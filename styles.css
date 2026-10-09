@@ -1,0 +1,36 @@
+/*
+ * Config Profile 样式：只放 `cp-` 前缀规则（AGENTS.md §4.3 样式隔离），
+ * 只用 Obsidian CSS 变量。段落取自 ob-tdk-general shared/css/kit.css 的弹窗骨架。
+ */
+
+.cp-modal {
+	width: min(640px, 92vw);
+}
+
+.cp-modal__message {
+	color: var(--text-normal);
+}
+
+.cp-modal__buttons {
+	display: flex;
+	justify-content: flex-end;
+	margin-top: var(--size-4-2);
+}
+
+.cp-modal__hint {
+	color: var(--text-muted);
+	font-size: var(--font-ui-smaller);
+	margin-top: var(--size-4-2);
+}
+
+.cp-first-run__choice {
+	display: flex;
+	flex-direction: column;
+	gap: var(--size-4-2);
+	margin-top: var(--size-4-4);
+}
+
+.cp-first-run__option {
+	display: block;
+	text-align: left;
+}
