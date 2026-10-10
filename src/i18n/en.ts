@@ -51,12 +51,11 @@ export const EN: Record<string, string> = {
 	"修改密码": "Change password",
 	"池内全部密文会以新密码重新加密重写。": "Every encrypted entry will be re-encrypted and rewritten with the new password.",
 	"尚未加密。下次同步时可设置密码，store 将整库加密。": "Not encrypted yet. Set a password on the next sync to encrypt the whole store.",
-	"尚未加密（同步设备可在其设置中开启）。": "Not encrypted yet (a sync device can enable it in its settings).",
 	"设置密码并立即重新同步（整库加密）。": "Set a password and re-sync immediately (whole-store encryption).",
 	"密码已修改，池内密文已重写。": "Password changed; encrypted entries rewritten.",
-	"录入密码": "Enter password",
-	"输入同步设备设置的密码，验证通过后本机记住（只存本机，不进 vault）。":
-		"Enter the password set on a sync device. Once verified it is remembered on this device only (never in the vault).",
+	"录入同步密码": "Enter sync password",
+	"输入同步设备设置的密码以解密配置库；验证通过后本机记住（只存本机，不进 vault）。":
+		"Enter the password set on a sync device to decrypt the store; once verified it is remembered on this device only (never in the vault).",
 	"配置库未加密，无需密码。": "The store is not encrypted; no password is needed.",
 	"密码已验证并记住（只存本机）。": "Password verified and saved (stored on this device only).",
 	"修改失败：{message}": "Change failed: {message}",

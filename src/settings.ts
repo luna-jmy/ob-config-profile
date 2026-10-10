@@ -116,8 +116,6 @@ export class CPSettingTab extends PluginSettingTab {
 	// ── 加密（SPEC §2.5：改密 / 启用仅同步设备 PC 端） ──
 
 	private async renderCrypto(container: HTMLElement): Promise<void> {
-		new Setting(container).setName(t("加密")).setHeading();
-
 		let encrypted = false;
 		try {
 			encrypted = await this.plugin.storeEncrypted();
@@ -126,35 +124,35 @@ export class CPSettingTab extends PluginSettingTab {
 		}
 		const canManage = !this.plugin.store.isMobile && this.plugin.config.preferredRole === "sync";
 
+		if (!canManage) {
+			// 仅应用设备：无加密管理权；store 已加密时只给「录入同步密码」动作行，未加密则整区不渲染
+			if (!encrypted) return;
+			new Setting(container).setName(t("加密")).setHeading();
+			new Setting(container)
+				.setName(t("录入同步密码"))
+				.setDesc(t("输入同步设备设置的密码以解密配置库；验证通过后本机记住（只存本机，不进 vault）。"))
+				.addButton((btn) => btn.setButtonText(t("录入同步密码")).onClick(() => void this.plugin.enterStorePassword()));
+			return;
+		}
+
+		new Setting(container).setName(t("加密")).setHeading();
+
 		if (encrypted) {
 			new Setting(container)
 				.setName(t("配置库加密"))
 				.setDesc(t("store 整库加密；密码只存各设备本地，不进 vault。"));
-			if (canManage) {
-				new Setting(container)
-					.setName(t("修改密码"))
-					.setDesc(t("池内全部密文会以新密码重新加密重写。"))
-					.addButton((btn) => btn.setButtonText(t("修改密码")).onClick(() => void this.changePassword()));
-			} else {
-				new Setting(container)
-					.setName(t("录入密码"))
-					.setDesc(t("输入同步设备设置的密码，验证通过后本机记住（只存本机，不进 vault）。"))
-					.addButton((btn) => btn.setButtonText(t("录入密码")).onClick(() => void this.plugin.enterStorePassword()));
-			}
+			new Setting(container)
+				.setName(t("修改密码"))
+				.setDesc(t("池内全部密文会以新密码重新加密重写。"))
+				.addButton((btn) => btn.setButtonText(t("修改密码")).onClick(() => void this.changePassword()));
 		} else {
 			new Setting(container)
 				.setName(t("配置库加密"))
-				.setDesc(
-					canManage
-						? t("尚未加密。下次同步时可设置密码，store 将整库加密。")
-						: t("尚未加密（同步设备可在其设置中开启）。"),
-				);
-			if (canManage) {
-				new Setting(container)
-					.setName(t("启用加密"))
-					.setDesc(t("设置密码并立即重新同步（整库加密）。"))
-					.addButton((btn) => btn.setButtonText(t("启用加密")).onClick(() => void this.plugin.runSync()));
-			}
+				.setDesc(t("尚未加密。下次同步时可设置密码，store 将整库加密。"));
+			new Setting(container)
+				.setName(t("启用加密"))
+				.setDesc(t("设置密码并立即重新同步（整库加密）。"))
+				.addButton((btn) => btn.setButtonText(t("启用加密")).onClick(() => void this.plugin.runSync()));
 		}
 	}
 
