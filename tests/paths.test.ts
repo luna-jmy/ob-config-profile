@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { lockPath, metaPath, normalizeStorePath, storePaths } from "../src/store/paths";
+import { metaPath, normalizeStorePath, storePaths } from "../src/store/paths";
 
 describe("normalizeStorePath", () => {
 	it("去首尾空白与斜杠", () => {
@@ -37,10 +37,6 @@ describe("storePaths（SPEC §2.1 结构）", () => {
 
 	it("profiles 目录在根下", () => {
 		expect(storePaths("store").profilesDir).toBe("store/profiles");
-	});
-
-	it("lock 只存在于 pcconfig 下（手机端无写池入口）", () => {
-		expect(lockPath(storePaths("store"))).toBe("store/pcconfig/_lock.json");
 	});
 
 	it("meta 路径", () => {

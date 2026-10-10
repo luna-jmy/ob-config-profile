@@ -1,6 +1,6 @@
 /**
- * Config Profile 入口：薄装配层——配置装载、语言、角色判定（fail-safe）、
- * 命令注册（同步 / 应用 profile / 编辑 profile）、设置页。
+ * Config Profile 入口：薄装配层——配置装载、语言、角色偏好、命令注册
+ * （同步 / 应用 profile / 编辑 profile）、设置页。
  * 不做自动同步（SPEC §0.7）：唯一写入口是手动命令与设置页操作。
  */
 
@@ -14,10 +14,7 @@ import type { CryptoMeta } from "./crypto/envelope";
 import { setLanguage, t } from "./i18n";
 import { storePaths } from "./store/paths";
 import type { StorePaths } from "./store/paths";
-import { decideRole, parseLock, roleStateKey } from "./store/lock";
-import type { RoleDecision } from "./store/lock";
 import {
-	buildMobileProfile,
 	emptyProfile,
 	isValidProfileName,
 	normalizeProfileName,
@@ -26,12 +23,17 @@ import {
 	profileFromFileName,
 	serializeProfile,
 } from "./store/profile";
+import { buildMobileProfile } from "./store/profile";
 import type { ProfileDoc, ProfilePlatform } from "./store/profile";
+import { decideStartupRole } from "./store/role";
+import type { DeviceRole } from "./store/role";
 import { ApplyService, WrongStorePasswordError } from "./services/apply-service";
 import type { ApplyReport } from "./services/apply-service";
 import { ConfigAdapter } from "./services/config-adapter";
 import type { PluginInfo } from "./services/config-adapter";
-import { SyncService } from "./services/sync-service";
+import { SyncService, SyncAbortedError, ClockSkewError } from "./services/sync-service";
+import type { ConflictResolution, FirstSyncDirection } from "./services/sync-options";
+import { chooseFromList } from "./modals/choice-list";
 import { ApplyResultModal } from "./modals/apply-result";
 import { FirstRunModal } from "./modals/first-run-modal";
 import { promptNewStorePassword, promptStorePassword } from "./modals/password";
@@ -42,8 +44,6 @@ import type { CPConfig } from "./types";
 export default class ConfigProfilePlugin extends Plugin {
 	config: CPConfig = DEFAULT_CONFIG;
 	store!: ConfigAdapter;
-	/** 本会话的角色判定结果（每次启动与写池操作前重新计算） */
-	currentRole: { kind: "fresh" | "master" | "apply"; holderName?: string } = { kind: "fresh" };
 
 	/** obsidian.d.ts 1.8.7 未声明 App.locale（运行时存在），收口在这一个转换里（qj 同款） */
 	private localeOf(app: unknown): string | undefined {
@@ -66,11 +66,15 @@ export default class ConfigProfilePlugin extends Plugin {
 		this.config = mergeConfig(await this.loadData());
 		this.applyLanguage();
 		this.store = new ConfigAdapter(this.app);
+		await this.ensureDeviceId();
 		this.addSettingTab(new CPSettingTab(this.app, this));
 
-		// 角色 / store 读取是磁盘 IO，放布局就绪后做，不阻塞 onload
+		// 角色是纯本地偏好：没选过就问一次（磁盘探测只在同步命令里做，不阻塞 onload）
 		this.app.workspace.onLayoutReady(() => {
-			void this.initRole().then(() => this.registerCommands());
+			this.registerCommands();
+			if (decideStartupRole(this.config.preferredRole).kind === "ask") {
+				new FirstRunModal(this.app, (choice) => void this.applyFirstRunChoice(choice)).open();
+			}
 		});
 	}
 
@@ -78,106 +82,29 @@ export default class ConfigProfilePlugin extends Plugin {
 		await this.saveData(this.config);
 	}
 
-	// ── 角色判定（SPEC §3.1） ──
-
-	private async initRole(): Promise<void> {
-		const decision = await this.computeRole();
-		this.currentRole = {
-			kind: decision.kind,
-			holderName: decision.kind === "apply" ? decision.holderName : undefined,
-		};
-
-		if (decision.kind === "fresh") {
-			if (this.config.preferredRole === "apply") {
-				await this.saveRoleState("apply:preferred");
-				return;
-			}
-			new FirstRunModal(this.app, (choice) => void this.applyFirstRunChoice(choice)).open();
-			return;
-		}
-		if (this.config.lastRoleState !== roleStateKey(decision)) {
-			this.noticeFor(decision);
-			await this.saveRoleState(roleStateKey(decision));
-		}
-	}
-
-	/** 全量重算：lock 原文（读失败按损坏）+ 池内容 → decideRole（纯函数） */
-	async computeRole() {
-		const paths = this.paths();
-		let raw: string | null = null;
-		try {
-			raw = await this.store.readLockRaw(paths);
-		} catch {
-			raw = ""; // 文件存在但读失败 → parseLock 按 corrupt 处理
-		}
-		let poolHasContent = false;
-		try {
-			poolHasContent = await this.store.poolHasContent(paths);
-		} catch {
-			poolHasContent = false;
-		}
-		return decideRole({ lock: parseLock(raw), poolHasContent, localDeviceId: this.store.deviceId() });
-	}
-
-	private async applyFirstRunChoice(choice: "master" | "apply"): Promise<void> {
-		if (choice === "master") {
-			await this.claimMaster();
-			return;
-		}
-		this.config.preferredRole = "apply";
-		this.currentRole = { kind: "apply" };
-		await this.saveConfig();
-		new Notice(t("本机已设为应用配置。"));
-	}
-
-	/** 夺取主配置（首次选择与设置页按钮共用） */
-	async claimMaster(): Promise<void> {
-		const paths = this.paths();
-		await this.store.writeLock(paths, this.store.buildLock(this.effectiveDeviceName()));
-		this.currentRole = { kind: "master" };
-		new Notice(t("本机已设为主配置。"));
-		await this.saveRoleState("master");
-	}
-
-	/** 让出主配置 */
-	async releaseMaster(): Promise<void> {
-		const paths = this.paths();
-		await this.store.deleteLock(paths);
-		this.currentRole = { kind: "apply" };
-		new Notice(t("已让出主配置。"));
-		await this.saveRoleState("apply:pool-without-lock");
-	}
-
-	private async saveRoleState(stateKey: string): Promise<void> {
-		this.config.lastRoleState = stateKey;
+	/** 设备身份持久化进 data.json（0.1.0 起；旧 localStorage 值只作迁移源） */
+	private async ensureDeviceId(): Promise<void> {
+		if (this.config.deviceId !== "") return;
+		this.config.deviceId = this.store.legacyDeviceId() ?? this.randomId();
 		await this.saveConfig();
 	}
 
-	private noticeFor(decision: RoleDecision): void {
-		if (decision.kind === "master") {
-			new Notice(t("本机已设为主配置。"));
-			return;
-		}
-		if (decision.kind === "fresh") return;
-		switch (decision.reason) {
-			case "other-device":
-				new Notice(
-					t(
-						"检测到主配置来自设备《{name}》，本机已设为应用配置。若主配置其实属于本机（重装或清除数据后身份丢失），请在设置中重新夺取。",
-						{ name: decision.holderName ?? "" },
-					),
-				);
-				break;
-			case "lock-corrupt":
-				new Notice(t("无法确认主配置归属（lock 文件损坏），本机暂按应用配置处理。"));
-				break;
-			case "future-schema":
-				new Notice(t("store 由更新版本的 Config Profile 写入，本机暂按应用配置处理。请更新插件。"));
-				break;
-			case "pool-without-lock":
-				new Notice(t("无法确认主配置归属（配置池存在但没有 lock，可能同步未完成），本机暂按应用配置处理。"));
-				break;
-		}
+	private randomId(): string {
+		const c = globalThis.crypto;
+		if (c && typeof c.randomUUID === "function") return c.randomUUID();
+		return `cp-${Math.random().toString(36).slice(2)}${Date.now().toString(36)}`;
+	}
+
+	// ── 角色（SPEC §3.1：本地偏好，无 lock） ──
+
+	private async applyFirstRunChoice(choice: DeviceRole): Promise<void> {
+		await this.setRole(choice);
+	}
+
+	async setRole(role: DeviceRole): Promise<void> {
+		this.config.preferredRole = role;
+		await this.saveConfig();
+		new Notice(role === "sync" ? t("本机已设为同步设备。") : t("本机已设为仅应用。"));
 	}
 
 	// ── 加密（SPEC §2.5） ──
@@ -207,7 +134,7 @@ export default class ConfigProfilePlugin extends Plugin {
 		return password;
 	}
 
-	/** 修改密码（仅主配置；设置页调用）：解密池内全部密文 → 新密码重加密重写 */
+	/** 修改密码（仅同步设备；设置页调用）：解密池内全部密文 → 新密码重加密重写 */
 	async changeStorePassword(oldPassword: string, newPassword: string): Promise<void> {
 		const meta = await this.readCryptoMeta();
 		if (meta === null) throw new Error("store not encrypted");
@@ -215,20 +142,19 @@ export default class ConfigProfilePlugin extends Plugin {
 
 		const paths = this.paths();
 		await this.store.writeAtomic(`${paths.root}/_crypto.json`, JSON.stringify(await createCryptoMeta(newPassword), null, "\t"));
-		// 池内容以新密码重写：直接复用同步流程（同步前会重新校验 lock）
+		// 池内容以新密码重写：复用同步流程（重加密即「双方都变」外的全量推）
 		await this.runSync(newPassword);
 	}
 
-	// ── 同步（SPEC §3.2，仅 PC + 仅主配置） ──
+	// ── 同步（SPEC §3.2，仅 PC + 仅同步设备；多主时间戳双向） ──
 
 	async runSync(passwordOverride?: string): Promise<void> {
 		if (this.store.isMobile) {
 			new Notice(t("手机端只能应用配置，不能同步。"));
 			return;
 		}
-		const decision = await this.computeRole();
-		if (decision.kind !== "master") {
-			new Notice(t("本机不是主配置设备，不能同步。可在设置中夺取主配置。"));
+		if (this.config.preferredRole !== "sync") {
+			new Notice(t("本机是仅应用设备，不能同步。可在设置中切换为同步设备。"));
 			return;
 		}
 
@@ -249,19 +175,65 @@ export default class ConfigProfilePlugin extends Plugin {
 			if (password === null) return;
 		}
 
-		const service = new SyncService(this.store, this.paths(), this.effectiveDeviceName());
+		const service = new SyncService(this.store, this.paths(), {
+			id: this.config.deviceId,
+			name: this.effectiveDeviceName(),
+		}, {
+			syncArtifacts: this.config.syncArtifacts,
+			firstSyncDirection: () => this.promptFirstSyncDirection(),
+			resolveConflicts: (files) => this.promptConflictResolution(files),
+		});
 		try {
 			const report = await service.run(password);
 			new Notice(
-				t("同步完成：更新 {updated} 项，跳过 {skipped} 项，清理 {pruned} 项。", {
-					updated: report.updated,
-					skipped: report.skipped,
-					pruned: report.pruned,
-				}) + (report.mobileProjection ? t("已更新移动投影。") : ""),
+				t("同步完成：推送 {pushed} 项，拉取 {pulled} 项，删除 {deleted} 项。", {
+					pushed: report.pushed,
+					pulled: report.pulled,
+					deleted: report.tombstoned + report.deletedLocal + report.prunedMeta,
+				}) +
+					(report.conflictsResolved === "local"
+						? t("冲突已按本机解决。")
+						: report.conflictsResolved === "pool"
+							? t("冲突已按池解决。")
+							: "") +
+					(report.mobileProjection ? t("已更新移动投影。") : ""),
 			);
 		} catch (error) {
+			if (error instanceof SyncAbortedError) return;
+			if (error instanceof ClockSkewError) {
+				new Notice(t("配置库的时间戳来自未来，本机或对端时钟可能不准。请校准系统时间后重试。"));
+				return;
+			}
 			new Notice(t("同步失败：{message}", { message: error instanceof Error ? error.message : String(error) }));
 		}
+	}
+
+	private async promptFirstSyncDirection(): Promise<FirstSyncDirection | null> {
+		return chooseFromList<FirstSyncDirection>(this.app, {
+			title: t("首次在此设备同步"),
+			message: t(
+				"配置库已有内容，但本机还没有同步记录。以哪边为准？本机多出的文件会保留，下次同步再上传。",
+			),
+			items: [],
+			hint: t("直接关闭弹窗即取消本次同步。"),
+			choices: [
+				{ label: t("用本机覆盖池"), value: "local-to-pool", destructive: true },
+				{ label: t("先把池应用回本机"), value: "pool-to-local", cta: true },
+			],
+		});
+	}
+
+	private async promptConflictResolution(files: string[]): Promise<ConflictResolution | null> {
+		return chooseFromList<ConflictResolution>(this.app, {
+			title: t("同步冲突"),
+			message: t("以下文件在本机和配置库都改过，需要你决定保留哪边（对所有列出的文件生效）："),
+			items: files,
+			hint: t("直接关闭弹窗即取消本次同步，两边改动都保持原样。"),
+			choices: [
+				{ label: t("保留本机版本"), value: "local", cta: true },
+				{ label: t("保留配置库版本"), value: "pool" },
+			],
+		});
 	}
 
 	// ── 应用（SPEC §3.3） ──

@@ -13,15 +13,17 @@ export interface CPConfig {
 	storePath: string;
 	/** 界面语言（auto = 跟随 Obsidian） */
 	language: LanguageSetting;
-	/** 设备显示名（空串 = 用运行时按平台生成的默认名） */
+	/** 设备显示名：仅来源标注（同步记录 / 冲突提示），不参与匹配；空串 = 平台默认名 */
 	deviceName: string;
+	/** 持久设备身份（data.json，不清缓存、不同步；空串 = 尚未生成，onload 补齐） */
+	deviceId: string;
 	/**
-	 * 全新 store 场景下用户选过「应用配置」后不再重复弹选择框；
-	 * 出现 lock 后此偏好失效，判定以 lock 为准（SPEC §3.1）。
+	 * 角色偏好（SPEC §3.1，0.1.0 起无 lock，角色只是本地偏好）：
+	 * ask = 尚未选择（启动弹一次）；sync = 同步设备（多主，可写池）；apply = 仅应用。
 	 */
-	preferredRole: "ask" | "apply";
-	/** 上次启动时的角色判定摘要（用于只在变化时提示，避免每次启动刷 Notice） */
-	lastRoleState: string;
+	preferredRole: "ask" | "sync" | "apply";
+	/** 同步插件主体（main.js/styles.css/manifest.json，明文不加密）；下次同步生效 */
+	syncArtifacts: boolean;
 }
 
 export const DEFAULT_STORE_PATH = "SettingProfiles";
@@ -30,8 +32,9 @@ export const DEFAULT_CONFIG: CPConfig = {
 	storePath: DEFAULT_STORE_PATH,
 	language: "auto",
 	deviceName: "",
+	deviceId: "",
 	preferredRole: "ask",
-	lastRoleState: "",
+	syncArtifacts: false,
 };
 
 /** 合并持久化配置与默认值；只接受类型匹配的字段，损坏数据回落默认（可重复执行）。 */
@@ -41,7 +44,9 @@ export function mergeConfig(saved: unknown): CPConfig {
 		storePath: typeof source.storePath === "string" && source.storePath.trim() !== "" ? source.storePath : DEFAULT_STORE_PATH,
 		language: source.language === "zh" || source.language === "en" ? source.language : "auto",
 		deviceName: typeof source.deviceName === "string" ? source.deviceName : "",
-		preferredRole: source.preferredRole === "apply" ? "apply" : "ask",
-		lastRoleState: typeof source.lastRoleState === "string" ? source.lastRoleState : "",
+		deviceId: typeof source.deviceId === "string" ? source.deviceId : "",
+		preferredRole:
+			source.preferredRole === "sync" || source.preferredRole === "apply" ? source.preferredRole : "ask",
+		syncArtifacts: source.syncArtifacts === true,
 	};
 }

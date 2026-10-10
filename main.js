@@ -1,4 +1,4 @@
-/* Config Profile — bundled 2026-10-10T01:05:53.295Z */
+/* Config Profile — bundled 2026-10-10T01:38:55.790Z */
 "use strict";
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -28,24 +28,20 @@ var init_en = __esm({
     "use strict";
     EN = {
       // ── 角色名 ──
-      "\u4E3B\u914D\u7F6E": "Master",
-      "\u5E94\u7528\u914D\u7F6E": "Apply-only",
+      "\u540C\u6B65\u8BBE\u5907": "Sync device",
+      "\u4EC5\u5E94\u7528": "Apply-only",
       "\u624B\u673A": "Mobile",
       "PC": "PC",
       "\u5C1A\u672A\u8BBE\u5B9A": "Not set yet",
       // ── 首次运行弹窗 ──
       "\u9009\u62E9\u672C\u673A\u89D2\u8272": "Choose this device's role",
-      "\u5F53\u524D vault \u5185\u6CA1\u6709\u53D1\u73B0\u914D\u7F6E\u5E93\u3002\u672C\u673A\u662F\u300C\u4E3B\u914D\u7F6E\u300D\uFF08\u628A\u672C\u673A Obsidian \u914D\u7F6E\u540C\u6B65\u5230 store\uFF09\uFF0C\u8FD8\u662F\u300C\u5E94\u7528\u914D\u7F6E\u300D\uFF08\u53EA\u5E94\u7528\u5176\u4ED6\u8BBE\u5907\u540C\u6B65\u6765\u7684\u914D\u7F6E\uFF09\uFF1F": "No config store found in this vault. Is this device the master (captures this machine's Obsidian settings into the store) or apply-only (only applies settings synced from other devices)?",
-      "\u672C\u673A\u4E3A\u4E3B\u914D\u7F6E\uFF08\u540C\u6B65\u672C\u673A\u914D\u7F6E\u5230 store\uFF09": "This device is the master (sync local config into the store)",
-      "\u672C\u673A\u4E3A\u5E94\u7528\u914D\u7F6E": "This device is apply-only",
-      "\u4E0D\u786E\u5B9A\u5C31\u9009\u5E94\u7528\u914D\u7F6E\u2014\u2014\u5E94\u7528\u914D\u7F6E\u4E0D\u4F1A\u5199\u5165 store\uFF0C\u968F\u65F6\u53EF\u4EE5\u5728\u8BBE\u7F6E\u91CC\u6539\u3002": "When in doubt choose apply-only \u2014 it never writes to the store, and you can change the role anytime in settings.",
-      // ── 角色判定 Notice ──
-      "\u672C\u673A\u5DF2\u8BBE\u4E3A\u4E3B\u914D\u7F6E\u3002": "This device is now the master.",
-      "\u672C\u673A\u5DF2\u8BBE\u4E3A\u5E94\u7528\u914D\u7F6E\u3002": "This device is now apply-only.",
-      "\u68C0\u6D4B\u5230\u4E3B\u914D\u7F6E\u6765\u81EA\u8BBE\u5907\u300A{name}\u300B\uFF0C\u672C\u673A\u5DF2\u8BBE\u4E3A\u5E94\u7528\u914D\u7F6E\u3002\u82E5\u4E3B\u914D\u7F6E\u5176\u5B9E\u5C5E\u4E8E\u672C\u673A\uFF08\u91CD\u88C5\u6216\u6E05\u9664\u6570\u636E\u540E\u8EAB\u4EFD\u4E22\u5931\uFF09\uFF0C\u8BF7\u5728\u8BBE\u7F6E\u4E2D\u91CD\u65B0\u593A\u53D6\u3002": 'The master role belongs to "{name}"; this device is set to apply-only. If that is actually this machine (identity lost after reinstall or data wipe), re-claim the master role in settings.',
-      "\u65E0\u6CD5\u786E\u8BA4\u4E3B\u914D\u7F6E\u5F52\u5C5E\uFF08lock \u6587\u4EF6\u635F\u574F\uFF09\uFF0C\u672C\u673A\u6682\u6309\u5E94\u7528\u914D\u7F6E\u5904\u7406\u3002": "Cannot confirm master ownership (lock file is corrupted); this device stays apply-only for now.",
-      "store \u7531\u66F4\u65B0\u7248\u672C\u7684 Config Profile \u5199\u5165\uFF0C\u672C\u673A\u6682\u6309\u5E94\u7528\u914D\u7F6E\u5904\u7406\u3002\u8BF7\u66F4\u65B0\u63D2\u4EF6\u3002": "The store was written by a newer version of Config Profile; this device stays apply-only for now. Please update the plugin.",
-      "\u65E0\u6CD5\u786E\u8BA4\u4E3B\u914D\u7F6E\u5F52\u5C5E\uFF08\u914D\u7F6E\u6C60\u5B58\u5728\u4F46\u6CA1\u6709 lock\uFF0C\u53EF\u80FD\u540C\u6B65\u672A\u5B8C\u6210\uFF09\uFF0C\u672C\u673A\u6682\u6309\u5E94\u7528\u914D\u7F6E\u5904\u7406\u3002": "Cannot confirm master ownership (pool exists but no lock \u2014 sync may be incomplete); this device stays apply-only for now.",
+      "\u672C\u673A\u662F\u300C\u540C\u6B65\u8BBE\u5907\u300D\uFF08\u628A\u672C\u673A Obsidian \u914D\u7F6E\u4E0E\u914D\u7F6E\u5E93\u53CC\u5411\u540C\u6B65\uFF0C\u53EF\u591A\u53F0\u540C\u65F6\u5F00\u542F\uFF09\uFF0C\u8FD8\u662F\u300C\u4EC5\u5E94\u7528\u300D\uFF08\u53EA\u5E94\u7528\u914D\u7F6E\u5E93\u540C\u6B65\u6765\u7684\u914D\u7F6E\uFF09\uFF1F": "Is this device a sync device (two-way sync between this machine's Obsidian settings and the store; multiple devices can sync at once) or apply-only (only applies settings synced from the store)?",
+      "\u672C\u673A\u4E3A\u540C\u6B65\u8BBE\u5907\uFF08\u4E0E\u914D\u7F6E\u5E93\u53CC\u5411\u540C\u6B65\uFF09": "This device is a sync device (two-way sync with the store)",
+      "\u672C\u673A\u4E3A\u4EC5\u5E94\u7528": "This device is apply-only",
+      "\u4E0D\u786E\u5B9A\u5C31\u9009\u4EC5\u5E94\u7528\u2014\u2014\u4EC5\u5E94\u7528\u4E0D\u4F1A\u5199\u5165\u914D\u7F6E\u5E93\uFF0C\u968F\u65F6\u53EF\u4EE5\u5728\u8BBE\u7F6E\u91CC\u6539\u3002": "When in doubt choose apply-only \u2014 it never writes to the store, and you can change the role anytime in settings.",
+      // ── 角色 Notice ──
+      "\u672C\u673A\u5DF2\u8BBE\u4E3A\u540C\u6B65\u8BBE\u5907\u3002": "This device is now a sync device.",
+      "\u672C\u673A\u5DF2\u8BBE\u4E3A\u4EC5\u5E94\u7528\u3002": "This device is now apply-only.",
       // ── 设置页 ──
       "Config Profile": "Config Profile",
       "\u901A\u7528": "General",
@@ -53,33 +49,77 @@ var init_en = __esm({
       "\u914D\u7F6E\u5E93\u8DEF\u5F84": "Store path",
       "store \u5728 vault \u5185\u7684\u8DEF\u5F84\uFF08\u9ED8\u8BA4 SettingProfiles\uFF0Cvault \u6839\uFF09\u3002\u4FEE\u6539\u540E\u91CD\u8F7D\u63D2\u4EF6\u751F\u6548\u3002": "Path of the store inside the vault (default: SettingProfiles at the vault root). Reload the plugin after changing.",
       "\u8BBE\u5907\u540D": "Device name",
-      "\u663E\u793A\u5728\u4E3B\u914D\u7F6E\u5F52\u5C5E\u63D0\u793A\u91CC\uFF0C\u5E2E\u52A9\u8BC6\u522B\u54EA\u53F0\u8BBE\u5907\u6301\u6709\u4E3B\u914D\u7F6E\u3002": "Shown in master-ownership notices so you can tell which device holds the role.",
+      "\u4EC5\u4F5C\u6765\u6E90\u6807\u6CE8\uFF1A\u663E\u793A\u5728\u540C\u6B65\u8BB0\u5F55\u4E0E\u51B2\u7A81\u63D0\u793A\u91CC\uFF0C\u8BF4\u660E\u914D\u7F6E\u6765\u81EA\u54EA\u53F0\u8BBE\u5907\uFF1B\u4E0D\u53C2\u4E0E\u540C\u6B65\u5339\u914D\u3002": "Provenance label only: shown in sync records and conflict prompts to tell which device a change came from; not used for matching.",
+      "\u540C\u6B65\u63D2\u4EF6\u4E3B\u4F53": "Sync plugin artifacts",
+      "\u628A\u63D2\u4EF6\u7684 main.js / styles.css / manifest.json \u4E00\u5E76\u660E\u6587\u540C\u6B65\uFF08\u4E0D\u52A0\u5BC6\uFF09\u3002\u5F00\u542F\u540E\u5E94\u7528\u7AEF\u53EF\u76F4\u63A5\u88C5\u9F50\u7F3A\u5931\u63D2\u4EF6\uFF1B\u4E0B\u6B21\u540C\u6B65\u751F\u6548\u3002": "Also sync plugins' main.js / styles.css / manifest.json in plain text (unencrypted). Apply-side devices can then install missing plugins directly; takes effect on the next sync.",
       "\u8BED\u8A00": "Language",
       "\u8DDF\u968F Obsidian": "Follow Obsidian",
       "\u4E2D\u6587": "Chinese",
       "English": "English",
       "\u5F53\u524D\u89D2\u8272": "Current role",
-      "\u4E3B\u914D\u7F6E\u6301\u6709\u8005\uFF1A{name}": "Master held by: {name}",
-      "\u593A\u53D6\u4E3B\u914D\u7F6E": "Claim master role",
-      "\u8BA9\u51FA\u4E3B\u914D\u7F6E": "Release master role",
-      "\u5C06\u4EE5\u672C\u673A\u8EAB\u4EFD\u63A5\u7BA1 store \u7684\u4E3B\u914D\u7F6E\u3002\u539F\u4E3B\u914D\u7F6E\u8BBE\u5907\u4F1A\u5728\u4E0B\u6B21\u64CD\u4F5C\u524D\u81EA\u52A8\u964D\u7EA7\u4E3A\u5E94\u7528\u914D\u7F6E\u3002\u7EE7\u7EED\uFF1F": "This device will take over the master role of the store. The previous master automatically drops to apply-only before its next write. Continue?",
-      "\u8BA9\u51FA\u540E store \u6682\u65E0\u4E3B\u914D\u7F6E\uFF0C\u6240\u6709\u8BBE\u5907\u90FD\u53EA\u80FD\u5E94\u7528\uFF0C\u76F4\u5230\u6709\u4EBA\u91CD\u65B0\u593A\u53D6\u3002\u7EE7\u7EED\uFF1F": "After releasing, the store has no master and every device can only apply, until someone claims it again. Continue?",
-      "\u5DF2\u63A5\u7BA1\u4E3B\u914D\u7F6E\u3002": "Master role claimed.",
-      "\u5DF2\u8BA9\u51FA\u4E3B\u914D\u7F6E\u3002": "Master role released.",
-      "\u593A\u53D6\u6216\u8BA9\u51FA\u5931\u8D25\uFF1A{message}": "Claim or release failed: {message}",
+      "\u540C\u6B65\u8BBE\u5907\u53EF\u4E0E\u914D\u7F6E\u5E93\u53CC\u5411\u540C\u6B65\uFF08\u591A\u53F0\u53EF\u540C\u65F6\u5F00\u542F\uFF09\uFF1B\u4EC5\u5E94\u7528\u53EA\u8986\u76D6\u672C\u673A\uFF0C\u4E0D\u5199\u914D\u7F6E\u5E93\u3002": "A sync device syncs both ways with the store (several can be enabled at once); apply-only only overwrites this machine and never writes to the store.",
+      "\u5207\u6362\u89D2\u8272": "Switch role",
+      "\u5207\u6362\u540E\u7ACB\u5373\u751F\u6548\uFF0C\u65E0\u9700\u91CD\u8F7D\u3002": "Takes effect immediately \u2014 no reload needed.",
+      "\u5F00 = \u540C\u6B65\u8BBE\u5907\uFF0C\u5173 = \u4EC5\u5E94\u7528": "On = sync device, off = apply-only",
       "\u53D6\u6D88": "Cancel",
+      // ── 设置页：加密区 ──
+      "\u52A0\u5BC6": "Encryption",
+      "\u914D\u7F6E\u5E93\u52A0\u5BC6": "Store encryption",
+      "store \u6574\u5E93\u52A0\u5BC6\uFF1B\u5BC6\u7801\u53EA\u5B58\u5404\u8BBE\u5907\u672C\u5730\uFF0C\u4E0D\u8FDB vault\u3002": "The whole store is encrypted; the password stays on each device, never in the vault.",
+      "\u4FEE\u6539\u5BC6\u7801": "Change password",
+      "\u6C60\u5185\u5168\u90E8\u5BC6\u6587\u4F1A\u4EE5\u65B0\u5BC6\u7801\u91CD\u65B0\u52A0\u5BC6\u91CD\u5199\u3002": "Every encrypted entry will be re-encrypted and rewritten with the new password.",
+      "\u5C1A\u672A\u52A0\u5BC6\u3002\u4E0B\u6B21\u540C\u6B65\u65F6\u53EF\u8BBE\u7F6E\u5BC6\u7801\uFF0Cstore \u5C06\u6574\u5E93\u52A0\u5BC6\u3002": "Not encrypted yet. Set a password on the next sync to encrypt the whole store.",
+      "\u5C1A\u672A\u52A0\u5BC6\uFF08\u4E3B\u914D\u7F6E\u8BBE\u5907\u53EF\u5728\u5176\u8BBE\u7F6E\u4E2D\u5F00\u542F\uFF09\u3002": "Not encrypted yet (a sync device can enable it in its settings).",
+      "\u8BBE\u7F6E\u5BC6\u7801\u5E76\u7ACB\u5373\u91CD\u65B0\u540C\u6B65\uFF08\u6574\u5E93\u52A0\u5BC6\uFF09\u3002": "Set a password and re-sync immediately (whole-store encryption).",
+      "\u5BC6\u7801\u5DF2\u4FEE\u6539\uFF0C\u6C60\u5185\u5BC6\u6587\u5DF2\u91CD\u5199\u3002": "Password changed; encrypted entries rewritten.",
+      "\u4FEE\u6539\u5931\u8D25\uFF1A{message}": "Change failed: {message}",
+      // ── 设置页：Profiles 区 ──
+      "Profiles": "Profiles",
+      "profile \u7BA1\u7406\u8BF7\u5230 PC \u7AEF\uFF08\u624B\u673A\u53EA\u5E94\u7528\u914D\u7F6E\uFF09\u3002": "Manage profiles on desktop (mobile only applies them).",
+      "\u65B0\u5EFA profile": "New profile",
+      "\u521B\u5EFA\u540E\u91CD\u8F7D\u63D2\u4EF6\uFF0C\u5E94\u7528\u547D\u4EE4\u5373\u53EF\u7528\u3002": "Reload the plugin after creating to register its apply command.",
+      "\u65B0\u5EFA": "Create",
+      "\u8FD8\u6CA1\u6709 profile\u3002\u65B0\u5EFA\u4E00\u4E2A\uFF0C\u6216\u5728\u4E3B\u914D\u7F6E\u7AEF\u6267\u884C\u540C\u6B65\u3002": "No profiles yet. Create one, or run a sync on a sync device.",
+      "\u7531\u540C\u540D\u684C\u9762 profile \u9002\u914D\u751F\u6210\uFF0C\u8DDF\u968F\u5176\u66F4\u65B0\u3002": "Generated from the desktop profile of the same name; follows its updates.",
+      "\u5DF2\u5F00\u542F\u624B\u673A\u9002\u914D\u3002": "Mobile adaptation enabled.",
+      "\u9002\u914D\u624B\u673A": "Adapt for mobile",
+      "\u67E5\u770B/\u7F16\u8F91": "View/edit",
+      "\u91CD\u547D\u540D": "Rename",
+      "\u5220\u9664": "Delete",
+      "\u540D\u79F0": "Name",
+      "\u4E3A\u300A{name}\u300B\u540C\u65F6\u751F\u6210\u624B\u673A\u9002\u914D profile \u5417\uFF1F": 'Also generate a mobile-adapted profile for "{name}"?',
+      "\u684C\u9762 + \u624B\u673A": "Desktop + mobile",
+      "\u4EC5\u684C\u9762": "Desktop only",
+      "\u91CD\u547D\u540D profile": "Rename profile",
+      "\u5220\u9664 profile": "Delete profile",
+      "\u786E\u5B9A\u5220\u9664\u300A{label}\u300B\uFF1F\u6B64\u64CD\u4F5C\u4E0D\u53EF\u64A4\u9500\u3002": 'Delete "{label}"? This cannot be undone.',
+      "\u64CD\u4F5C\u5931\u8D25\uFF1A{message}": "Operation failed: {message}",
       // ── 命令 ──
       "\u540C\u6B65\u672C\u5730\u914D\u7F6E": "Sync local settings",
       "\u5E94\u7528\u914D\u7F6E\uFF1A{name}": "Apply profile: {name}",
       "\u67E5\u770B/\u7F16\u8F91\u914D\u7F6E\uFF1A{name}": "View/edit profile: {name}",
       "{name}\uFF08\u624B\u673A\uFF09": "{name} (mobile)",
-      // ── 同步 / 应用 Notice ──
+      // ── 同步 Notice / 弹窗 ──
       "\u5BC6\u7801\u4E0D\u6B63\u786E\u3002": "Wrong password.",
       "\u624B\u673A\u7AEF\u53EA\u80FD\u5E94\u7528\u914D\u7F6E\uFF0C\u4E0D\u80FD\u540C\u6B65\u3002": "Mobile devices can only apply profiles, not sync.",
-      "\u672C\u673A\u4E0D\u662F\u4E3B\u914D\u7F6E\u8BBE\u5907\uFF0C\u4E0D\u80FD\u540C\u6B65\u3002\u53EF\u5728\u8BBE\u7F6E\u4E2D\u593A\u53D6\u4E3B\u914D\u7F6E\u3002": "This device is not the master, so it cannot sync. Claim the master role in settings.",
-      "\u540C\u6B65\u5B8C\u6210\uFF1A\u66F4\u65B0 {updated} \u9879\uFF0C\u8DF3\u8FC7 {skipped} \u9879\uFF0C\u6E05\u7406 {pruned} \u9879\u3002": "Sync finished: {updated} updated, {skipped} skipped, {pruned} pruned.",
+      "\u672C\u673A\u662F\u4EC5\u5E94\u7528\u8BBE\u5907\uFF0C\u4E0D\u80FD\u540C\u6B65\u3002\u53EF\u5728\u8BBE\u7F6E\u4E2D\u5207\u6362\u4E3A\u540C\u6B65\u8BBE\u5907\u3002": "This device is apply-only and cannot sync. Switch it to a sync device in settings.",
+      "\u540C\u6B65\u5B8C\u6210\uFF1A\u63A8\u9001 {pushed} \u9879\uFF0C\u62C9\u53D6 {pulled} \u9879\uFF0C\u5220\u9664 {deleted} \u9879\u3002": "Sync finished: {pushed} pushed, {pulled} pulled, {deleted} deleted.",
+      "\u51B2\u7A81\u5DF2\u6309\u672C\u673A\u89E3\u51B3\u3002": " Conflicts resolved with local versions.",
+      "\u51B2\u7A81\u5DF2\u6309\u6C60\u89E3\u51B3\u3002": " Conflicts resolved with store versions.",
       "\u5DF2\u66F4\u65B0\u79FB\u52A8\u6295\u5F71\u3002": " Mobile projection updated.",
       "\u540C\u6B65\u5931\u8D25\uFF1A{message}": "Sync failed: {message}",
+      "\u914D\u7F6E\u5E93\u7684\u65F6\u95F4\u6233\u6765\u81EA\u672A\u6765\uFF0C\u672C\u673A\u6216\u5BF9\u7AEF\u65F6\u949F\u53EF\u80FD\u4E0D\u51C6\u3002\u8BF7\u6821\u51C6\u7CFB\u7EDF\u65F6\u95F4\u540E\u91CD\u8BD5\u3002": "The store's timestamps are in the future; this device or a peer may have a wrong clock. Calibrate the system time and retry.",
+      "\u9996\u6B21\u5728\u6B64\u8BBE\u5907\u540C\u6B65": "First sync on this device",
+      "\u914D\u7F6E\u5E93\u5DF2\u6709\u5185\u5BB9\uFF0C\u4F46\u672C\u673A\u8FD8\u6CA1\u6709\u540C\u6B65\u8BB0\u5F55\u3002\u4EE5\u54EA\u8FB9\u4E3A\u51C6\uFF1F\u672C\u673A\u591A\u51FA\u7684\u6587\u4EF6\u4F1A\u4FDD\u7559\uFF0C\u4E0B\u6B21\u540C\u6B65\u518D\u4E0A\u4F20\u3002": "The store already has content, but this device has no sync record yet. Which side wins? Files that exist only locally are kept and uploaded on the next sync.",
+      "\u76F4\u63A5\u5173\u95ED\u5F39\u7A97\u5373\u53D6\u6D88\u672C\u6B21\u540C\u6B65\u3002": "Closing this dialog cancels the sync.",
+      "\u7528\u672C\u673A\u8986\u76D6\u6C60": "Overwrite store with local",
+      "\u5148\u628A\u6C60\u5E94\u7528\u56DE\u672C\u673A": "Apply the store to this device first",
+      "\u540C\u6B65\u51B2\u7A81": "Sync conflicts",
+      "\u4EE5\u4E0B\u6587\u4EF6\u5728\u672C\u673A\u548C\u914D\u7F6E\u5E93\u90FD\u6539\u8FC7\uFF0C\u9700\u8981\u4F60\u51B3\u5B9A\u4FDD\u7559\u54EA\u8FB9\uFF08\u5BF9\u6240\u6709\u5217\u51FA\u7684\u6587\u4EF6\u751F\u6548\uFF09\uFF1A": "These files changed both locally and in the store; choose which side to keep (applies to all listed files):",
+      "\u76F4\u63A5\u5173\u95ED\u5F39\u7A97\u5373\u53D6\u6D88\u672C\u6B21\u540C\u6B65\uFF0C\u4E24\u8FB9\u6539\u52A8\u90FD\u4FDD\u6301\u539F\u6837\u3002": "Closing this dialog cancels the sync; both sides stay as they are.",
+      "\u4FDD\u7559\u672C\u673A\u7248\u672C": "Keep local versions",
+      "\u4FDD\u7559\u914D\u7F6E\u5E93\u7248\u672C": "Keep store versions",
+      // ── 应用 ──
       "\u627E\u4E0D\u5230 profile\uFF1A{name}": "Profile not found: {name}",
       "profile \u6587\u4EF6\u635F\u574F\uFF1A{name}": "Profile file is corrupted: {name}",
       "profile \u91CC\u6CA1\u6709\u52FE\u9009\u4EFB\u4F55\u5185\u5BB9\uFF1A{name}": "Nothing is checked in this profile: {name}",
@@ -108,7 +148,7 @@ var init_en = __esm({
       "\u542F\u7528\u52A0\u5BC6": "Enable encryption",
       "\u4E24\u6B21\u8F93\u5165\u4E0D\u4E00\u81F4\u6216\u4E3A\u7A7A\u3002": "The two entries do not match or are empty.",
       "\u8F93\u5165\u914D\u7F6E\u5E93\u5BC6\u7801": "Enter the store password",
-      "\u8FD9\u4E2A\u914D\u7F6E\u5E93\u5DF2\u52A0\u5BC6\u3002\u8F93\u5165\u4E3B\u914D\u7F6E\u8BBE\u5907\u8BBE\u7F6E\u7684\u5BC6\u7801\u4EE5\u7EE7\u7EED\uFF0C\u9A8C\u8BC1\u901A\u8FC7\u540E\u672C\u673A\u8BB0\u4F4F\u5BC6\u7801\u3002": "This store is encrypted. Enter the password set on the master device to continue; it will be remembered on this device after verification.",
+      "\u8FD9\u4E2A\u914D\u7F6E\u5E93\u5DF2\u52A0\u5BC6\u3002\u8F93\u5165\u4E3B\u914D\u7F6E\u8BBE\u5907\u8BBE\u7F6E\u7684\u5BC6\u7801\u4EE5\u7EE7\u7EED\uFF0C\u9A8C\u8BC1\u901A\u8FC7\u540E\u672C\u673A\u8BB0\u4F4F\u5BC6\u7801\u3002": "This store is encrypted. Enter the password set on the sync device to continue; it will be remembered on this device after verification.",
       "\u786E\u8BA4": "OK",
       "\u4FEE\u6539\u914D\u7F6E\u5E93\u5BC6\u7801": "Change the store password",
       "\u6C60\u5185\u5168\u90E8\u5BC6\u6587\u4F1A\u4EE5\u65B0\u5BC6\u7801\u91CD\u65B0\u52A0\u5BC6\u5E76\u91CD\u5199\uFF0C\u5176\u4ED6\u8BBE\u5907\u4E0B\u6B21\u5E94\u7528\u65F6\u8F93\u5165\u65B0\u5BC6\u7801\u5373\u53EF\u3002": "Every encrypted entry will be re-encrypted with the new password; other devices just enter the new password on their next apply.",
@@ -133,39 +173,7 @@ var init_en = __esm({
       "\u6838\u5FC3\u63D2\u4EF6\u5F00\u5173": "Core plugin switches",
       "\u793E\u533A\u63D2\u4EF6\u542F\u7528\u5217\u8868": "Community plugin enable list",
       "\u5173\u7CFB\u56FE\u8BBE\u7F6E": "Graph settings",
-      "\u4E66\u7B7E": "Bookmarks",
-      // ── 设置页：加密区 ──
-      "\u52A0\u5BC6": "Encryption",
-      "\u914D\u7F6E\u5E93\u52A0\u5BC6": "Store encryption",
-      "store \u6574\u5E93\u52A0\u5BC6\uFF1B\u5BC6\u7801\u53EA\u5B58\u5404\u8BBE\u5907\u672C\u5730\uFF0C\u4E0D\u8FDB vault\u3002": "The whole store is encrypted; the password stays on each device, never in the vault.",
-      "\u4FEE\u6539\u5BC6\u7801": "Change password",
-      "\u6C60\u5185\u5168\u90E8\u5BC6\u6587\u4F1A\u4EE5\u65B0\u5BC6\u7801\u91CD\u65B0\u52A0\u5BC6\u91CD\u5199\u3002": "Every encrypted entry will be re-encrypted and rewritten with the new password.",
-      "\u5C1A\u672A\u52A0\u5BC6\u3002\u4E0B\u6B21\u540C\u6B65\u65F6\u53EF\u8BBE\u7F6E\u5BC6\u7801\uFF0Cstore \u5C06\u6574\u5E93\u52A0\u5BC6\u3002": "Not encrypted yet. Set a password on the next sync to encrypt the whole store.",
-      "\u5C1A\u672A\u52A0\u5BC6\uFF08\u4E3B\u914D\u7F6E\u8BBE\u5907\u53EF\u5728\u5176\u8BBE\u7F6E\u4E2D\u5F00\u542F\uFF09\u3002": "Not encrypted yet (the master device can enable it in its settings).",
-      "\u8BBE\u7F6E\u5BC6\u7801\u5E76\u7ACB\u5373\u91CD\u65B0\u540C\u6B65\uFF08\u6574\u5E93\u52A0\u5BC6\uFF09\u3002": "Set a password and re-sync immediately (whole-store encryption).",
-      "\u5BC6\u7801\u5DF2\u4FEE\u6539\uFF0C\u6C60\u5185\u5BC6\u6587\u5DF2\u91CD\u5199\u3002": "Password changed; encrypted entries rewritten.",
-      "\u4FEE\u6539\u5931\u8D25\uFF1A{message}": "Change failed: {message}",
-      // ── 设置页：Profiles 区 ──
-      "Profiles": "Profiles",
-      "profile \u7BA1\u7406\u8BF7\u5230 PC \u7AEF\uFF08\u624B\u673A\u53EA\u5E94\u7528\u914D\u7F6E\uFF09\u3002": "Manage profiles on desktop (mobile only applies them).",
-      "\u65B0\u5EFA profile": "New profile",
-      "\u521B\u5EFA\u540E\u91CD\u8F7D\u63D2\u4EF6\uFF0C\u5E94\u7528\u547D\u4EE4\u5373\u53EF\u7528\u3002": "Reload the plugin after creating to register its apply command.",
-      "\u65B0\u5EFA": "Create",
-      "\u8FD8\u6CA1\u6709 profile\u3002\u65B0\u5EFA\u4E00\u4E2A\uFF0C\u6216\u5728\u4E3B\u914D\u7F6E\u7AEF\u6267\u884C\u540C\u6B65\u3002": "No profiles yet. Create one, or run a sync on the master device.",
-      "\u7531\u540C\u540D\u684C\u9762 profile \u9002\u914D\u751F\u6210\uFF0C\u8DDF\u968F\u5176\u66F4\u65B0\u3002": "Generated from the desktop profile of the same name; follows its updates.",
-      "\u5DF2\u5F00\u542F\u624B\u673A\u9002\u914D\u3002": "Mobile adaptation enabled.",
-      "\u9002\u914D\u624B\u673A": "Adapt for mobile",
-      "\u67E5\u770B/\u7F16\u8F91": "View/edit",
-      "\u91CD\u547D\u540D": "Rename",
-      "\u5220\u9664": "Delete",
-      "\u540D\u79F0": "Name",
-      "\u4E3A\u300A{name}\u300B\u540C\u65F6\u751F\u6210\u624B\u673A\u9002\u914D profile \u5417\uFF1F": 'Also generate a mobile-adapted profile for "{name}"?',
-      "\u684C\u9762 + \u624B\u673A": "Desktop + mobile",
-      "\u4EC5\u684C\u9762": "Desktop only",
-      "\u91CD\u547D\u540D profile": "Rename profile",
-      "\u5220\u9664 profile": "Delete profile",
-      "\u786E\u5B9A\u5220\u9664\u300A{label}\u300B\uFF1F\u6B64\u64CD\u4F5C\u4E0D\u53EF\u64A4\u9500\u3002": 'Delete "{label}"? This cannot be undone.',
-      "\u64CD\u4F5C\u5931\u8D25\uFF1A{message}": "Operation failed: {message}"
+      "\u4E66\u7B7E": "Bookmarks"
     };
   }
 });
@@ -241,12 +249,12 @@ var init_items = __esm({
 
 // src/ui/profile-editor.ts
 function toggleRow(container, label, checked, onChange, extra) {
-  const setting = new import_obsidian8.Setting(container).setName(label);
+  const setting = new import_obsidian9.Setting(container).setName(label);
   if (extra) setting.setDesc(extra);
   setting.addToggle((toggle) => toggle.setValue(checked).onChange(onChange));
 }
 function groupHeading(container, name) {
-  new import_obsidian8.Setting(container).setName(name).setHeading();
+  new import_obsidian9.Setting(container).setName(name).setHeading();
 }
 function renderProfileEditor(container, doc, data, host) {
   container.empty();
@@ -296,11 +304,11 @@ function renderProfileEditor(container, doc, data, host) {
     }
   }
 }
-var import_obsidian8;
+var import_obsidian9;
 var init_profile_editor = __esm({
   "src/ui/profile-editor.ts"() {
     "use strict";
-    import_obsidian8 = require("obsidian");
+    import_obsidian9 = require("obsidian");
     init_i18n();
     init_items();
   }
@@ -311,14 +319,14 @@ var profile_edit_exports = {};
 __export(profile_edit_exports, {
   ProfileEditModal: () => ProfileEditModal
 });
-var import_obsidian9, ProfileEditModal;
+var import_obsidian10, ProfileEditModal;
 var init_profile_edit = __esm({
   "src/modals/profile-edit.ts"() {
     "use strict";
-    import_obsidian9 = require("obsidian");
+    import_obsidian10 = require("obsidian");
     init_i18n();
     init_profile_editor();
-    ProfileEditModal = class extends import_obsidian9.Modal {
+    ProfileEditModal = class extends import_obsidian10.Modal {
       constructor(plugin, doc, data) {
         super(plugin.app);
         this.plugin = plugin;
@@ -353,7 +361,7 @@ __export(main_exports, {
   default: () => ConfigProfilePlugin
 });
 module.exports = __toCommonJS(main_exports);
-var import_obsidian10 = require("obsidian");
+var import_obsidian11 = require("obsidian");
 
 // src/crypto/envelope.ts
 var CRYPTO_SCHEMA = "aes-256-gcm";
@@ -514,57 +522,8 @@ function storePaths(storePath) {
     profilesDir: `${root}/profiles`
   };
 }
-function lockPath(paths) {
-  return `${paths.pcPool.base}/_lock.json`;
-}
-
-// src/store/lock.ts
-var LOCK_SCHEMA = 1;
-function parseLock(raw) {
-  if (raw === null) return { ok: false, error: "missing" };
-  let parsed;
-  try {
-    parsed = JSON.parse(raw);
-  } catch (e) {
-    return { ok: false, error: "corrupt" };
-  }
-  if (typeof parsed !== "object" || parsed === null) {
-    return { ok: false, error: "corrupt" };
-  }
-  const lock = parsed;
-  if (typeof lock.deviceId !== "string" || lock.deviceId.trim() === "") {
-    return { ok: false, error: "corrupt" };
-  }
-  if (typeof lock.schema !== "number" || !Number.isFinite(lock.schema)) {
-    return { ok: false, error: "corrupt" };
-  }
-  if (lock.schema > LOCK_SCHEMA) {
-    return { ok: false, error: "future-schema" };
-  }
-  return {
-    ok: true,
-    lock: {
-      deviceId: lock.deviceId,
-      deviceName: typeof lock.deviceName === "string" ? lock.deviceName : "",
-      claimedAt: typeof lock.claimedAt === "string" ? lock.claimedAt : "",
-      schema: lock.schema
-    }
-  };
-}
-function decideRole(input) {
-  const { lock, poolHasContent, localDeviceId } = input;
-  if (lock.ok) {
-    return lock.lock.deviceId === localDeviceId ? { kind: "master" } : { kind: "apply", reason: "other-device", holderName: lock.lock.deviceName };
-  }
-  if (lock.error === "missing") {
-    return poolHasContent ? { kind: "apply", reason: "pool-without-lock" } : { kind: "fresh" };
-  }
-  return { kind: "apply", reason: lock.error === "corrupt" ? "lock-corrupt" : "future-schema" };
-}
-function roleStateKey(decision) {
-  if (decision.kind === "fresh") return "fresh";
-  if (decision.kind === "master") return "master";
-  return `apply:${decision.reason}`;
+function metaPath(pool) {
+  return `${pool.base}/_meta.json`;
 }
 
 // src/store/profile.ts
@@ -658,6 +617,12 @@ function filterCommunityListForMobile(rawJson, desktopOnlyPluginIds) {
   if (!Array.isArray(list) || !list.every((id) => typeof id === "string")) return rawJson;
   const filtered = list.filter((id) => !desktopOnlyPluginIds.has(id));
   return JSON.stringify(filtered, null, "	");
+}
+
+// src/store/role.ts
+function decideStartupRole(preferredRole) {
+  if (preferredRole === "ask") return { kind: "ask" };
+  return { kind: "role", role: preferredRole };
 }
 
 // src/services/apply-service.ts
@@ -762,15 +727,8 @@ var ApplyService = class {
 // src/services/config-adapter.ts
 var import_obsidian = require("obsidian");
 init_items();
-var DEVICE_ID_KEY = "cp-device-id";
+var LEGACY_DEVICE_ID_KEY = "cp-device-id";
 var STORE_PASSWORD_KEY = "cp-store-password";
-function randomId() {
-  const c = globalThis.crypto;
-  if (c && typeof c.randomUUID === "function") {
-    return c.randomUUID();
-  }
-  return `cp-${Math.random().toString(36).slice(2)}${Date.now().toString(36)}`;
-}
 var ConfigAdapter = class {
   constructor(app) {
     this.app = app;
@@ -780,15 +738,12 @@ var ConfigAdapter = class {
     return import_obsidian.Platform.isMobile;
   }
   /**
-   * 本机设备 id：首次访问时生成并落 localStorage；之后稳定不变。
-   * 注意绝不写入 vault / store（同步后双机同 id，识别就失效——SPEC §11.1）。
+   * 旧版（≤0.0.3）存在 localStorage 的设备 id：只读迁移源，不写回。
+   * 0.1.0 起 deviceId 存 data.json（清缓存不丢）；无旧值 → null，调用方生成新 id。
    */
-  deviceId() {
-    const existing = this.app.loadLocalStorage(DEVICE_ID_KEY);
-    if (typeof existing === "string" && existing !== "") return existing;
-    const id = randomId();
-    this.app.saveLocalStorage(DEVICE_ID_KEY, id);
-    return id;
+  legacyDeviceId() {
+    const value = this.app.loadLocalStorage(LEGACY_DEVICE_ID_KEY);
+    return typeof value === "string" && value !== "" ? value : null;
   }
   // ── store 密码（SPEC §2.5：只存各设备本地） ──
   storePassword() {
@@ -798,28 +753,7 @@ var ConfigAdapter = class {
   setStorePassword(password) {
     this.app.saveLocalStorage(STORE_PASSWORD_KEY, password);
   }
-  // ── lock（SPEC §2.2） ──
-  /** lock 原文：文件不存在 → null；存在但读失败 → 抛出（调用方按 corrupt 处理） */
-  async readLockRaw(paths) {
-    const p = this.n(lockPath(paths));
-    if (!await this.adapter.exists(p)) return null;
-    return this.adapter.read(p);
-  }
-  async writeLock(paths, lock) {
-    await this.mkdir(this.n(paths.pcPool.base));
-    await this.adapter.write(this.n(lockPath(paths)), JSON.stringify(lock, null, "	"));
-  }
-  async deleteLock(paths) {
-    await this.adapter.rmdir(this.n(lockPath(paths)), true);
-  }
-  buildLock(deviceName) {
-    return {
-      deviceId: this.deviceId(),
-      deviceName,
-      claimedAt: (/* @__PURE__ */ new Date()).toISOString(),
-      schema: LOCK_SCHEMA
-    };
-  }
+  // ── store 结构探测 ──
   async poolHasContent(paths) {
     if (!await this.adapter.exists(this.n(paths.root))) return false;
     const dirs = [paths.pcPool.base, paths.mobilePool.base, paths.profilesDir];
@@ -855,6 +789,19 @@ var ConfigAdapter = class {
   /** `.obsidian/plugins` 下已安装社区插件的清单（读各目录 manifest.json） */
   async listInstalledPlugins() {
     return this.listPluginManifests(`${this.configDir}/plugins`);
+  }
+  /** 插件目录内的相对文件路径（递归；目录不存在 → 空数组）。同步枚举插件文件用 */
+  async listPluginFilesRel(id) {
+    const root = this.n(`${this.configDir}/plugins/${id}`);
+    if (!await this.adapter.exists(root)) return [];
+    const out = [];
+    const walk = async (dir) => {
+      const listed = await this.adapter.list(this.n(dir));
+      out.push(...listed.files.map((file) => file.slice(root.length + 1)));
+      for (const folder of listed.folders) await walk(folder);
+    };
+    await walk(root);
+    return out;
   }
   /** 池内插件目录只有 id（manifest 是安装产物被排除，SPEC §9.3） */
   async listPoolPluginIds(pool) {
@@ -993,6 +940,9 @@ var ConfigAdapter = class {
   }
 };
 
+// src/services/sync-service.ts
+init_items();
+
 // src/store/fingerprint.ts
 function fingerprint(text) {
   let hash = 2166136261;
@@ -1003,128 +953,377 @@ function fingerprint(text) {
   return (hash >>> 0).toString(16).padStart(8, "0");
 }
 
+// src/store/pool-meta.ts
+var EMPTY_POOL_META = {
+  schema: 2,
+  syncedAt: "",
+  encrypted: false,
+  entries: {},
+  devices: {}
+};
+function asRecord(value) {
+  return typeof value === "object" && value !== null ? value : null;
+}
+function parseEntry(raw) {
+  const rec = asRecord(raw);
+  if (rec === null) return null;
+  const fp = typeof rec.fp === "string" ? rec.fp : "";
+  const ts = typeof rec.ts === "string" ? rec.ts : "";
+  const deviceId = typeof rec.deviceId === "string" ? rec.deviceId : "";
+  const deleted = rec.deleted === true ? true : void 0;
+  return { fp, ts, deviceId, deleted };
+}
+function parseDevice(raw) {
+  const rec = asRecord(raw);
+  if (rec === null) return null;
+  const baseline = asRecord(rec.baseline);
+  const parsed = {};
+  if (baseline !== null) {
+    for (const [key, value] of Object.entries(baseline)) {
+      if (typeof value === "string") parsed[key] = value;
+    }
+  }
+  return {
+    name: typeof rec.name === "string" ? rec.name : "",
+    lastSyncedAt: typeof rec.lastSyncedAt === "string" ? rec.lastSyncedAt : "",
+    baseline: parsed
+  };
+}
+function parsePoolMeta(raw) {
+  if (raw === null) return { ...EMPTY_POOL_META, entries: {}, devices: {} };
+  let parsed;
+  try {
+    parsed = JSON.parse(raw);
+  } catch (e) {
+    return { ...EMPTY_POOL_META, entries: {}, devices: {} };
+  }
+  const rec = asRecord(parsed);
+  if (rec === null) return { ...EMPTY_POOL_META, entries: {}, devices: {} };
+  if (rec.schema === 1) {
+    const entries2 = {};
+    const v1entries = asRecord(rec.entries);
+    const syncedAt = typeof rec.syncedAt === "string" ? rec.syncedAt : "";
+    if (v1entries !== null) {
+      for (const [key, fp] of Object.entries(v1entries)) {
+        if (typeof fp === "string") {
+          entries2[key] = { fp, ts: syncedAt, deviceId: "" };
+        }
+      }
+    }
+    return { schema: 2, syncedAt, encrypted: rec.encrypted === true, entries: entries2, devices: {} };
+  }
+  const entries = {};
+  const rawEntries = asRecord(rec.entries);
+  if (rawEntries !== null) {
+    for (const [key, value] of Object.entries(rawEntries)) {
+      const entry = parseEntry(value);
+      if (entry !== null) entries[key] = entry;
+    }
+  }
+  const devices = {};
+  const rawDevices = asRecord(rec.devices);
+  if (rawDevices !== null) {
+    for (const [id, value] of Object.entries(rawDevices)) {
+      const device = parseDevice(value);
+      if (device !== null) devices[id] = device;
+    }
+  }
+  return {
+    schema: 2,
+    syncedAt: typeof rec.syncedAt === "string" ? rec.syncedAt : "",
+    encrypted: rec.encrypted === true,
+    entries,
+    devices
+  };
+}
+function serializePoolMeta(meta) {
+  return JSON.stringify(meta, null, "	");
+}
+
+// src/store/reconcile.ts
+function classifyEntry(sides) {
+  const { base, local, pool } = sides;
+  if (pool === void 0) {
+    return local === void 0 ? { kind: "noop" } : { kind: "push" };
+  }
+  if (pool.deleted) {
+    if (local === void 0) return { kind: "noop" };
+    return base !== void 0 && local === base ? { kind: "delete-local" } : { kind: "push" };
+  }
+  if (local === void 0) {
+    if (base === void 0) return { kind: "pull" };
+    return pool.fp === base ? { kind: "tombstone" } : { kind: "conflict" };
+  }
+  if (local === pool.fp) return { kind: "noop" };
+  if (base === void 0) return { kind: "conflict" };
+  if (pool.fp === base) return { kind: "push" };
+  if (local === base) return { kind: "pull" };
+  return { kind: "conflict" };
+}
+var CLOCK_TOLERANCE_MS = 5 * 60 * 1e3;
+function clockSkewDetected(metaSyncedAt, now) {
+  if (metaSyncedAt === "") return false;
+  const ts = Date.parse(metaSyncedAt);
+  return Number.isFinite(ts) && ts > now.getTime() + CLOCK_TOLERANCE_MS;
+}
+function monotonicTs(now, poolMaxTs2) {
+  const floor = Date.parse(poolMaxTs2);
+  if (Number.isFinite(floor) && floor + 1e3 > now.getTime()) {
+    return new Date(floor + 1e3).toISOString();
+  }
+  return now.toISOString();
+}
+var TOMBSTONE_MAX_AGE_MS = 90 * 24 * 60 * 60 * 1e3;
+function tombstoneCollectible(entry, devices, now) {
+  const ts = Date.parse(entry.ts);
+  if (Number.isFinite(ts) && now.getTime() - ts > TOMBSTONE_MAX_AGE_MS) return true;
+  for (const device of Object.values(devices)) {
+    const seen = Date.parse(device.lastSyncedAt);
+    if (!Number.isFinite(seen) || seen < ts) return false;
+  }
+  return true;
+}
+function poolMaxTs(meta) {
+  let max = meta.syncedAt;
+  for (const entry of Object.values(meta.entries)) {
+    if (entry.ts > max) max = entry.ts;
+  }
+  return max;
+}
+
 // src/services/sync-service.ts
-init_items();
+var ClockSkewError = class extends Error {
+  constructor() {
+    super("clock skew detected");
+    this.name = "ClockSkewError";
+  }
+};
+var SyncAbortedError = class extends Error {
+  constructor() {
+    super("sync aborted by user");
+    this.name = "SyncAbortedError";
+  }
+};
 var SyncService = class {
-  constructor(adapter, paths, deviceName) {
+  constructor(adapter, paths, device, callbacks) {
     this.adapter = adapter;
     this.paths = paths;
-    this.deviceName = deviceName;
+    this.device = device;
+    this.callbacks = callbacks;
   }
   async run(password) {
-    const meta = await this.readMeta();
-    const entries = {};
-    let updated = 0;
-    let skipped = 0;
-    let pruned = 0;
-    const transform = password === null ? void 0 : async (content) => JSON.stringify(await encryptText(password, content), null, "	");
-    const put = async (key, dstPath, content) => {
-      const finalContent = transform ? await transform(content) : content;
-      const fp = fingerprint(finalContent);
-      entries[key] = fp;
-      if (meta.entries[key] === fp) {
-        skipped++;
-        return;
-      }
-      await this.adapter.writeAtomic(dstPath, finalContent);
-      updated++;
+    const meta = parsePoolMeta(await this.adapter.readIfExists(metaPath(this.paths.pcPool)));
+    const now = /* @__PURE__ */ new Date();
+    if (clockSkewDetected(meta.syncedAt, now)) throw new ClockSkewError();
+    await this.adapter.deletePath(`${this.paths.pcPool.base}/_lock.json`);
+    const report = {
+      pushed: 0,
+      pulled: 0,
+      tombstoned: 0,
+      deletedLocal: 0,
+      prunedMeta: 0,
+      conflictsResolved: null,
+      mobileProjection: false
     };
+    const writeTs = monotonicTs(now, poolMaxTs(meta));
+    const local = await this.collectLocal();
+    const mine = meta.devices[this.device.id];
+    const firstSync = mine === void 0;
+    if (firstSync && Object.keys(meta.entries).length > 0) {
+      const direction = await this.callbacks.firstSyncDirection();
+      if (direction === null) throw new SyncAbortedError();
+      if (direction === "local-to-pool") {
+        for (const [key, content] of local) {
+          await this.pushPool(meta, key, content, password, writeTs);
+          report.pushed++;
+        }
+        for (const key of Object.keys(meta.entries)) {
+          if (!local.has(key)) {
+            if (!this.callbacks.syncArtifacts && this.isPluginArtifactKey(key)) continue;
+            this.writeTombstone(meta, key, writeTs);
+            report.tombstoned++;
+          }
+        }
+      } else {
+        for (const [key, entry] of Object.entries(meta.entries)) {
+          if (entry.deleted) continue;
+          if (!this.callbacks.syncArtifacts && this.isPluginArtifactKey(key)) continue;
+          await this.pullLocal(key, await this.readPool(key, password), report);
+        }
+      }
+    } else {
+      const keys = /* @__PURE__ */ new Set([...local.keys(), ...Object.keys(meta.entries)]);
+      const conflicts = [];
+      for (const key of keys) {
+        if (!this.callbacks.syncArtifacts && this.isPluginArtifactKey(key)) continue;
+        const action = classifyEntry({
+          base: mine == null ? void 0 : mine.baseline[key],
+          local: local.has(key) ? fingerprint(local.get(key)) : void 0,
+          pool: meta.entries[key]
+        });
+        switch (action.kind) {
+          case "noop":
+            break;
+          case "push":
+            await this.pushPool(meta, key, local.get(key), password, writeTs);
+            report.pushed++;
+            break;
+          case "pull":
+            await this.pullLocal(key, await this.readPool(key, password), report);
+            break;
+          case "tombstone":
+            this.writeTombstone(meta, key, writeTs);
+            report.tombstoned++;
+            break;
+          case "delete-local":
+            await this.deleteLocalFile(key);
+            report.deletedLocal++;
+            break;
+          case "conflict":
+            conflicts.push(key);
+            break;
+        }
+      }
+      if (conflicts.length > 0) {
+        const resolution = await this.callbacks.resolveConflicts(conflicts);
+        if (resolution === null) throw new SyncAbortedError();
+        report.conflictsResolved = resolution;
+        for (const key of conflicts) {
+          if (resolution === "local") {
+            await this.pushPool(meta, key, local.get(key), password, writeTs);
+            report.pushed++;
+          } else {
+            await this.pullLocal(key, await this.readPool(key, password), report);
+          }
+        }
+      }
+    }
+    const baseline = {};
+    for (const [key, entry] of Object.entries(meta.entries)) {
+      if (entry.deleted) continue;
+      baseline[key] = entry.fp;
+    }
+    for (const key of Object.keys(meta.entries)) {
+      const entry = meta.entries[key];
+      if ((entry == null ? void 0 : entry.deleted) && tombstoneCollectible(entry, meta.devices, now)) {
+        delete meta.entries[key];
+        report.prunedMeta++;
+      }
+    }
+    meta.syncedAt = monotonicTs(now, poolMaxTs(meta));
+    meta.encrypted = password !== null;
+    meta.devices[this.device.id] = {
+      name: this.device.name,
+      lastSyncedAt: meta.syncedAt,
+      baseline
+    };
+    await this.adapter.mkdir(this.paths.pcPool.base);
+    await this.adapter.writeAtomic(metaPath(this.paths.pcPool), serializePoolMeta(meta));
+    report.mobileProjection = await this.buildMobileProjection(password);
+    return report;
+  }
+  // ── 本机状态收集 ──
+  /** key → 明文内容（key 空间：app/<file>、plugins/<id>/<rel>、snippets/<name>、themes/<name>） */
+  async collectLocal() {
+    var _a;
+    const local = /* @__PURE__ */ new Map();
     for (const spec of APP_FILES) {
       const raw = await this.adapter.obsidianRead(spec.file);
-      if (raw === null) {
-        if (meta.entries[`app/${spec.file}`] !== void 0) {
-          await this.adapter.deletePath(`${this.paths.pcPool.app}/${spec.file}`);
-          delete entries[`app/${spec.file}`];
-          pruned++;
-        }
-        continue;
-      }
-      await this.adapter.mkdir(this.paths.pcPool.app);
-      await put(`app/${spec.file}`, `${this.paths.pcPool.app}/${spec.file}`, raw);
+      if (raw !== null) local.set(`app/${spec.file}`, raw);
     }
-    const localPlugins = await this.adapter.listInstalledPlugins();
-    const poolPluginIds = await this.adapter.listPoolPluginIds(this.paths.pcPool);
-    for (const id of poolPluginIds) {
-      if (!localPlugins.some((plugin) => plugin.id === id)) {
-        await this.adapter.deletePath(`${this.paths.pcPool.plugins}/${id}`);
-        pruned++;
+    const plugins = await this.adapter.listInstalledPlugins();
+    for (const plugin of plugins) {
+      const files = await this.adapter.listPluginFilesRel(plugin.id);
+      for (const rel of files) {
+        const fileName = (_a = rel.split("/").pop()) != null ? _a : rel;
+        if (!this.callbacks.syncArtifacts && !isCarryablePluginFile(fileName)) continue;
+        const raw = await this.adapter.obsidianRead(`plugins/${plugin.id}/${rel}`);
+        if (raw !== null) local.set(`plugins/${plugin.id}/${rel}`, raw);
       }
     }
-    if (localPlugins.length > 0) await this.adapter.mkdir(this.paths.pcPool.plugins);
-    for (const plugin of localPlugins) {
-      const copied = await this.adapter.copyTree(
-        this.adapter.obsidianPath(`plugins/${plugin.id}`),
-        `${this.paths.pcPool.plugins}/${plugin.id}`,
-        { excludeFileName: (fileName) => !isCarryablePluginFile(fileName), transform }
-      );
-      updated += copied.length;
+    for (const [prefix, dir] of [
+      ["snippets", "snippets"],
+      ["themes", "themes"]
+    ]) {
+      for (const name of await this.adapter.listFileNames(this.adapter.obsidianPath(dir))) {
+        const raw = await this.adapter.readIfExists(`${this.adapter.obsidianPath(dir)}/${name}`);
+        if (raw !== null) local.set(`${prefix}/${name}`, raw);
+      }
     }
-    pruned += await this.syncFlatDir("snippets", this.paths.pcPool.snippets, "snippets", entries, meta, transform);
-    pruned += await this.syncFlatDir("themes", this.paths.pcPool.themes, "themes", entries, meta, transform);
-    const newMeta = {
-      schema: 1,
-      syncedAt: (/* @__PURE__ */ new Date()).toISOString(),
-      deviceName: this.deviceName,
-      encrypted: password !== null,
-      entries
-    };
-    await this.adapter.writeAtomic(`${this.paths.pcPool.base}/_meta.json`, JSON.stringify(newMeta, null, "	"));
-    const mobileProjection = await this.buildMobileProjection(password, localPlugins);
-    return { updated, skipped, pruned, mobileProjection };
+    return local;
   }
-  /** 文件级目录（snippets/themes）：源文件全量入池（含加密）+ 池内多余清除 */
-  async syncFlatDir(srcRel, dstDir, keyPrefix, entries, meta, transform) {
-    const srcDir = this.adapter.obsidianPath(srcRel);
-    const localNames = await this.adapter.listFileNames(srcDir);
-    let pruned = 0;
-    if (localNames.length > 0) await this.adapter.mkdir(dstDir);
-    for (const name of localNames) {
-      const raw = await this.adapter.readIfExists(`${srcDir}/${name}`);
-      if (raw === null) continue;
-      const finalContent = transform ? await transform(raw) : raw;
-      const fp = fingerprint(finalContent);
-      entries[`${keyPrefix}/${name}`] = fp;
-      if (meta.entries[`${keyPrefix}/${name}`] === fp) continue;
-      await this.adapter.writeAtomic(`${dstDir}/${name}`, finalContent);
+  // ── 编解码（主体明文例外：syncArtifacts 开启时安装产物不加密） ──
+  async encode(key, plain, password) {
+    var _a;
+    if (password === null) return plain;
+    const fileName = (_a = key.split("/").pop()) != null ? _a : key;
+    if (this.callbacks.syncArtifacts && key.startsWith("plugins/") && INSTALL_ARTIFACTS.has(fileName)) {
+      return plain;
     }
-    for (const name of await this.adapter.listFileNames(dstDir)) {
-      if (!localNames.includes(name)) {
-        await this.adapter.deletePath(`${dstDir}/${name}`);
-        delete entries[`${keyPrefix}/${name}`];
-        pruned++;
-      }
-    }
-    return pruned;
+    return JSON.stringify(await encryptText(password, plain), null, "	");
   }
-  async readMeta() {
-    const raw = await this.adapter.readIfExists(`${this.paths.pcPool.base}/_meta.json`);
-    if (raw === null) return { schema: 1, syncedAt: "", deviceName: "", encrypted: false, entries: {} };
+  async readPool(key, password) {
+    const raw = await this.adapter.readIfExists(this.poolPath(key));
+    if (raw === null) throw new Error(`pool entry missing: ${key}`);
+    const envelope = parseEnvelopeText(raw);
+    if (envelope === null) return raw;
+    if (password === null) throw new Error(`encrypted entry but no password: ${key}`);
     try {
-      const parsed = JSON.parse(raw);
-      return {
-        schema: 1,
-        syncedAt: typeof parsed.syncedAt === "string" ? parsed.syncedAt : "",
-        deviceName: typeof parsed.deviceName === "string" ? parsed.deviceName : "",
-        encrypted: parsed.encrypted === true,
-        entries: typeof parsed.entries === "object" && parsed.entries !== null ? parsed.entries : {}
-      };
-    } catch (e) {
-      return { schema: 1, syncedAt: "", deviceName: "", encrypted: false, entries: {} };
+      return await decryptText(password, envelope);
+    } catch (error) {
+      if (error instanceof PasswordError) throw new Error(`cannot decrypt pool entry: ${key}`);
+      throw error;
     }
   }
-  /**
-   * 移动投影（SPEC §3.2 第 3 步）：mobileconfig 只放 core/community 两个 app 文件
-   * （community 按本机 manifest 剔除 isDesktopOnly 插件）+ 非 desktopOnly 插件；
-   * 同时把 mobile profile 文档按当前桌面 profile 重新生成。
-   */
-  async buildMobileProjection(password, localPlugins) {
+  // ── 动作执行 ──
+  poolPath(key) {
+    return `${this.paths.pcPool.base}/${key}`;
+  }
+  /** key 是否为插件安装产物（main.js / styles.css / manifest.json） */
+  isPluginArtifactKey(key) {
+    var _a;
+    return key.startsWith("plugins/") && INSTALL_ARTIFACTS.has((_a = key.split("/").pop()) != null ? _a : key);
+  }
+  async pushPool(meta, key, plain, password, ts) {
+    const fp = fingerprint(plain);
+    await this.adapter.mkdir(this.dirname(this.poolPath(key)));
+    await this.adapter.writeAtomic(this.poolPath(key), await this.encode(key, plain, password));
+    meta.entries[key] = { fp, ts, deviceId: this.device.id };
+  }
+  writeTombstone(meta, key, ts) {
+    meta.entries[key] = { fp: "", ts, deviceId: this.device.id, deleted: true };
+  }
+  async pullLocal(key, plain, report) {
+    if (key.startsWith("app/")) {
+      await this.adapter.obsidianWrite(key.slice("app/".length), plain);
+    } else {
+      await this.adapter.mkdir(this.dirname(this.adapter.obsidianPath(key)));
+      await this.adapter.writeText(this.adapter.obsidianPath(key), plain);
+    }
+    report.pulled++;
+  }
+  async deleteLocalFile(key) {
+    await this.adapter.deletePath(this.adapter.obsidianPath(key));
+  }
+  dirname(path) {
+    const idx = path.lastIndexOf("/");
+    return idx === -1 ? "" : path.slice(0, idx);
+  }
+  // ── 移动投影（SPEC §3.2 末步；mobileconfig 由 PC 重建，手机永不写池） ──
+  async buildMobileProjection(password) {
     const profileFiles = await this.adapter.listFileNames(this.paths.profilesDir);
     const mobileProfiles = profileFiles.map((name) => profileFromFileName(name)).filter((entry) => (entry == null ? void 0 : entry.platform) === "mobile");
     if (mobileProfiles.length === 0) return false;
-    const transform = password === null ? void 0 : async (content) => JSON.stringify(await encryptText(password, content), null, "	");
-    const put = async (dstPath, content) => {
-      await this.adapter.writeAtomic(dstPath, transform ? await transform(content) : content);
+    const transform = password === null ? void 0 : async (content, relPath) => {
+      var _a;
+      const fileName = (_a = relPath.split("/").pop()) != null ? _a : relPath;
+      if (this.callbacks.syncArtifacts && INSTALL_ARTIFACTS.has(fileName)) return content;
+      return JSON.stringify(await encryptText(password, content), null, "	");
     };
+    const put = async (dstPath, content) => {
+      await this.adapter.writeAtomic(dstPath, password === null ? content : await transform(content, ""));
+    };
+    const localPlugins = await this.adapter.listInstalledPlugins();
     const desktopOnly = new Set(localPlugins.filter((p) => p.isDesktopOnly).map((p) => p.id));
     await this.adapter.mkdir(this.paths.mobilePool.app);
     const core = await this.adapter.obsidianRead("core-plugins.json");
@@ -1149,7 +1348,7 @@ var SyncService = class {
         this.adapter.obsidianPath(`plugins/${plugin.id}`),
         `${this.paths.mobilePool.plugins}/${plugin.id}`,
         {
-          excludeFileName: (fileName) => !isCarryablePluginFile(fileName),
+          excludeFileName: (fileName) => this.callbacks.syncArtifacts ? false : !isCarryablePluginFile(fileName),
           transform
         }
       );
@@ -1169,10 +1368,53 @@ var SyncService = class {
   }
 };
 
-// src/modals/apply-result.ts
+// src/modals/choice-list.ts
 var import_obsidian2 = require("obsidian");
+function chooseFromList(app, options) {
+  return new Promise((resolve) => {
+    new ChoiceListModal(app, options, resolve).open();
+  });
+}
+var ChoiceListModal = class extends import_obsidian2.Modal {
+  constructor(app, options, settle) {
+    super(app);
+    this.options = options;
+    this.settle = settle;
+    this.answered = false;
+  }
+  onOpen() {
+    this.contentEl.addClass("cp-modal");
+    this.titleEl.setText(this.options.title);
+    this.contentEl.createEl("p", { cls: "cp-modal__message", text: this.options.message });
+    if (this.options.items.length > 0) {
+      const ul = this.contentEl.createEl("ul", { cls: "cp-modal__list" });
+      for (const item of this.options.items) ul.createEl("li", { text: item });
+    }
+    if (this.options.hint) {
+      this.contentEl.createEl("p", { cls: "cp-modal__hint", text: this.options.hint });
+    }
+    const buttons = this.contentEl.createDiv({ cls: "cp-modal__buttons" });
+    for (const choice of this.options.choices) {
+      const btn = new import_obsidian2.ButtonComponent(buttons).setButtonText(choice.label).onClick(() => {
+        this.answered = true;
+        this.settle(choice.value);
+        this.close();
+      });
+      if (choice.tooltip) btn.setTooltip(choice.tooltip);
+      if (choice.destructive) btn.setDestructive();
+      else if (choice.cta) btn.setCta();
+    }
+  }
+  onClose() {
+    this.contentEl.empty();
+    if (!this.answered) this.settle(null);
+  }
+};
+
+// src/modals/apply-result.ts
+var import_obsidian3 = require("obsidian");
 init_i18n();
-var ApplyResultModal = class extends import_obsidian2.Modal {
+var ApplyResultModal = class extends import_obsidian3.Modal {
   constructor(app, profileName, report, reload) {
     super(app);
     this.profileName = profileName;
@@ -1205,15 +1447,15 @@ var ApplyResultModal = class extends import_obsidian2.Modal {
     }
     if (this.report.applied.length === 0) {
       const buttons2 = this.contentEl.createDiv({ cls: "cp-modal__buttons" });
-      new import_obsidian2.ButtonComponent(buttons2).setButtonText(t("\u5173\u95ED")).setCta().onClick(() => this.close());
+      new import_obsidian3.ButtonComponent(buttons2).setButtonText(t("\u5173\u95ED")).setCta().onClick(() => this.close());
       return;
     }
     const buttons = this.contentEl.createDiv({ cls: "cp-modal__buttons" });
-    new import_obsidian2.ButtonComponent(buttons).setButtonText(t("\u7A0D\u540E\u624B\u52A8\u91CD\u8F7D")).onClick(() => this.close());
-    new import_obsidian2.ButtonComponent(buttons).setButtonText(t("\u7ACB\u5373\u91CD\u8F7D")).setCta().onClick(() => {
+    new import_obsidian3.ButtonComponent(buttons).setButtonText(t("\u7A0D\u540E\u624B\u52A8\u91CD\u8F7D")).onClick(() => this.close());
+    new import_obsidian3.ButtonComponent(buttons).setButtonText(t("\u7ACB\u5373\u91CD\u8F7D")).setCta().onClick(() => {
       this.close();
       if (!this.reload()) {
-        new import_obsidian2.Notice(t("\u65E0\u6CD5\u81EA\u52A8\u91CD\u8F7D\uFF0C\u8BF7\u624B\u52A8\u91CD\u542F Obsidian\uFF08Ctrl/Cmd+R \u6216\u91CD\u542F\u5E94\u7528\uFF09\u3002"));
+        new import_obsidian3.Notice(t("\u65E0\u6CD5\u81EA\u52A8\u91CD\u8F7D\uFF0C\u8BF7\u624B\u52A8\u91CD\u542F Obsidian\uFF08Ctrl/Cmd+R \u6216\u91CD\u542F\u5E94\u7528\uFF09\u3002"));
       }
     });
   }
@@ -1223,9 +1465,9 @@ var ApplyResultModal = class extends import_obsidian2.Modal {
 };
 
 // src/modals/first-run-modal.ts
-var import_obsidian3 = require("obsidian");
+var import_obsidian4 = require("obsidian");
 init_i18n();
-var FirstRunModal = class extends import_obsidian3.Modal {
+var FirstRunModal = class extends import_obsidian4.Modal {
   constructor(app, onChoose) {
     super(app);
     this.onChoose = onChoose;
@@ -1237,19 +1479,19 @@ var FirstRunModal = class extends import_obsidian3.Modal {
     this.contentEl.createEl("p", {
       cls: "cp-modal__message",
       text: t(
-        "\u5F53\u524D vault \u5185\u6CA1\u6709\u53D1\u73B0\u914D\u7F6E\u5E93\u3002\u672C\u673A\u662F\u300C\u4E3B\u914D\u7F6E\u300D\uFF08\u628A\u672C\u673A Obsidian \u914D\u7F6E\u540C\u6B65\u5230 store\uFF09\uFF0C\u8FD8\u662F\u300C\u5E94\u7528\u914D\u7F6E\u300D\uFF08\u53EA\u5E94\u7528\u5176\u4ED6\u8BBE\u5907\u540C\u6B65\u6765\u7684\u914D\u7F6E\uFF09\uFF1F"
+        "\u672C\u673A\u662F\u300C\u540C\u6B65\u8BBE\u5907\u300D\uFF08\u628A\u672C\u673A Obsidian \u914D\u7F6E\u4E0E\u914D\u7F6E\u5E93\u53CC\u5411\u540C\u6B65\uFF0C\u53EF\u591A\u53F0\u540C\u65F6\u5F00\u542F\uFF09\uFF0C\u8FD8\u662F\u300C\u4EC5\u5E94\u7528\u300D\uFF08\u53EA\u5E94\u7528\u914D\u7F6E\u5E93\u540C\u6B65\u6765\u7684\u914D\u7F6E\uFF09\uFF1F"
       )
     });
     this.contentEl.createEl("p", {
       cls: "cp-modal__hint",
-      text: t("\u4E0D\u786E\u5B9A\u5C31\u9009\u5E94\u7528\u914D\u7F6E\u2014\u2014\u5E94\u7528\u914D\u7F6E\u4E0D\u4F1A\u5199\u5165 store\uFF0C\u968F\u65F6\u53EF\u4EE5\u5728\u8BBE\u7F6E\u91CC\u6539\u3002")
+      text: t("\u4E0D\u786E\u5B9A\u5C31\u9009\u4EC5\u5E94\u7528\u2014\u2014\u4EC5\u5E94\u7528\u4E0D\u4F1A\u5199\u5165\u914D\u7F6E\u5E93\uFF0C\u968F\u65F6\u53EF\u4EE5\u5728\u8BBE\u7F6E\u91CC\u6539\u3002")
     });
     const choices = this.contentEl.createDiv({ cls: "cp-first-run__choice" });
-    const apply = new import_obsidian3.ButtonComponent(choices).setButtonText(t("\u672C\u673A\u4E3A\u5E94\u7528\u914D\u7F6E")).onClick(() => this.answer("apply"));
+    const apply = new import_obsidian4.ButtonComponent(choices).setButtonText(t("\u672C\u673A\u4E3A\u4EC5\u5E94\u7528")).onClick(() => this.answer("apply"));
     apply.buttonEl.addClass("cp-first-run__option");
     apply.setCta();
-    const master = new import_obsidian3.ButtonComponent(choices).setButtonText(t("\u672C\u673A\u4E3A\u4E3B\u914D\u7F6E\uFF08\u540C\u6B65\u672C\u673A\u914D\u7F6E\u5230 store\uFF09")).onClick(() => this.answer("master"));
-    master.buttonEl.addClass("cp-first-run__option");
+    const sync = new import_obsidian4.ButtonComponent(choices).setButtonText(t("\u672C\u673A\u4E3A\u540C\u6B65\u8BBE\u5907\uFF08\u4E0E\u914D\u7F6E\u5E93\u53CC\u5411\u540C\u6B65\uFF09")).onClick(() => this.answer("sync"));
+    sync.buttonEl.addClass("cp-first-run__option");
   }
   onClose() {
     this.contentEl.empty();
@@ -1263,7 +1505,7 @@ var FirstRunModal = class extends import_obsidian3.Modal {
 };
 
 // src/modals/password.ts
-var import_obsidian4 = require("obsidian");
+var import_obsidian5 = require("obsidian");
 init_i18n();
 function readInputValue(input) {
   var _a;
@@ -1284,7 +1526,7 @@ function promptChangeStorePassword(app) {
     new ChangePasswordModal(app, resolve).open();
   });
 }
-var NewPasswordModal = class extends import_obsidian4.Modal {
+var NewPasswordModal = class extends import_obsidian5.Modal {
   constructor(app, settle) {
     super(app);
     this.settle = settle;
@@ -1299,24 +1541,24 @@ var NewPasswordModal = class extends import_obsidian4.Modal {
     });
     let pwInput = null;
     let pw2Input = null;
-    new import_obsidian4.Setting(this.contentEl).setName(t("\u5BC6\u7801")).addText((text) => {
+    new import_obsidian5.Setting(this.contentEl).setName(t("\u5BC6\u7801")).addText((text) => {
       text.inputEl.type = "password";
       pwInput = text.inputEl;
     });
-    new import_obsidian4.Setting(this.contentEl).setName(t("\u518D\u8F93\u4E00\u6B21")).addText((text) => {
+    new import_obsidian5.Setting(this.contentEl).setName(t("\u518D\u8F93\u4E00\u6B21")).addText((text) => {
       text.inputEl.type = "password";
       pw2Input = text.inputEl;
     });
     const buttons = this.contentEl.createDiv({ cls: "cp-modal__buttons" });
-    new import_obsidian4.ButtonComponent(buttons).setButtonText(t("\u6682\u4E0D\u52A0\u5BC6")).setTooltip(t("store \u4EE5\u660E\u6587\u968F\u7B14\u8BB0\u540C\u6B65\uFF1B\u540E\u7EED\u53EF\u5728\u8BBE\u7F6E\u91CC\u5F00\u542F\u52A0\u5BC6\uFF08\u89E6\u53D1\u4E00\u6B21\u91CD\u65B0\u540C\u6B65\uFF09")).onClick(() => {
+    new import_obsidian5.ButtonComponent(buttons).setButtonText(t("\u6682\u4E0D\u52A0\u5BC6")).setTooltip(t("store \u4EE5\u660E\u6587\u968F\u7B14\u8BB0\u540C\u6B65\uFF1B\u540E\u7EED\u53EF\u5728\u8BBE\u7F6E\u91CC\u5F00\u542F\u52A0\u5BC6\uFF08\u89E6\u53D1\u4E00\u6B21\u91CD\u65B0\u540C\u6B65\uFF09")).onClick(() => {
       this.answered = true;
       this.settle(null);
       this.close();
     });
-    new import_obsidian4.ButtonComponent(buttons).setButtonText(t("\u542F\u7528\u52A0\u5BC6")).setCta().onClick(() => {
+    new import_obsidian5.ButtonComponent(buttons).setButtonText(t("\u542F\u7528\u52A0\u5BC6")).setCta().onClick(() => {
       const pw = readInputValue(pwInput);
       if (pw === "" || pw !== readInputValue(pw2Input)) {
-        new import_obsidian4.Notice(t("\u4E24\u6B21\u8F93\u5165\u4E0D\u4E00\u81F4\u6216\u4E3A\u7A7A\u3002"));
+        new import_obsidian5.Notice(t("\u4E24\u6B21\u8F93\u5165\u4E0D\u4E00\u81F4\u6216\u4E3A\u7A7A\u3002"));
         return;
       }
       this.answered = true;
@@ -1329,7 +1571,7 @@ var NewPasswordModal = class extends import_obsidian4.Modal {
     if (!this.answered) this.settle(null);
   }
 };
-var PasswordInputModal = class extends import_obsidian4.Modal {
+var PasswordInputModal = class extends import_obsidian5.Modal {
   constructor(app, settle) {
     super(app);
     this.settle = settle;
@@ -1343,17 +1585,17 @@ var PasswordInputModal = class extends import_obsidian4.Modal {
       text: t("\u8FD9\u4E2A\u914D\u7F6E\u5E93\u5DF2\u52A0\u5BC6\u3002\u8F93\u5165\u4E3B\u914D\u7F6E\u8BBE\u5907\u8BBE\u7F6E\u7684\u5BC6\u7801\u4EE5\u7EE7\u7EED\uFF0C\u9A8C\u8BC1\u901A\u8FC7\u540E\u672C\u673A\u8BB0\u4F4F\u5BC6\u7801\u3002")
     });
     let pwInput = null;
-    new import_obsidian4.Setting(this.contentEl).setName(t("\u5BC6\u7801")).addText((text) => {
+    new import_obsidian5.Setting(this.contentEl).setName(t("\u5BC6\u7801")).addText((text) => {
       text.inputEl.type = "password";
       pwInput = text.inputEl;
     });
     const buttons = this.contentEl.createDiv({ cls: "cp-modal__buttons" });
-    new import_obsidian4.ButtonComponent(buttons).setButtonText(t("\u53D6\u6D88")).onClick(() => {
+    new import_obsidian5.ButtonComponent(buttons).setButtonText(t("\u53D6\u6D88")).onClick(() => {
       this.answered = true;
       this.settle(null);
       this.close();
     });
-    new import_obsidian4.ButtonComponent(buttons).setButtonText(t("\u786E\u8BA4")).setCta().onClick(() => {
+    new import_obsidian5.ButtonComponent(buttons).setButtonText(t("\u786E\u8BA4")).setCta().onClick(() => {
       this.answered = true;
       this.settle(readInputValue(pwInput));
       this.close();
@@ -1364,7 +1606,7 @@ var PasswordInputModal = class extends import_obsidian4.Modal {
     if (!this.answered) this.settle(null);
   }
 };
-var ChangePasswordModal = class extends import_obsidian4.Modal {
+var ChangePasswordModal = class extends import_obsidian5.Modal {
   constructor(app, settle) {
     super(app);
     this.settle = settle;
@@ -1380,28 +1622,28 @@ var ChangePasswordModal = class extends import_obsidian4.Modal {
     let oldInput = null;
     let newInput = null;
     let new2Input = null;
-    new import_obsidian4.Setting(this.contentEl).setName(t("\u5F53\u524D\u5BC6\u7801")).addText((text) => {
+    new import_obsidian5.Setting(this.contentEl).setName(t("\u5F53\u524D\u5BC6\u7801")).addText((text) => {
       text.inputEl.type = "password";
       oldInput = text.inputEl;
     });
-    new import_obsidian4.Setting(this.contentEl).setName(t("\u65B0\u5BC6\u7801")).addText((text) => {
+    new import_obsidian5.Setting(this.contentEl).setName(t("\u65B0\u5BC6\u7801")).addText((text) => {
       text.inputEl.type = "password";
       newInput = text.inputEl;
     });
-    new import_obsidian4.Setting(this.contentEl).setName(t("\u518D\u8F93\u4E00\u6B21\u65B0\u5BC6\u7801")).addText((text) => {
+    new import_obsidian5.Setting(this.contentEl).setName(t("\u518D\u8F93\u4E00\u6B21\u65B0\u5BC6\u7801")).addText((text) => {
       text.inputEl.type = "password";
       new2Input = text.inputEl;
     });
     const buttons = this.contentEl.createDiv({ cls: "cp-modal__buttons" });
-    new import_obsidian4.ButtonComponent(buttons).setButtonText(t("\u53D6\u6D88")).onClick(() => {
+    new import_obsidian5.ButtonComponent(buttons).setButtonText(t("\u53D6\u6D88")).onClick(() => {
       this.answered = true;
       this.settle(null);
       this.close();
     });
-    new import_obsidian4.ButtonComponent(buttons).setButtonText(t("\u786E\u8BA4\u4FEE\u6539")).setCta().onClick(() => {
+    new import_obsidian5.ButtonComponent(buttons).setButtonText(t("\u786E\u8BA4\u4FEE\u6539")).setCta().onClick(() => {
       const newPassword = readInputValue(newInput);
       if (newPassword === "" || newPassword !== readInputValue(new2Input)) {
-        new import_obsidian4.Notice(t("\u4E24\u6B21\u8F93\u5165\u4E0D\u4E00\u81F4\u6216\u4E3A\u7A7A\u3002"));
+        new import_obsidian5.Notice(t("\u4E24\u6B21\u8F93\u5165\u4E0D\u4E00\u81F4\u6216\u4E3A\u7A7A\u3002"));
         return;
       }
       this.answered = true;
@@ -1416,12 +1658,12 @@ var ChangePasswordModal = class extends import_obsidian4.Modal {
 };
 
 // src/settings.ts
-var import_obsidian7 = require("obsidian");
+var import_obsidian8 = require("obsidian");
 init_i18n();
 
 // src/modals/confirm.ts
-var import_obsidian5 = require("obsidian");
-var ConfirmModal = class extends import_obsidian5.Modal {
+var import_obsidian6 = require("obsidian");
+var ConfirmModal = class extends import_obsidian6.Modal {
   constructor(app, options, settle) {
     super(app);
     this.options = options;
@@ -1436,8 +1678,8 @@ var ConfirmModal = class extends import_obsidian5.Modal {
       text: this.options.message
     });
     const buttons = this.contentEl.createDiv({ cls: "cp-modal__buttons" });
-    new import_obsidian5.ButtonComponent(buttons).setButtonText(this.options.cancelLabel).onClick(() => this.close());
-    const accept = new import_obsidian5.ButtonComponent(buttons).setButtonText(this.options.acceptLabel).onClick(() => {
+    new import_obsidian6.ButtonComponent(buttons).setButtonText(this.options.cancelLabel).onClick(() => this.close());
+    const accept = new import_obsidian6.ButtonComponent(buttons).setButtonText(this.options.acceptLabel).onClick(() => {
       this.answered = true;
       this.settle(true);
       this.close();
@@ -1457,14 +1699,14 @@ function askConfirm(app, options) {
 }
 
 // src/modals/text-input.ts
-var import_obsidian6 = require("obsidian");
+var import_obsidian7 = require("obsidian");
 init_i18n();
 function promptText(app, options) {
   return new Promise((resolve) => {
     new TextInputModal(app, options, resolve).open();
   });
 }
-var TextInputModal = class extends import_obsidian6.Modal {
+var TextInputModal = class extends import_obsidian7.Modal {
   constructor(app, options, settle) {
     super(app);
     this.options = options;
@@ -1476,7 +1718,7 @@ var TextInputModal = class extends import_obsidian6.Modal {
     this.contentEl.addClass("cp-modal");
     this.titleEl.setText(this.options.title);
     let input = null;
-    new import_obsidian6.Setting(this.contentEl).setName(this.options.title).addText((text) => {
+    new import_obsidian7.Setting(this.contentEl).setName(this.options.title).addText((text) => {
       if (this.options.placeholder) text.setPlaceholder(this.options.placeholder);
       if (this.options.value !== void 0) text.setValue(this.options.value);
       input = text.inputEl;
@@ -1485,12 +1727,12 @@ var TextInputModal = class extends import_obsidian6.Modal {
       });
     });
     const buttons = this.contentEl.createDiv({ cls: "cp-modal__buttons" });
-    new import_obsidian6.ButtonComponent(buttons).setButtonText(t("\u53D6\u6D88")).onClick(() => {
+    new import_obsidian7.ButtonComponent(buttons).setButtonText(t("\u53D6\u6D88")).onClick(() => {
       this.answered = true;
       this.settle(null);
       this.close();
     });
-    new import_obsidian6.ButtonComponent(buttons).setButtonText((_a = this.options.acceptLabel) != null ? _a : t("\u786E\u8BA4")).setCta().onClick(() => this.accept(input));
+    new import_obsidian7.ButtonComponent(buttons).setButtonText((_a = this.options.acceptLabel) != null ? _a : t("\u786E\u8BA4")).setCta().onClick(() => this.accept(input));
   }
   accept(input) {
     var _a;
@@ -1507,7 +1749,7 @@ var TextInputModal = class extends import_obsidian6.Modal {
 };
 
 // src/settings.ts
-var CPSettingTab = class extends import_obsidian7.PluginSettingTab {
+var CPSettingTab = class extends import_obsidian8.PluginSettingTab {
   constructor(app, plugin) {
     super(app, plugin);
     this.plugin = plugin;
@@ -1521,20 +1763,30 @@ var CPSettingTab = class extends import_obsidian7.PluginSettingTab {
     void this.renderProfiles(containerEl);
   }
   renderGeneral(container) {
-    new import_obsidian7.Setting(container).setName(t("\u901A\u7528")).setHeading();
-    new import_obsidian7.Setting(container).setName(t("\u914D\u7F6E\u5E93\u8DEF\u5F84")).setDesc(t("store \u5728 vault \u5185\u7684\u8DEF\u5F84\uFF08\u9ED8\u8BA4 SettingProfiles\uFF0Cvault \u6839\uFF09\u3002\u4FEE\u6539\u540E\u91CD\u8F7D\u63D2\u4EF6\u751F\u6548\u3002")).addText(
+    new import_obsidian8.Setting(container).setName(t("\u901A\u7528")).setHeading();
+    new import_obsidian8.Setting(container).setName(t("\u914D\u7F6E\u5E93\u8DEF\u5F84")).setDesc(t("store \u5728 vault \u5185\u7684\u8DEF\u5F84\uFF08\u9ED8\u8BA4 SettingProfiles\uFF0Cvault \u6839\uFF09\u3002\u4FEE\u6539\u540E\u91CD\u8F7D\u63D2\u4EF6\u751F\u6548\u3002")).addText(
       (text) => text.setPlaceholder("SettingProfiles").setValue(this.plugin.config.storePath).onChange(async (value) => {
         this.plugin.config.storePath = value;
         await this.plugin.saveConfig();
       })
     );
-    new import_obsidian7.Setting(container).setName(t("\u8BBE\u5907\u540D")).setDesc(t("\u663E\u793A\u5728\u4E3B\u914D\u7F6E\u5F52\u5C5E\u63D0\u793A\u91CC\uFF0C\u5E2E\u52A9\u8BC6\u522B\u54EA\u53F0\u8BBE\u5907\u6301\u6709\u4E3B\u914D\u7F6E\u3002")).addText(
+    new import_obsidian8.Setting(container).setName(t("\u8BBE\u5907\u540D")).setDesc(t("\u4EC5\u4F5C\u6765\u6E90\u6807\u6CE8\uFF1A\u663E\u793A\u5728\u540C\u6B65\u8BB0\u5F55\u4E0E\u51B2\u7A81\u63D0\u793A\u91CC\uFF0C\u8BF4\u660E\u914D\u7F6E\u6765\u81EA\u54EA\u53F0\u8BBE\u5907\uFF1B\u4E0D\u53C2\u4E0E\u540C\u6B65\u5339\u914D\u3002")).addText(
       (text) => text.setPlaceholder(this.plugin.effectiveDeviceName()).setValue(this.plugin.config.deviceName).onChange(async (value) => {
         this.plugin.config.deviceName = value;
         await this.plugin.saveConfig();
       })
     );
-    new import_obsidian7.Setting(container).setName(t("\u8BED\u8A00")).addDropdown(
+    if (!this.plugin.store.isMobile) {
+      new import_obsidian8.Setting(container).setName(t("\u540C\u6B65\u63D2\u4EF6\u4E3B\u4F53")).setDesc(
+        t("\u628A\u63D2\u4EF6\u7684 main.js / styles.css / manifest.json \u4E00\u5E76\u660E\u6587\u540C\u6B65\uFF08\u4E0D\u52A0\u5BC6\uFF09\u3002\u5F00\u542F\u540E\u5E94\u7528\u7AEF\u53EF\u76F4\u63A5\u88C5\u9F50\u7F3A\u5931\u63D2\u4EF6\uFF1B\u4E0B\u6B21\u540C\u6B65\u751F\u6548\u3002")
+      ).addToggle(
+        (toggle) => toggle.setValue(this.plugin.config.syncArtifacts).onChange(async (value) => {
+          this.plugin.config.syncArtifacts = value;
+          await this.plugin.saveConfig();
+        })
+      );
+    }
+    new import_obsidian8.Setting(container).setName(t("\u8BED\u8A00")).addDropdown(
       (drop) => drop.addOptions({
         auto: t("\u8DDF\u968F Obsidian"),
         zh: t("\u4E2D\u6587"),
@@ -1548,40 +1800,37 @@ var CPSettingTab = class extends import_obsidian7.PluginSettingTab {
     );
   }
   renderRole(container) {
-    new import_obsidian7.Setting(container).setName(t("\u89D2\u8272")).setHeading();
-    const role = this.plugin.currentRole;
-    const roleName = role.kind === "master" ? t("\u4E3B\u914D\u7F6E") : role.kind === "apply" ? t("\u5E94\u7528\u914D\u7F6E") : t("\u5C1A\u672A\u8BBE\u5B9A");
-    const holderDesc = role.holderName ? t("\u4E3B\u914D\u7F6E\u6301\u6709\u8005\uFF1A{name}", { name: role.holderName }) : "";
-    new import_obsidian7.Setting(container).setName(t("\u5F53\u524D\u89D2\u8272")).setDesc(holderDesc).then((s) => {
+    new import_obsidian8.Setting(container).setName(t("\u89D2\u8272")).setHeading();
+    const isSync = this.plugin.config.preferredRole === "sync";
+    const roleName = isSync ? t("\u540C\u6B65\u8BBE\u5907") : this.plugin.config.preferredRole === "apply" ? t("\u4EC5\u5E94\u7528") : t("\u5C1A\u672A\u8BBE\u5B9A");
+    new import_obsidian8.Setting(container).setName(t("\u5F53\u524D\u89D2\u8272")).setDesc(t("\u540C\u6B65\u8BBE\u5907\u53EF\u4E0E\u914D\u7F6E\u5E93\u53CC\u5411\u540C\u6B65\uFF08\u591A\u53F0\u53EF\u540C\u65F6\u5F00\u542F\uFF09\uFF1B\u4EC5\u5E94\u7528\u53EA\u8986\u76D6\u672C\u673A\uFF0C\u4E0D\u5199\u914D\u7F6E\u5E93\u3002")).then((s) => {
       s.controlEl.createSpan({ text: roleName });
     });
-    if (role.kind === "master") {
-      new import_obsidian7.Setting(container).setName(t("\u8BA9\u51FA\u4E3B\u914D\u7F6E")).then((s) => s.addButton((btn) => btn.setButtonText(t("\u8BA9\u51FA\u4E3B\u914D\u7F6E")).onClick(() => void this.releaseMaster(s))));
-    } else {
-      new import_obsidian7.Setting(container).setName(t("\u593A\u53D6\u4E3B\u914D\u7F6E")).then((s) => s.addButton((btn) => btn.setButtonText(t("\u593A\u53D6\u4E3B\u914D\u7F6E")).onClick(() => void this.claimMaster(s))));
-    }
+    new import_obsidian8.Setting(container).setName(t("\u5207\u6362\u89D2\u8272")).setDesc(t("\u5207\u6362\u540E\u7ACB\u5373\u751F\u6548\uFF0C\u65E0\u9700\u91CD\u8F7D\u3002")).addToggle(
+      (toggle) => toggle.setValue(isSync).setTooltip(t("\u5F00 = \u540C\u6B65\u8BBE\u5907\uFF0C\u5173 = \u4EC5\u5E94\u7528")).onChange((value) => void this.plugin.setRole(value ? "sync" : "apply"))
+    );
   }
   // ── 加密（SPEC §2.5：改密 / 启用仅主配置 PC 端） ──
   async renderCrypto(container) {
-    new import_obsidian7.Setting(container).setName(t("\u52A0\u5BC6")).setHeading();
+    new import_obsidian8.Setting(container).setName(t("\u52A0\u5BC6")).setHeading();
     let encrypted = false;
     try {
       encrypted = await this.plugin.storeEncrypted();
     } catch (e) {
       encrypted = false;
     }
-    const canManage = !this.plugin.store.isMobile && this.plugin.currentRole.kind === "master";
+    const canManage = !this.plugin.store.isMobile && this.plugin.config.preferredRole === "sync";
     if (encrypted) {
-      new import_obsidian7.Setting(container).setName(t("\u914D\u7F6E\u5E93\u52A0\u5BC6")).setDesc(t("store \u6574\u5E93\u52A0\u5BC6\uFF1B\u5BC6\u7801\u53EA\u5B58\u5404\u8BBE\u5907\u672C\u5730\uFF0C\u4E0D\u8FDB vault\u3002"));
+      new import_obsidian8.Setting(container).setName(t("\u914D\u7F6E\u5E93\u52A0\u5BC6")).setDesc(t("store \u6574\u5E93\u52A0\u5BC6\uFF1B\u5BC6\u7801\u53EA\u5B58\u5404\u8BBE\u5907\u672C\u5730\uFF0C\u4E0D\u8FDB vault\u3002"));
       if (canManage) {
-        new import_obsidian7.Setting(container).setName(t("\u4FEE\u6539\u5BC6\u7801")).setDesc(t("\u6C60\u5185\u5168\u90E8\u5BC6\u6587\u4F1A\u4EE5\u65B0\u5BC6\u7801\u91CD\u65B0\u52A0\u5BC6\u91CD\u5199\u3002")).addButton((btn) => btn.setButtonText(t("\u4FEE\u6539\u5BC6\u7801")).onClick(() => void this.changePassword()));
+        new import_obsidian8.Setting(container).setName(t("\u4FEE\u6539\u5BC6\u7801")).setDesc(t("\u6C60\u5185\u5168\u90E8\u5BC6\u6587\u4F1A\u4EE5\u65B0\u5BC6\u7801\u91CD\u65B0\u52A0\u5BC6\u91CD\u5199\u3002")).addButton((btn) => btn.setButtonText(t("\u4FEE\u6539\u5BC6\u7801")).onClick(() => void this.changePassword()));
       }
     } else {
-      new import_obsidian7.Setting(container).setName(t("\u914D\u7F6E\u5E93\u52A0\u5BC6")).setDesc(
+      new import_obsidian8.Setting(container).setName(t("\u914D\u7F6E\u5E93\u52A0\u5BC6")).setDesc(
         canManage ? t("\u5C1A\u672A\u52A0\u5BC6\u3002\u4E0B\u6B21\u540C\u6B65\u65F6\u53EF\u8BBE\u7F6E\u5BC6\u7801\uFF0Cstore \u5C06\u6574\u5E93\u52A0\u5BC6\u3002") : t("\u5C1A\u672A\u52A0\u5BC6\uFF08\u4E3B\u914D\u7F6E\u8BBE\u5907\u53EF\u5728\u5176\u8BBE\u7F6E\u4E2D\u5F00\u542F\uFF09\u3002")
       );
       if (canManage) {
-        new import_obsidian7.Setting(container).setName(t("\u542F\u7528\u52A0\u5BC6")).setDesc(t("\u8BBE\u7F6E\u5BC6\u7801\u5E76\u7ACB\u5373\u91CD\u65B0\u540C\u6B65\uFF08\u6574\u5E93\u52A0\u5BC6\uFF09\u3002")).addButton((btn) => btn.setButtonText(t("\u542F\u7528\u52A0\u5BC6")).onClick(() => void this.plugin.runSync()));
+        new import_obsidian8.Setting(container).setName(t("\u542F\u7528\u52A0\u5BC6")).setDesc(t("\u8BBE\u7F6E\u5BC6\u7801\u5E76\u7ACB\u5373\u91CD\u65B0\u540C\u6B65\uFF08\u6574\u5E93\u52A0\u5BC6\uFF09\u3002")).addButton((btn) => btn.setButtonText(t("\u542F\u7528\u52A0\u5BC6")).onClick(() => void this.plugin.runSync()));
       }
     }
   }
@@ -1590,27 +1839,27 @@ var CPSettingTab = class extends import_obsidian7.PluginSettingTab {
     if (input === null) return;
     try {
       await this.plugin.changeStorePassword(input.oldPassword, input.newPassword);
-      new import_obsidian7.Notice(t("\u5BC6\u7801\u5DF2\u4FEE\u6539\uFF0C\u6C60\u5185\u5BC6\u6587\u5DF2\u91CD\u5199\u3002"));
+      new import_obsidian8.Notice(t("\u5BC6\u7801\u5DF2\u4FEE\u6539\uFF0C\u6C60\u5185\u5BC6\u6587\u5DF2\u91CD\u5199\u3002"));
     } catch (error) {
       if (error instanceof WrongStorePasswordError) {
-        new import_obsidian7.Notice(t("\u5BC6\u7801\u4E0D\u6B63\u786E\u3002"));
+        new import_obsidian8.Notice(t("\u5BC6\u7801\u4E0D\u6B63\u786E\u3002"));
         return;
       }
-      new import_obsidian7.Notice(t("\u4FEE\u6539\u5931\u8D25\uFF1A{message}", { message: error instanceof Error ? error.message : String(error) }));
+      new import_obsidian8.Notice(t("\u4FEE\u6539\u5931\u8D25\uFF1A{message}", { message: error instanceof Error ? error.message : String(error) }));
     }
   }
   // ── Profiles（PC 端管理；与编辑 Modal 共用渲染） ──
   async renderProfiles(container) {
-    new import_obsidian7.Setting(container).setName(t("Profiles")).setHeading();
+    new import_obsidian8.Setting(container).setName(t("Profiles")).setHeading();
     if (this.plugin.store.isMobile) {
-      new import_obsidian7.Setting(container).setDesc(t("profile \u7BA1\u7406\u8BF7\u5230 PC \u7AEF\uFF08\u624B\u673A\u53EA\u5E94\u7528\u914D\u7F6E\uFF09\u3002"));
+      new import_obsidian8.Setting(container).setDesc(t("profile \u7BA1\u7406\u8BF7\u5230 PC \u7AEF\uFF08\u624B\u673A\u53EA\u5E94\u7528\u914D\u7F6E\uFF09\u3002"));
       return;
     }
     const profiles = await this.plugin.listProfiles();
     const names = [...new Set(profiles.map((entry) => entry.name))];
-    new import_obsidian7.Setting(container).setName(t("\u65B0\u5EFA profile")).setDesc(t("\u521B\u5EFA\u540E\u91CD\u8F7D\u63D2\u4EF6\uFF0C\u5E94\u7528\u547D\u4EE4\u5373\u53EF\u7528\u3002")).addButton((btn) => btn.setButtonText(t("\u65B0\u5EFA")).setCta().onClick(() => void this.createProfile()));
+    new import_obsidian8.Setting(container).setName(t("\u65B0\u5EFA profile")).setDesc(t("\u521B\u5EFA\u540E\u91CD\u8F7D\u63D2\u4EF6\uFF0C\u5E94\u7528\u547D\u4EE4\u5373\u53EF\u7528\u3002")).addButton((btn) => btn.setButtonText(t("\u65B0\u5EFA")).setCta().onClick(() => void this.createProfile()));
     if (profiles.length === 0) {
-      new import_obsidian7.Setting(container).setDesc(t("\u8FD8\u6CA1\u6709 profile\u3002\u65B0\u5EFA\u4E00\u4E2A\uFF0C\u6216\u5728\u4E3B\u914D\u7F6E\u7AEF\u6267\u884C\u540C\u6B65\u3002"));
+      new import_obsidian8.Setting(container).setDesc(t("\u8FD8\u6CA1\u6709 profile\u3002\u65B0\u5EFA\u4E00\u4E2A\uFF0C\u6216\u5728\u4E3B\u914D\u7F6E\u7AEF\u6267\u884C\u540C\u6B65\u3002"));
       return;
     }
     for (const name of names) {
@@ -1627,7 +1876,7 @@ var CPSettingTab = class extends import_obsidian7.PluginSettingTab {
   renderProfileRow(container, name, platform, hasMobileTwin) {
     const label = platform === "mobile" ? t("{name}\uFF08\u624B\u673A\uFF09", { name }) : name;
     const desc = platform === "mobile" ? t("\u7531\u540C\u540D\u684C\u9762 profile \u9002\u914D\u751F\u6210\uFF0C\u8DDF\u968F\u5176\u66F4\u65B0\u3002") : hasMobileTwin ? t("\u5DF2\u5F00\u542F\u624B\u673A\u9002\u914D\u3002") : "";
-    const setting = new import_obsidian7.Setting(container).setName(label).setDesc(desc);
+    const setting = new import_obsidian8.Setting(container).setName(label).setDesc(desc);
     if (platform === "desktop") {
       setting.addToggle(
         (toggle) => toggle.setValue(hasMobileTwin).setTooltip(t("\u9002\u914D\u624B\u673A")).onChange((value) => void this.setMobileAdaptation(name, value))
@@ -1678,40 +1927,9 @@ var CPSettingTab = class extends import_obsidian7.PluginSettingTab {
     try {
       await this.plugin.setMobileAdaptation(name, enabled);
     } catch (error) {
-      new import_obsidian7.Notice(t("\u64CD\u4F5C\u5931\u8D25\uFF1A{message}", { message: error instanceof Error ? error.message : String(error) }));
+      new import_obsidian8.Notice(t("\u64CD\u4F5C\u5931\u8D25\uFF1A{message}", { message: error instanceof Error ? error.message : String(error) }));
     }
     this.display();
-  }
-  // ── 角色切换 ──
-  async claimMaster(setting) {
-    const confirmed = await askConfirm(this.app, {
-      title: t("\u593A\u53D6\u4E3B\u914D\u7F6E"),
-      message: t("\u5C06\u4EE5\u672C\u673A\u8EAB\u4EFD\u63A5\u7BA1 store \u7684\u4E3B\u914D\u7F6E\u3002\u539F\u4E3B\u914D\u7F6E\u8BBE\u5907\u4F1A\u5728\u4E0B\u6B21\u64CD\u4F5C\u524D\u81EA\u52A8\u964D\u7EA7\u4E3A\u5E94\u7528\u914D\u7F6E\u3002\u7EE7\u7EED\uFF1F"),
-      acceptLabel: t("\u593A\u53D6\u4E3B\u914D\u7F6E"),
-      cancelLabel: t("\u53D6\u6D88")
-    });
-    if (!confirmed) return;
-    try {
-      await this.plugin.claimMaster();
-      this.display();
-    } catch (error) {
-      setting.setName(`${t("\u593A\u53D6\u6216\u8BA9\u51FA\u5931\u8D25\uFF1A{message}", { message: String(error) })}`);
-    }
-  }
-  async releaseMaster(setting) {
-    const confirmed = await askConfirm(this.app, {
-      title: t("\u8BA9\u51FA\u4E3B\u914D\u7F6E"),
-      message: t("\u8BA9\u51FA\u540E store \u6682\u65E0\u4E3B\u914D\u7F6E\uFF0C\u6240\u6709\u8BBE\u5907\u90FD\u53EA\u80FD\u5E94\u7528\uFF0C\u76F4\u5230\u6709\u4EBA\u91CD\u65B0\u593A\u53D6\u3002\u7EE7\u7EED\uFF1F"),
-      acceptLabel: t("\u8BA9\u51FA\u4E3B\u914D\u7F6E"),
-      cancelLabel: t("\u53D6\u6D88")
-    });
-    if (!confirmed) return;
-    try {
-      await this.plugin.releaseMaster();
-      this.display();
-    } catch (error) {
-      setting.setName(`${t("\u593A\u53D6\u6216\u8BA9\u51FA\u5931\u8D25\uFF1A{message}", { message: String(error) })}`);
-    }
   }
 };
 
@@ -1721,8 +1939,9 @@ var DEFAULT_CONFIG = {
   storePath: DEFAULT_STORE_PATH,
   language: "auto",
   deviceName: "",
+  deviceId: "",
   preferredRole: "ask",
-  lastRoleState: ""
+  syncArtifacts: false
 };
 function mergeConfig(saved) {
   const source = saved != null ? saved : {};
@@ -1730,18 +1949,17 @@ function mergeConfig(saved) {
     storePath: typeof source.storePath === "string" && source.storePath.trim() !== "" ? source.storePath : DEFAULT_STORE_PATH,
     language: source.language === "zh" || source.language === "en" ? source.language : "auto",
     deviceName: typeof source.deviceName === "string" ? source.deviceName : "",
-    preferredRole: source.preferredRole === "apply" ? "apply" : "ask",
-    lastRoleState: typeof source.lastRoleState === "string" ? source.lastRoleState : ""
+    deviceId: typeof source.deviceId === "string" ? source.deviceId : "",
+    preferredRole: source.preferredRole === "sync" || source.preferredRole === "apply" ? source.preferredRole : "ask",
+    syncArtifacts: source.syncArtifacts === true
   };
 }
 
 // src/main.ts
-var ConfigProfilePlugin = class extends import_obsidian10.Plugin {
+var ConfigProfilePlugin = class extends import_obsidian11.Plugin {
   constructor() {
     super(...arguments);
     this.config = DEFAULT_CONFIG;
-    /** 本会话的角色判定结果（每次启动与写池操作前重新计算） */
-    this.currentRole = { kind: "fresh" };
   }
   /** obsidian.d.ts 1.8.7 未声明 App.locale（运行时存在），收口在这一个转换里（qj 同款） */
   localeOf(app) {
@@ -1760,107 +1978,38 @@ var ConfigProfilePlugin = class extends import_obsidian10.Plugin {
     this.config = mergeConfig(await this.loadData());
     this.applyLanguage();
     this.store = new ConfigAdapter(this.app);
+    await this.ensureDeviceId();
     this.addSettingTab(new CPSettingTab(this.app, this));
     this.app.workspace.onLayoutReady(() => {
-      void this.initRole().then(() => this.registerCommands());
+      this.registerCommands();
+      if (decideStartupRole(this.config.preferredRole).kind === "ask") {
+        new FirstRunModal(this.app, (choice) => void this.applyFirstRunChoice(choice)).open();
+      }
     });
   }
   async saveConfig() {
     await this.saveData(this.config);
   }
-  // ── 角色判定（SPEC §3.1） ──
-  async initRole() {
-    const decision = await this.computeRole();
-    this.currentRole = {
-      kind: decision.kind,
-      holderName: decision.kind === "apply" ? decision.holderName : void 0
-    };
-    if (decision.kind === "fresh") {
-      if (this.config.preferredRole === "apply") {
-        await this.saveRoleState("apply:preferred");
-        return;
-      }
-      new FirstRunModal(this.app, (choice) => void this.applyFirstRunChoice(choice)).open();
-      return;
-    }
-    if (this.config.lastRoleState !== roleStateKey(decision)) {
-      this.noticeFor(decision);
-      await this.saveRoleState(roleStateKey(decision));
-    }
-  }
-  /** 全量重算：lock 原文（读失败按损坏）+ 池内容 → decideRole（纯函数） */
-  async computeRole() {
-    const paths = this.paths();
-    let raw = null;
-    try {
-      raw = await this.store.readLockRaw(paths);
-    } catch (e) {
-      raw = "";
-    }
-    let poolHasContent = false;
-    try {
-      poolHasContent = await this.store.poolHasContent(paths);
-    } catch (e) {
-      poolHasContent = false;
-    }
-    return decideRole({ lock: parseLock(raw), poolHasContent, localDeviceId: this.store.deviceId() });
-  }
-  async applyFirstRunChoice(choice) {
-    if (choice === "master") {
-      await this.claimMaster();
-      return;
-    }
-    this.config.preferredRole = "apply";
-    this.currentRole = { kind: "apply" };
-    await this.saveConfig();
-    new import_obsidian10.Notice(t("\u672C\u673A\u5DF2\u8BBE\u4E3A\u5E94\u7528\u914D\u7F6E\u3002"));
-  }
-  /** 夺取主配置（首次选择与设置页按钮共用） */
-  async claimMaster() {
-    const paths = this.paths();
-    await this.store.writeLock(paths, this.store.buildLock(this.effectiveDeviceName()));
-    this.currentRole = { kind: "master" };
-    new import_obsidian10.Notice(t("\u672C\u673A\u5DF2\u8BBE\u4E3A\u4E3B\u914D\u7F6E\u3002"));
-    await this.saveRoleState("master");
-  }
-  /** 让出主配置 */
-  async releaseMaster() {
-    const paths = this.paths();
-    await this.store.deleteLock(paths);
-    this.currentRole = { kind: "apply" };
-    new import_obsidian10.Notice(t("\u5DF2\u8BA9\u51FA\u4E3B\u914D\u7F6E\u3002"));
-    await this.saveRoleState("apply:pool-without-lock");
-  }
-  async saveRoleState(stateKey) {
-    this.config.lastRoleState = stateKey;
-    await this.saveConfig();
-  }
-  noticeFor(decision) {
+  /** 设备身份持久化进 data.json（0.1.0 起；旧 localStorage 值只作迁移源） */
+  async ensureDeviceId() {
     var _a;
-    if (decision.kind === "master") {
-      new import_obsidian10.Notice(t("\u672C\u673A\u5DF2\u8BBE\u4E3A\u4E3B\u914D\u7F6E\u3002"));
-      return;
-    }
-    if (decision.kind === "fresh") return;
-    switch (decision.reason) {
-      case "other-device":
-        new import_obsidian10.Notice(
-          t(
-            "\u68C0\u6D4B\u5230\u4E3B\u914D\u7F6E\u6765\u81EA\u8BBE\u5907\u300A{name}\u300B\uFF0C\u672C\u673A\u5DF2\u8BBE\u4E3A\u5E94\u7528\u914D\u7F6E\u3002\u82E5\u4E3B\u914D\u7F6E\u5176\u5B9E\u5C5E\u4E8E\u672C\u673A\uFF08\u91CD\u88C5\u6216\u6E05\u9664\u6570\u636E\u540E\u8EAB\u4EFD\u4E22\u5931\uFF09\uFF0C\u8BF7\u5728\u8BBE\u7F6E\u4E2D\u91CD\u65B0\u593A\u53D6\u3002",
-            { name: (_a = decision.holderName) != null ? _a : "" }
-          )
-        );
-        break;
-      case "lock-corrupt":
-        new import_obsidian10.Notice(t("\u65E0\u6CD5\u786E\u8BA4\u4E3B\u914D\u7F6E\u5F52\u5C5E\uFF08lock \u6587\u4EF6\u635F\u574F\uFF09\uFF0C\u672C\u673A\u6682\u6309\u5E94\u7528\u914D\u7F6E\u5904\u7406\u3002"));
-        break;
-      case "future-schema":
-        new import_obsidian10.Notice(t("store \u7531\u66F4\u65B0\u7248\u672C\u7684 Config Profile \u5199\u5165\uFF0C\u672C\u673A\u6682\u6309\u5E94\u7528\u914D\u7F6E\u5904\u7406\u3002\u8BF7\u66F4\u65B0\u63D2\u4EF6\u3002"));
-        break;
-      case "pool-without-lock":
-        new import_obsidian10.Notice(t("\u65E0\u6CD5\u786E\u8BA4\u4E3B\u914D\u7F6E\u5F52\u5C5E\uFF08\u914D\u7F6E\u6C60\u5B58\u5728\u4F46\u6CA1\u6709 lock\uFF0C\u53EF\u80FD\u540C\u6B65\u672A\u5B8C\u6210\uFF09\uFF0C\u672C\u673A\u6682\u6309\u5E94\u7528\u914D\u7F6E\u5904\u7406\u3002"));
-        break;
-    }
+    if (this.config.deviceId !== "") return;
+    this.config.deviceId = (_a = this.store.legacyDeviceId()) != null ? _a : this.randomId();
+    await this.saveConfig();
+  }
+  randomId() {
+    const c = globalThis.crypto;
+    if (c && typeof c.randomUUID === "function") return c.randomUUID();
+    return `cp-${Math.random().toString(36).slice(2)}${Date.now().toString(36)}`;
+  }
+  // ── 角色（SPEC §3.1：本地偏好，无 lock） ──
+  async applyFirstRunChoice(choice) {
+    await this.setRole(choice);
+  }
+  async setRole(role) {
+    this.config.preferredRole = role;
+    await this.saveConfig();
+    new import_obsidian11.Notice(role === "sync" ? t("\u672C\u673A\u5DF2\u8BBE\u4E3A\u540C\u6B65\u8BBE\u5907\u3002") : t("\u672C\u673A\u5DF2\u8BBE\u4E3A\u4EC5\u5E94\u7528\u3002"));
   }
   // ── 加密（SPEC §2.5） ──
   async readCryptoMeta() {
@@ -1878,14 +2027,14 @@ var ConfigProfilePlugin = class extends import_obsidian10.Plugin {
     password = await promptStorePassword(this.app);
     if (password === null || password === "") return null;
     if (!await verifyPassword(meta, password)) {
-      new import_obsidian10.Notice(t("\u5BC6\u7801\u4E0D\u6B63\u786E\u3002"));
+      new import_obsidian11.Notice(t("\u5BC6\u7801\u4E0D\u6B63\u786E\u3002"));
       this.store.setStorePassword(null);
       return null;
     }
     this.store.setStorePassword(password);
     return password;
   }
-  /** 修改密码（仅主配置；设置页调用）：解密池内全部密文 → 新密码重加密重写 */
+  /** 修改密码（仅同步设备；设置页调用）：解密池内全部密文 → 新密码重加密重写 */
   async changeStorePassword(oldPassword, newPassword) {
     const meta = await this.readCryptoMeta();
     if (meta === null) throw new Error("store not encrypted");
@@ -1894,15 +2043,14 @@ var ConfigProfilePlugin = class extends import_obsidian10.Plugin {
     await this.store.writeAtomic(`${paths.root}/_crypto.json`, JSON.stringify(await createCryptoMeta(newPassword), null, "	"));
     await this.runSync(newPassword);
   }
-  // ── 同步（SPEC §3.2，仅 PC + 仅主配置） ──
+  // ── 同步（SPEC §3.2，仅 PC + 仅同步设备；多主时间戳双向） ──
   async runSync(passwordOverride) {
     if (this.store.isMobile) {
-      new import_obsidian10.Notice(t("\u624B\u673A\u7AEF\u53EA\u80FD\u5E94\u7528\u914D\u7F6E\uFF0C\u4E0D\u80FD\u540C\u6B65\u3002"));
+      new import_obsidian11.Notice(t("\u624B\u673A\u7AEF\u53EA\u80FD\u5E94\u7528\u914D\u7F6E\uFF0C\u4E0D\u80FD\u540C\u6B65\u3002"));
       return;
     }
-    const decision = await this.computeRole();
-    if (decision.kind !== "master") {
-      new import_obsidian10.Notice(t("\u672C\u673A\u4E0D\u662F\u4E3B\u914D\u7F6E\u8BBE\u5907\uFF0C\u4E0D\u80FD\u540C\u6B65\u3002\u53EF\u5728\u8BBE\u7F6E\u4E2D\u593A\u53D6\u4E3B\u914D\u7F6E\u3002"));
+    if (this.config.preferredRole !== "sync") {
+      new import_obsidian11.Notice(t("\u672C\u673A\u662F\u4EC5\u5E94\u7528\u8BBE\u5907\uFF0C\u4E0D\u80FD\u540C\u6B65\u3002\u53EF\u5728\u8BBE\u7F6E\u4E2D\u5207\u6362\u4E3A\u540C\u6B65\u8BBE\u5907\u3002"));
       return;
     }
     let password = passwordOverride != null ? passwordOverride : null;
@@ -1920,31 +2068,69 @@ var ConfigProfilePlugin = class extends import_obsidian10.Plugin {
       password = await this.ensurePassword(meta);
       if (password === null) return;
     }
-    const service = new SyncService(this.store, this.paths(), this.effectiveDeviceName());
+    const service = new SyncService(this.store, this.paths(), {
+      id: this.config.deviceId,
+      name: this.effectiveDeviceName()
+    }, {
+      syncArtifacts: this.config.syncArtifacts,
+      firstSyncDirection: () => this.promptFirstSyncDirection(),
+      resolveConflicts: (files) => this.promptConflictResolution(files)
+    });
     try {
       const report = await service.run(password);
-      new import_obsidian10.Notice(
-        t("\u540C\u6B65\u5B8C\u6210\uFF1A\u66F4\u65B0 {updated} \u9879\uFF0C\u8DF3\u8FC7 {skipped} \u9879\uFF0C\u6E05\u7406 {pruned} \u9879\u3002", {
-          updated: report.updated,
-          skipped: report.skipped,
-          pruned: report.pruned
-        }) + (report.mobileProjection ? t("\u5DF2\u66F4\u65B0\u79FB\u52A8\u6295\u5F71\u3002") : "")
+      new import_obsidian11.Notice(
+        t("\u540C\u6B65\u5B8C\u6210\uFF1A\u63A8\u9001 {pushed} \u9879\uFF0C\u62C9\u53D6 {pulled} \u9879\uFF0C\u5220\u9664 {deleted} \u9879\u3002", {
+          pushed: report.pushed,
+          pulled: report.pulled,
+          deleted: report.tombstoned + report.deletedLocal + report.prunedMeta
+        }) + (report.conflictsResolved === "local" ? t("\u51B2\u7A81\u5DF2\u6309\u672C\u673A\u89E3\u51B3\u3002") : report.conflictsResolved === "pool" ? t("\u51B2\u7A81\u5DF2\u6309\u6C60\u89E3\u51B3\u3002") : "") + (report.mobileProjection ? t("\u5DF2\u66F4\u65B0\u79FB\u52A8\u6295\u5F71\u3002") : "")
       );
     } catch (error) {
-      new import_obsidian10.Notice(t("\u540C\u6B65\u5931\u8D25\uFF1A{message}", { message: error instanceof Error ? error.message : String(error) }));
+      if (error instanceof SyncAbortedError) return;
+      if (error instanceof ClockSkewError) {
+        new import_obsidian11.Notice(t("\u914D\u7F6E\u5E93\u7684\u65F6\u95F4\u6233\u6765\u81EA\u672A\u6765\uFF0C\u672C\u673A\u6216\u5BF9\u7AEF\u65F6\u949F\u53EF\u80FD\u4E0D\u51C6\u3002\u8BF7\u6821\u51C6\u7CFB\u7EDF\u65F6\u95F4\u540E\u91CD\u8BD5\u3002"));
+        return;
+      }
+      new import_obsidian11.Notice(t("\u540C\u6B65\u5931\u8D25\uFF1A{message}", { message: error instanceof Error ? error.message : String(error) }));
     }
+  }
+  async promptFirstSyncDirection() {
+    return chooseFromList(this.app, {
+      title: t("\u9996\u6B21\u5728\u6B64\u8BBE\u5907\u540C\u6B65"),
+      message: t(
+        "\u914D\u7F6E\u5E93\u5DF2\u6709\u5185\u5BB9\uFF0C\u4F46\u672C\u673A\u8FD8\u6CA1\u6709\u540C\u6B65\u8BB0\u5F55\u3002\u4EE5\u54EA\u8FB9\u4E3A\u51C6\uFF1F\u672C\u673A\u591A\u51FA\u7684\u6587\u4EF6\u4F1A\u4FDD\u7559\uFF0C\u4E0B\u6B21\u540C\u6B65\u518D\u4E0A\u4F20\u3002"
+      ),
+      items: [],
+      hint: t("\u76F4\u63A5\u5173\u95ED\u5F39\u7A97\u5373\u53D6\u6D88\u672C\u6B21\u540C\u6B65\u3002"),
+      choices: [
+        { label: t("\u7528\u672C\u673A\u8986\u76D6\u6C60"), value: "local-to-pool", destructive: true },
+        { label: t("\u5148\u628A\u6C60\u5E94\u7528\u56DE\u672C\u673A"), value: "pool-to-local", cta: true }
+      ]
+    });
+  }
+  async promptConflictResolution(files) {
+    return chooseFromList(this.app, {
+      title: t("\u540C\u6B65\u51B2\u7A81"),
+      message: t("\u4EE5\u4E0B\u6587\u4EF6\u5728\u672C\u673A\u548C\u914D\u7F6E\u5E93\u90FD\u6539\u8FC7\uFF0C\u9700\u8981\u4F60\u51B3\u5B9A\u4FDD\u7559\u54EA\u8FB9\uFF08\u5BF9\u6240\u6709\u5217\u51FA\u7684\u6587\u4EF6\u751F\u6548\uFF09\uFF1A"),
+      items: files,
+      hint: t("\u76F4\u63A5\u5173\u95ED\u5F39\u7A97\u5373\u53D6\u6D88\u672C\u6B21\u540C\u6B65\uFF0C\u4E24\u8FB9\u6539\u52A8\u90FD\u4FDD\u6301\u539F\u6837\u3002"),
+      choices: [
+        { label: t("\u4FDD\u7559\u672C\u673A\u7248\u672C"), value: "local", cta: true },
+        { label: t("\u4FDD\u7559\u914D\u7F6E\u5E93\u7248\u672C"), value: "pool" }
+      ]
+    });
   }
   // ── 应用（SPEC §3.3） ──
   async runApply(name, platform) {
     const paths = this.paths();
     const raw = await this.store.readIfExists(`${paths.profilesDir}/${profileFileName(name, platform)}`);
     if (raw === null) {
-      new import_obsidian10.Notice(t("\u627E\u4E0D\u5230 profile\uFF1A{name}", { name }));
+      new import_obsidian11.Notice(t("\u627E\u4E0D\u5230 profile\uFF1A{name}", { name }));
       return;
     }
     const parsed = parseProfile(raw);
     if (!parsed.ok) {
-      new import_obsidian10.Notice(t("profile \u6587\u4EF6\u635F\u574F\uFF1A{name}", { name }));
+      new import_obsidian11.Notice(t("profile \u6587\u4EF6\u635F\u574F\uFF1A{name}", { name }));
       return;
     }
     let password = null;
@@ -1957,17 +2143,17 @@ var ConfigProfilePlugin = class extends import_obsidian10.Plugin {
     try {
       const report = await service.run(parsed.profile, password);
       if (report.applied.length === 0 && report.missingPlugins.length === 0 && report.desktopOnlySkipped.length === 0) {
-        new import_obsidian10.Notice(t("profile \u91CC\u6CA1\u6709\u52FE\u9009\u4EFB\u4F55\u5185\u5BB9\uFF1A{name}", { name }));
+        new import_obsidian11.Notice(t("profile \u91CC\u6CA1\u6709\u52FE\u9009\u4EFB\u4F55\u5185\u5BB9\uFF1A{name}", { name }));
         return;
       }
       new ApplyResultModal(this.app, name, report, () => this.store.reloadApp()).open();
     } catch (error) {
       if (error instanceof WrongStorePasswordError) {
         this.store.setStorePassword(null);
-        new import_obsidian10.Notice(t("\u5BC6\u7801\u4E0D\u6B63\u786E\u3002"));
+        new import_obsidian11.Notice(t("\u5BC6\u7801\u4E0D\u6B63\u786E\u3002"));
         return;
       }
-      new import_obsidian10.Notice(t("\u5E94\u7528\u5931\u8D25\uFF1A{message}", { message: error instanceof Error ? error.message : String(error) }));
+      new import_obsidian11.Notice(t("\u5E94\u7528\u5931\u8D25\uFF1A{message}", { message: error instanceof Error ? error.message : String(error) }));
     }
   }
   // ── profile CRUD（设置页与编辑弹窗共用） ──
@@ -1997,19 +2183,19 @@ var ConfigProfilePlugin = class extends import_obsidian10.Plugin {
   async createProfile(name, adaptMobile) {
     const normalized = normalizeProfileName(name);
     if (!isValidProfileName(name)) {
-      new import_obsidian10.Notice(t("\u540D\u79F0\u4E0D\u80FD\u4E3A\u7A7A\uFF0C\u4E14\u4E0D\u80FD\u5305\u542B / \u6216 \\\u3002"));
+      new import_obsidian11.Notice(t("\u540D\u79F0\u4E0D\u80FD\u4E3A\u7A7A\uFF0C\u4E14\u4E0D\u80FD\u5305\u542B / \u6216 \\\u3002"));
       return false;
     }
     const existing = await this.listProfiles();
     if (existing.some((entry) => entry.name === normalized)) {
-      new import_obsidian10.Notice(t("\u540C\u540D profile \u5DF2\u5B58\u5728\uFF1A{name}", { name: normalized }));
+      new import_obsidian11.Notice(t("\u540C\u540D profile \u5DF2\u5B58\u5728\uFF1A{name}", { name: normalized }));
       return false;
     }
     await this.writeProfile(emptyProfile(normalized, "desktop"));
     if (adaptMobile) {
       await this.writeProfile(emptyProfile(normalized, "mobile"));
     }
-    new import_obsidian10.Notice(t("\u5DF2\u521B\u5EFA profile\u3002\u91CD\u8F7D\u63D2\u4EF6\u540E\u65B0\u547D\u4EE4\u751F\u6548\u3002"));
+    new import_obsidian11.Notice(t("\u5DF2\u521B\u5EFA profile\u3002\u91CD\u8F7D\u63D2\u4EF6\u540E\u65B0\u547D\u4EE4\u751F\u6548\u3002"));
     return true;
   }
   async deleteProfile(name, platform) {
@@ -2018,13 +2204,13 @@ var ConfigProfilePlugin = class extends import_obsidian10.Plugin {
   async renameProfile(from, to) {
     const normalized = normalizeProfileName(to);
     if (!isValidProfileName(to)) {
-      new import_obsidian10.Notice(t("\u540D\u79F0\u4E0D\u80FD\u4E3A\u7A7A\uFF0C\u4E14\u4E0D\u80FD\u5305\u542B / \u6216 \\\u3002"));
+      new import_obsidian11.Notice(t("\u540D\u79F0\u4E0D\u80FD\u4E3A\u7A7A\uFF0C\u4E14\u4E0D\u80FD\u5305\u542B / \u6216 \\\u3002"));
       return false;
     }
     if (normalized === from) return true;
     const existing = await this.listProfiles();
     if (existing.some((entry) => entry.name === normalized)) {
-      new import_obsidian10.Notice(t("\u540C\u540D profile \u5DF2\u5B58\u5728\uFF1A{name}", { name: normalized }));
+      new import_obsidian11.Notice(t("\u540C\u540D profile \u5DF2\u5B58\u5728\uFF1A{name}", { name: normalized }));
       return false;
     }
     const paths = this.paths();
@@ -2122,7 +2308,7 @@ var ConfigProfilePlugin = class extends import_obsidian10.Plugin {
   async openProfileEditor(name, platform) {
     const doc = await this.readProfile(name, platform);
     if (doc === null) {
-      new import_obsidian10.Notice(t("\u627E\u4E0D\u5230 profile\uFF1A{name}", { name }));
+      new import_obsidian11.Notice(t("\u627E\u4E0D\u5230 profile\uFF1A{name}", { name }));
       return;
     }
     const data = await this.profileEditorData(platform);

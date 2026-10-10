@@ -2,8 +2,9 @@
  * config-adapter：访问宿主内部面的**唯一**文件（AGENTS.md §4.6 内部 API 收口）。
  *
  * 收口内容（全部对过 obsidian.d.ts 1.8.7）：
- * - 设备 id / store 密码：App#loadLocalStorage / saveLocalStorage（:1398/1406，since 1.8.7，
- *   vault 作用域、设备本地——密码与 id 绝不进 vault / store / data.json，SPEC §2.4/§2.5）；
+ * - store 密码：App#loadLocalStorage / saveLocalStorage（:1398/1406，since 1.8.7，
+ *   vault 作用域、设备本地——密码绝不进 vault / store / data.json，SPEC §2.5）；
+ *   设备 id 0.1.0 起存 data.json，localStorage 只留作旧值迁移源；
  * - 平台探测：Platform.isMobile（:7041，公开导出）；
  * - `.obsidian` 与 store 读写：DataAdapter（app.vault.adapter，:3190 起；vault.configDir :10196）；
  *   走 Adapter 而非 Vault API 的理由：点目录 Vault API 访问不了，且需要逐文件复制 / 原子写；
@@ -15,27 +16,16 @@
 
 import { normalizePath, Platform } from "obsidian";
 import type { App } from "obsidian";
-import { LOCK_SCHEMA } from "../store/lock";
-import type { LockFile } from "../store/lock";
-import { lockPath } from "../store/paths";
 import type { PoolPaths, StorePaths } from "../store/paths";
 import { SELF_PLUGIN_ID } from "../store/items";
 
-const DEVICE_ID_KEY = "cp-device-id";
+const LEGACY_DEVICE_ID_KEY = "cp-device-id";
 const STORE_PASSWORD_KEY = "cp-store-password";
 
 export interface PluginInfo {
 	id: string;
 	name: string;
 	isDesktopOnly: boolean;
-}
-
-function randomId(): string {
-	const c = globalThis.crypto;
-	if (c && typeof c.randomUUID === "function") {
-		return c.randomUUID();
-	}
-	return `cp-${Math.random().toString(36).slice(2)}${Date.now().toString(36)}`;
 }
 
 export class ConfigAdapter {
@@ -47,15 +37,12 @@ export class ConfigAdapter {
 	}
 
 	/**
-	 * 本机设备 id：首次访问时生成并落 localStorage；之后稳定不变。
-	 * 注意绝不写入 vault / store（同步后双机同 id，识别就失效——SPEC §11.1）。
+	 * 旧版（≤0.0.3）存在 localStorage 的设备 id：只读迁移源，不写回。
+	 * 0.1.0 起 deviceId 存 data.json（清缓存不丢）；无旧值 → null，调用方生成新 id。
 	 */
-	deviceId(): string {
-		const existing = this.app.loadLocalStorage(DEVICE_ID_KEY);
-		if (typeof existing === "string" && existing !== "") return existing;
-		const id = randomId();
-		this.app.saveLocalStorage(DEVICE_ID_KEY, id);
-		return id;
+	legacyDeviceId(): string | null {
+		const value = this.app.loadLocalStorage(LEGACY_DEVICE_ID_KEY);
+		return typeof value === "string" && value !== "" ? value : null;
 	}
 
 	// ── store 密码（SPEC §2.5：只存各设备本地） ──
@@ -69,32 +56,7 @@ export class ConfigAdapter {
 		this.app.saveLocalStorage(STORE_PASSWORD_KEY, password);
 	}
 
-	// ── lock（SPEC §2.2） ──
-
-	/** lock 原文：文件不存在 → null；存在但读失败 → 抛出（调用方按 corrupt 处理） */
-	async readLockRaw(paths: StorePaths): Promise<string | null> {
-		const p = this.n(lockPath(paths));
-		if (!(await this.adapter.exists(p))) return null;
-		return this.adapter.read(p);
-	}
-
-	async writeLock(paths: StorePaths, lock: LockFile): Promise<void> {
-		await this.mkdir(this.n(paths.pcPool.base));
-		await this.adapter.write(this.n(lockPath(paths)), JSON.stringify(lock, null, "\t"));
-	}
-
-	async deleteLock(paths: StorePaths): Promise<void> {
-		await this.adapter.rmdir(this.n(lockPath(paths)), true);
-	}
-
-	buildLock(deviceName: string): LockFile {
-		return {
-			deviceId: this.deviceId(),
-			deviceName,
-			claimedAt: new Date().toISOString(),
-			schema: LOCK_SCHEMA,
-		};
-	}
+	// ── store 结构探测 ──
 
 	async poolHasContent(paths: StorePaths): Promise<boolean> {
 		if (!(await this.adapter.exists(this.n(paths.root)))) return false;
@@ -138,6 +100,20 @@ export class ConfigAdapter {
 	/** `.obsidian/plugins` 下已安装社区插件的清单（读各目录 manifest.json） */
 	async listInstalledPlugins(): Promise<PluginInfo[]> {
 		return this.listPluginManifests(`${this.configDir}/plugins`);
+	}
+
+	/** 插件目录内的相对文件路径（递归；目录不存在 → 空数组）。同步枚举插件文件用 */
+	async listPluginFilesRel(id: string): Promise<string[]> {
+		const root = this.n(`${this.configDir}/plugins/${id}`);
+		if (!(await this.adapter.exists(root))) return [];
+		const out: string[] = [];
+		const walk = async (dir: string): Promise<void> => {
+			const listed = await this.adapter.list(this.n(dir));
+			out.push(...listed.files.map((file) => file.slice(root.length + 1)));
+			for (const folder of listed.folders) await walk(folder);
+		};
+		await walk(root);
+		return out;
 	}
 
 	/** 池内插件目录只有 id（manifest 是安装产物被排除，SPEC §9.3） */

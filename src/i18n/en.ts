@@ -1,33 +1,25 @@
 /**
- * 英文字典：键 = 中文原文。check-i18n.mjs 校验 t("…") 字面量与这里的一致性。
+ * 英文字典：键 = 中文原文。check-i18n.mjs 校验 t() 字面量与这里的一致性。
  */
 
 export const EN: Record<string, string> = {
 	// ── 角色名 ──
-	"主配置": "Master",
-	"应用配置": "Apply-only",
+	"同步设备": "Sync device",
+	"仅应用": "Apply-only",
 	"手机": "Mobile",
 	"PC": "PC",
 	"尚未设定": "Not set yet",
 	// ── 首次运行弹窗 ──
 	"选择本机角色": "Choose this device's role",
-	"当前 vault 内没有发现配置库。本机是「主配置」（把本机 Obsidian 配置同步到 store），还是「应用配置」（只应用其他设备同步来的配置）？":
-		"No config store found in this vault. Is this device the master (captures this machine's Obsidian settings into the store) or apply-only (only applies settings synced from other devices)?",
-	"本机为主配置（同步本机配置到 store）": "This device is the master (sync local config into the store)",
-	"本机为应用配置": "This device is apply-only",
-	"不确定就选应用配置——应用配置不会写入 store，随时可以在设置里改。":
+	"本机是「同步设备」（把本机 Obsidian 配置与配置库双向同步，可多台同时开启），还是「仅应用」（只应用配置库同步来的配置）？":
+		"Is this device a sync device (two-way sync between this machine's Obsidian settings and the store; multiple devices can sync at once) or apply-only (only applies settings synced from the store)?",
+	"本机为同步设备（与配置库双向同步）": "This device is a sync device (two-way sync with the store)",
+	"本机为仅应用": "This device is apply-only",
+	"不确定就选仅应用——仅应用不会写入配置库，随时可以在设置里改。":
 		"When in doubt choose apply-only — it never writes to the store, and you can change the role anytime in settings.",
-	// ── 角色判定 Notice ──
-	"本机已设为主配置。": "This device is now the master.",
-	"本机已设为应用配置。": "This device is now apply-only.",
-	"检测到主配置来自设备《{name}》，本机已设为应用配置。若主配置其实属于本机（重装或清除数据后身份丢失），请在设置中重新夺取。":
-		"The master role belongs to \"{name}\"; this device is set to apply-only. If that is actually this machine (identity lost after reinstall or data wipe), re-claim the master role in settings.",
-	"无法确认主配置归属（lock 文件损坏），本机暂按应用配置处理。":
-		"Cannot confirm master ownership (lock file is corrupted); this device stays apply-only for now.",
-	"store 由更新版本的 Config Profile 写入，本机暂按应用配置处理。请更新插件。":
-		"The store was written by a newer version of Config Profile; this device stays apply-only for now. Please update the plugin.",
-	"无法确认主配置归属（配置池存在但没有 lock，可能同步未完成），本机暂按应用配置处理。":
-		"Cannot confirm master ownership (pool exists but no lock — sync may be incomplete); this device stays apply-only for now.",
+	// ── 角色 Notice ──
+	"本机已设为同步设备。": "This device is now a sync device.",
+	"本机已设为仅应用。": "This device is now apply-only.",
 	// ── 设置页 ──
 	"Config Profile": "Config Profile",
 	"通用": "General",
@@ -36,38 +28,85 @@ export const EN: Record<string, string> = {
 	"store 在 vault 内的路径（默认 SettingProfiles，vault 根）。修改后重载插件生效。":
 		"Path of the store inside the vault (default: SettingProfiles at the vault root). Reload the plugin after changing.",
 	"设备名": "Device name",
-	"显示在主配置归属提示里，帮助识别哪台设备持有主配置。":
-		"Shown in master-ownership notices so you can tell which device holds the role.",
+	"仅作来源标注：显示在同步记录与冲突提示里，说明配置来自哪台设备；不参与同步匹配。":
+		"Provenance label only: shown in sync records and conflict prompts to tell which device a change came from; not used for matching.",
+	"同步插件主体": "Sync plugin artifacts",
+	"把插件的 main.js / styles.css / manifest.json 一并明文同步（不加密）。开启后应用端可直接装齐缺失插件；下次同步生效。":
+		"Also sync plugins' main.js / styles.css / manifest.json in plain text (unencrypted). Apply-side devices can then install missing plugins directly; takes effect on the next sync.",
 	"语言": "Language",
 	"跟随 Obsidian": "Follow Obsidian",
 	"中文": "Chinese",
 	"English": "English",
 	"当前角色": "Current role",
-	"主配置持有者：{name}": "Master held by: {name}",
-	"夺取主配置": "Claim master role",
-	"让出主配置": "Release master role",
-	"将以本机身份接管 store 的主配置。原主配置设备会在下次操作前自动降级为应用配置。继续？":
-		"This device will take over the master role of the store. The previous master automatically drops to apply-only before its next write. Continue?",
-	"让出后 store 暂无主配置，所有设备都只能应用，直到有人重新夺取。继续？":
-		"After releasing, the store has no master and every device can only apply, until someone claims it again. Continue?",
-	"已接管主配置。": "Master role claimed.",
-	"已让出主配置。": "Master role released.",
-	"夺取或让出失败：{message}": "Claim or release failed: {message}",
+	"同步设备可与配置库双向同步（多台可同时开启）；仅应用只覆盖本机，不写配置库。":
+		"A sync device syncs both ways with the store (several can be enabled at once); apply-only only overwrites this machine and never writes to the store.",
+	"切换角色": "Switch role",
+	"切换后立即生效，无需重载。": "Takes effect immediately — no reload needed.",
+	"开 = 同步设备，关 = 仅应用": "On = sync device, off = apply-only",
 	"取消": "Cancel",
+	// ── 设置页：加密区 ──
+	"加密": "Encryption",
+	"配置库加密": "Store encryption",
+	"store 整库加密；密码只存各设备本地，不进 vault。": "The whole store is encrypted; the password stays on each device, never in the vault.",
+	"修改密码": "Change password",
+	"池内全部密文会以新密码重新加密重写。": "Every encrypted entry will be re-encrypted and rewritten with the new password.",
+	"尚未加密。下次同步时可设置密码，store 将整库加密。": "Not encrypted yet. Set a password on the next sync to encrypt the whole store.",
+	"尚未加密（主配置设备可在其设置中开启）。": "Not encrypted yet (a sync device can enable it in its settings).",
+	"设置密码并立即重新同步（整库加密）。": "Set a password and re-sync immediately (whole-store encryption).",
+	"密码已修改，池内密文已重写。": "Password changed; encrypted entries rewritten.",
+	"修改失败：{message}": "Change failed: {message}",
+	// ── 设置页：Profiles 区 ──
+	"Profiles": "Profiles",
+	"profile 管理请到 PC 端（手机只应用配置）。": "Manage profiles on desktop (mobile only applies them).",
+	"新建 profile": "New profile",
+	"创建后重载插件，应用命令即可用。": "Reload the plugin after creating to register its apply command.",
+	"新建": "Create",
+	"还没有 profile。新建一个，或在主配置端执行同步。": "No profiles yet. Create one, or run a sync on a sync device.",
+	"由同名桌面 profile 适配生成，跟随其更新。": "Generated from the desktop profile of the same name; follows its updates.",
+	"已开启手机适配。": "Mobile adaptation enabled.",
+	"适配手机": "Adapt for mobile",
+	"查看/编辑": "View/edit",
+	"重命名": "Rename",
+	"删除": "Delete",
+	"名称": "Name",
+	"为《{name}》同时生成手机适配 profile 吗？": "Also generate a mobile-adapted profile for \"{name}\"?",
+	"桌面 + 手机": "Desktop + mobile",
+	"仅桌面": "Desktop only",
+	"重命名 profile": "Rename profile",
+	"删除 profile": "Delete profile",
+	"确定删除《{label}》？此操作不可撤销。": "Delete \"{label}\"? This cannot be undone.",
+	"操作失败：{message}": "Operation failed: {message}",
 	// ── 命令 ──
 	"同步本地配置": "Sync local settings",
 	"应用配置：{name}": "Apply profile: {name}",
 	"查看/编辑配置：{name}": "View/edit profile: {name}",
 	"{name}（手机）": "{name} (mobile)",
-	// ── 同步 / 应用 Notice ──
+	// ── 同步 Notice / 弹窗 ──
 	"密码不正确。": "Wrong password.",
 	"手机端只能应用配置，不能同步。": "Mobile devices can only apply profiles, not sync.",
-	"本机不是主配置设备，不能同步。可在设置中夺取主配置。":
-		"This device is not the master, so it cannot sync. Claim the master role in settings.",
-	"同步完成：更新 {updated} 项，跳过 {skipped} 项，清理 {pruned} 项。":
-		"Sync finished: {updated} updated, {skipped} skipped, {pruned} pruned.",
+	"本机是仅应用设备，不能同步。可在设置中切换为同步设备。":
+		"This device is apply-only and cannot sync. Switch it to a sync device in settings.",
+	"同步完成：推送 {pushed} 项，拉取 {pulled} 项，删除 {deleted} 项。":
+		"Sync finished: {pushed} pushed, {pulled} pulled, {deleted} deleted.",
+	"冲突已按本机解决。": " Conflicts resolved with local versions.",
+	"冲突已按池解决。": " Conflicts resolved with store versions.",
 	"已更新移动投影。": " Mobile projection updated.",
 	"同步失败：{message}": "Sync failed: {message}",
+	"配置库的时间戳来自未来，本机或对端时钟可能不准。请校准系统时间后重试。":
+		"The store's timestamps are in the future; this device or a peer may have a wrong clock. Calibrate the system time and retry.",
+	"首次在此设备同步": "First sync on this device",
+	"配置库已有内容，但本机还没有同步记录。以哪边为准？本机多出的文件会保留，下次同步再上传。":
+		"The store already has content, but this device has no sync record yet. Which side wins? Files that exist only locally are kept and uploaded on the next sync.",
+	"直接关闭弹窗即取消本次同步。": "Closing this dialog cancels the sync.",
+	"用本机覆盖池": "Overwrite store with local",
+	"先把池应用回本机": "Apply the store to this device first",
+	"同步冲突": "Sync conflicts",
+	"以下文件在本机和配置库都改过，需要你决定保留哪边（对所有列出的文件生效）：":
+		"These files changed both locally and in the store; choose which side to keep (applies to all listed files):",
+	"直接关闭弹窗即取消本次同步，两边改动都保持原样。": "Closing this dialog cancels the sync; both sides stay as they are.",
+	"保留本机版本": "Keep local versions",
+	"保留配置库版本": "Keep store versions",
+	// ── 应用 ──
 	"找不到 profile：{name}": "Profile not found: {name}",
 	"profile 文件损坏：{name}": "Profile file is corrupted: {name}",
 	"profile 里没有勾选任何内容：{name}": "Nothing is checked in this profile: {name}",
@@ -102,7 +141,7 @@ export const EN: Record<string, string> = {
 	"两次输入不一致或为空。": "The two entries do not match or are empty.",
 	"输入配置库密码": "Enter the store password",
 	"这个配置库已加密。输入主配置设备设置的密码以继续，验证通过后本机记住密码。":
-		"This store is encrypted. Enter the password set on the master device to continue; it will be remembered on this device after verification.",
+		"This store is encrypted. Enter the password set on the sync device to continue; it will be remembered on this device after verification.",
 	"确认": "OK",
 	"修改配置库密码": "Change the store password",
 	"池内全部密文会以新密码重新加密并重写，其他设备下次应用时输入新密码即可。":
@@ -130,36 +169,4 @@ export const EN: Record<string, string> = {
 	"社区插件启用列表": "Community plugin enable list",
 	"关系图设置": "Graph settings",
 	"书签": "Bookmarks",
-	// ── 设置页：加密区 ──
-	"加密": "Encryption",
-	"配置库加密": "Store encryption",
-	"store 整库加密；密码只存各设备本地，不进 vault。": "The whole store is encrypted; the password stays on each device, never in the vault.",
-	"修改密码": "Change password",
-	"池内全部密文会以新密码重新加密重写。": "Every encrypted entry will be re-encrypted and rewritten with the new password.",
-	"尚未加密。下次同步时可设置密码，store 将整库加密。": "Not encrypted yet. Set a password on the next sync to encrypt the whole store.",
-	"尚未加密（主配置设备可在其设置中开启）。": "Not encrypted yet (the master device can enable it in its settings).",
-	"设置密码并立即重新同步（整库加密）。": "Set a password and re-sync immediately (whole-store encryption).",
-	"密码已修改，池内密文已重写。": "Password changed; encrypted entries rewritten.",
-	"修改失败：{message}": "Change failed: {message}",
-	// ── 设置页：Profiles 区 ──
-	"Profiles": "Profiles",
-	"profile 管理请到 PC 端（手机只应用配置）。": "Manage profiles on desktop (mobile only applies them).",
-	"新建 profile": "New profile",
-	"创建后重载插件，应用命令即可用。": "Reload the plugin after creating to register its apply command.",
-	"新建": "Create",
-	"还没有 profile。新建一个，或在主配置端执行同步。": "No profiles yet. Create one, or run a sync on the master device.",
-	"由同名桌面 profile 适配生成，跟随其更新。": "Generated from the desktop profile of the same name; follows its updates.",
-	"已开启手机适配。": "Mobile adaptation enabled.",
-	"适配手机": "Adapt for mobile",
-	"查看/编辑": "View/edit",
-	"重命名": "Rename",
-	"删除": "Delete",
-	"名称": "Name",
-	"为《{name}》同时生成手机适配 profile 吗？": "Also generate a mobile-adapted profile for \"{name}\"?",
-	"桌面 + 手机": "Desktop + mobile",
-	"仅桌面": "Desktop only",
-	"重命名 profile": "Rename profile",
-	"删除 profile": "Delete profile",
-	"确定删除《{label}》？此操作不可撤销。": "Delete \"{label}\"? This cannot be undone.",
-	"操作失败：{message}": "Operation failed: {message}",
 };

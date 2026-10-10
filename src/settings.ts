@@ -49,7 +49,7 @@ export class CPSettingTab extends PluginSettingTab {
 
 		new Setting(container)
 			.setName(t("设备名"))
-			.setDesc(t("显示在主配置归属提示里，帮助识别哪台设备持有主配置。"))
+			.setDesc(t("仅作来源标注：显示在同步记录与冲突提示里，说明配置来自哪台设备；不参与同步匹配。"))
 			.addText((text) =>
 				text
 					.setPlaceholder(this.plugin.effectiveDeviceName())
@@ -59,6 +59,20 @@ export class CPSettingTab extends PluginSettingTab {
 						await this.plugin.saveConfig();
 					}),
 			);
+
+		if (!this.plugin.store.isMobile) {
+			new Setting(container)
+				.setName(t("同步插件主体"))
+				.setDesc(
+					t("把插件的 main.js / styles.css / manifest.json 一并明文同步（不加密）。开启后应用端可直接装齐缺失插件；下次同步生效。"),
+				)
+				.addToggle((toggle) =>
+					toggle.setValue(this.plugin.config.syncArtifacts).onChange(async (value) => {
+						this.plugin.config.syncArtifacts = value;
+						await this.plugin.saveConfig();
+					}),
+				);
+		}
 
 		new Setting(container).setName(t("语言")).addDropdown((drop) =>
 			drop
@@ -80,23 +94,24 @@ export class CPSettingTab extends PluginSettingTab {
 	private renderRole(container: HTMLElement): void {
 		new Setting(container).setName(t("角色")).setHeading();
 
-		const role = this.plugin.currentRole;
-		const roleName =
-			role.kind === "master" ? t("主配置") : role.kind === "apply" ? t("应用配置") : t("尚未设定");
-		const holderDesc = role.holderName ? t("主配置持有者：{name}", { name: role.holderName }) : "";
-		new Setting(container).setName(t("当前角色")).setDesc(holderDesc).then((s) => {
-			s.controlEl.createSpan({ text: roleName });
-		});
+		const isSync = this.plugin.config.preferredRole === "sync";
+		const roleName = isSync ? t("同步设备") : this.plugin.config.preferredRole === "apply" ? t("仅应用") : t("尚未设定");
+		new Setting(container)
+			.setName(t("当前角色"))
+			.setDesc(t("同步设备可与配置库双向同步（多台可同时开启）；仅应用只覆盖本机，不写配置库。"))
+			.then((s) => {
+				s.controlEl.createSpan({ text: roleName });
+			});
 
-		if (role.kind === "master") {
-			new Setting(container)
-				.setName(t("让出主配置"))
-				.then((s) => s.addButton((btn) => btn.setButtonText(t("让出主配置")).onClick(() => void this.releaseMaster(s))));
-		} else {
-			new Setting(container)
-				.setName(t("夺取主配置"))
-				.then((s) => s.addButton((btn) => btn.setButtonText(t("夺取主配置")).onClick(() => void this.claimMaster(s))));
-		}
+		new Setting(container)
+			.setName(t("切换角色"))
+			.setDesc(t("切换后立即生效，无需重载。"))
+			.addToggle((toggle) =>
+				toggle
+					.setValue(isSync)
+					.setTooltip(t("开 = 同步设备，关 = 仅应用"))
+					.onChange((value) => void this.plugin.setRole(value ? "sync" : "apply")),
+			);
 	}
 
 	// ── 加密（SPEC §2.5：改密 / 启用仅主配置 PC 端） ──
@@ -110,7 +125,7 @@ export class CPSettingTab extends PluginSettingTab {
 		} catch {
 			encrypted = false;
 		}
-		const canManage = !this.plugin.store.isMobile && this.plugin.currentRole.kind === "master";
+		const canManage = !this.plugin.store.isMobile && this.plugin.config.preferredRole === "sync";
 
 		if (encrypted) {
 			new Setting(container)
@@ -269,39 +284,5 @@ export class CPSettingTab extends PluginSettingTab {
 			new Notice(t("操作失败：{message}", { message: error instanceof Error ? error.message : String(error) }));
 		}
 		this.display();
-	}
-
-	// ── 角色切换 ──
-
-	private async claimMaster(setting: Setting): Promise<void> {
-		const confirmed = await askConfirm(this.app, {
-			title: t("夺取主配置"),
-			message: t("将以本机身份接管 store 的主配置。原主配置设备会在下次操作前自动降级为应用配置。继续？"),
-			acceptLabel: t("夺取主配置"),
-			cancelLabel: t("取消"),
-		});
-		if (!confirmed) return;
-		try {
-			await this.plugin.claimMaster();
-			this.display();
-		} catch (error) {
-			setting.setName(`${t("夺取或让出失败：{message}", { message: String(error) })}`);
-		}
-	}
-
-	private async releaseMaster(setting: Setting): Promise<void> {
-		const confirmed = await askConfirm(this.app, {
-			title: t("让出主配置"),
-			message: t("让出后 store 暂无主配置，所有设备都只能应用，直到有人重新夺取。继续？"),
-			acceptLabel: t("让出主配置"),
-			cancelLabel: t("取消"),
-		});
-		if (!confirmed) return;
-		try {
-			await this.plugin.releaseMaster();
-			this.display();
-		} catch (error) {
-			setting.setName(`${t("夺取或让出失败：{message}", { message: String(error) })}`);
-		}
 	}
 }

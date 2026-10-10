@@ -49,11 +49,6 @@ export function storePaths(storePath: string): StorePaths {
 	};
 }
 
-/** lock 的完整路径（只存在于 pcconfig 下，SPEC §2.2：手机端无写池入口，天然无竞争） */
-export function lockPath(paths: StorePaths): string {
-	return `${paths.pcPool.base}/_lock.json`;
-}
-
 /** 池元数据路径 */
 export function metaPath(pool: PoolPaths): string {
 	return `${pool.base}/_meta.json`;
