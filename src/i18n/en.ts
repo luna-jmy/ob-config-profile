@@ -161,6 +161,8 @@ export const EN: Record<string, string> = {
 	"编辑 profile：{name}（手机）": "Edit profile: {name} (mobile)",
 	"勾选改动即时保存，无需手动确认。": "Toggles save immediately — no confirmation needed.",
 	"App 设置": "App settings",
+	"已选 {selected}/{total}": "Selected {selected}/{total}",
+	"全选": "Select all",
 	"社区插件": "Community plugins",
 	"CSS 片段": "CSS snippets",
 	"主题": "Themes",

@@ -40,8 +40,25 @@ function toggleRow(
 	setting.addToggle((toggle) => toggle.setValue(checked).onChange(onChange));
 }
 
-function groupHeading(container: HTMLElement, name: string): void {
-	new Setting(container).setName(name).setHeading();
+/** 分组标题行：带「已选 N/M」计数与全选开关（点一下全开/全关，单次落盘） */
+function groupHeader<T>(
+	container: HTMLElement,
+	name: string,
+	items: readonly T[],
+	isSelected: (item: T) => boolean,
+	selectAll: (selected: boolean) => void,
+): void {
+	const setting = new Setting(container).setName(name).setHeading();
+	if (items.length === 0) return;
+	const selected = items.filter(isSelected).length;
+	setting
+		.setDesc(t("已选 {selected}/{total}", { selected, total: items.length }))
+		.addToggle((toggle) =>
+			toggle
+				.setValue(selected === items.length)
+				.setTooltip(t("全选"))
+				.onChange((value) => selectAll(value)),
+		);
 }
 
 export function renderProfileEditor(
@@ -61,9 +78,18 @@ export function renderProfileEditor(
 	}
 
 	// ── app 设置 ──
-	groupHeading(container, t("App 设置"));
-	for (const spec of APP_FILES) {
-		if (isMobileDoc && !isMobileAllowedAppFile(spec.file)) continue;
+	const appSpecs = APP_FILES.filter((spec) => !isMobileDoc || isMobileAllowedAppFile(spec.file));
+	groupHeader(
+		container,
+		t("App 设置"),
+		appSpecs,
+		(spec) => doc.app.includes(spec.file),
+		(on) => {
+			doc.app = on ? appSpecs.map((spec) => spec.file) : [];
+			void host.onChanged(globalThis.structuredClone(doc));
+		},
+	);
+	for (const spec of appSpecs) {
 		toggleRow(
 			container,
 			t(spec.label),
@@ -78,7 +104,16 @@ export function renderProfileEditor(
 	}
 
 	// ── 社区插件 ──
-	groupHeading(container, t("社区插件"));
+	groupHeader(
+		container,
+		t("社区插件"),
+		data.plugins,
+		(plugin) => doc.plugins.includes(plugin.id),
+		(on) => {
+			doc.plugins = on ? data.plugins.map((plugin) => plugin.id) : [];
+			void host.onChanged(globalThis.structuredClone(doc));
+		},
+	);
 	for (const plugin of data.plugins) {
 		const label = plugin.name === plugin.id ? plugin.id : `${plugin.name}（${plugin.id}）`;
 		const extra = plugin.isDesktopOnly ? t("桌面专属，不进移动 profile") : undefined;
@@ -90,14 +125,32 @@ export function renderProfileEditor(
 
 	// ── 片段 / 主题（mobile profile 没有这两组） ──
 	if (!isMobileDoc) {
-		groupHeading(container, t("CSS 片段"));
+		groupHeader(
+			container,
+			t("CSS 片段"),
+			data.snippets,
+			(name) => doc.snippets.includes(name),
+			(on) => {
+				doc.snippets = on ? [...data.snippets] : [];
+				void host.onChanged(globalThis.structuredClone(doc));
+			},
+		);
 		for (const name of data.snippets) {
 			toggleRow(container, name, doc.snippets.includes(name), (value) => {
 				doc.snippets = value ? [...doc.snippets, name] : doc.snippets.filter((item) => item !== name);
 				void host.onChanged(globalThis.structuredClone(doc));
 			});
 		}
-		groupHeading(container, t("主题"));
+		groupHeader(
+			container,
+			t("主题"),
+			data.themes,
+			(name) => doc.themes.includes(name),
+			(on) => {
+				doc.themes = on ? [...data.themes] : [];
+				void host.onChanged(globalThis.structuredClone(doc));
+			},
+		);
 		for (const name of data.themes) {
 			toggleRow(container, name, doc.themes.includes(name), (value) => {
 				doc.themes = value ? [...doc.themes, name] : doc.themes.filter((item) => item !== name);

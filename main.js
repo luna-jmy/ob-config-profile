@@ -1,4 +1,4 @@
-/* Config Profile — bundled 2026-10-10T04:57:35.079Z */
+/* Config Profile — bundled 2026-10-10T05:08:02.274Z */
 "use strict";
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -299,6 +299,8 @@ var EN = {
   "\u7F16\u8F91 profile\uFF1A{name}\uFF08\u624B\u673A\uFF09": "Edit profile: {name} (mobile)",
   "\u52FE\u9009\u6539\u52A8\u5373\u65F6\u4FDD\u5B58\uFF0C\u65E0\u9700\u624B\u52A8\u786E\u8BA4\u3002": "Toggles save immediately \u2014 no confirmation needed.",
   "App \u8BBE\u7F6E": "App settings",
+  "\u5DF2\u9009 {selected}/{total}": "Selected {selected}/{total}",
+  "\u5168\u9009": "Select all",
   "\u793E\u533A\u63D2\u4EF6": "Community plugins",
   "CSS \u7247\u6BB5": "CSS snippets",
   "\u4E3B\u9898": "Themes",
@@ -1376,8 +1378,13 @@ function toggleRow(container, label, checked, onChange, extra) {
   if (extra) setting.setDesc(extra);
   setting.addToggle((toggle) => toggle.setValue(checked).onChange(onChange));
 }
-function groupHeading(container, name) {
-  new import_obsidian5.Setting(container).setName(name).setHeading();
+function groupHeader(container, name, items, isSelected, selectAll) {
+  const setting = new import_obsidian5.Setting(container).setName(name).setHeading();
+  if (items.length === 0) return;
+  const selected = items.filter(isSelected).length;
+  setting.setDesc(t("\u5DF2\u9009 {selected}/{total}", { selected, total: items.length })).addToggle(
+    (toggle) => toggle.setValue(selected === items.length).setTooltip(t("\u5168\u9009")).onChange((value) => selectAll(value))
+  );
 }
 function renderProfileEditor(container, doc, data, host) {
   container.empty();
@@ -1388,9 +1395,18 @@ function renderProfileEditor(container, doc, data, host) {
       text: t("\u79FB\u52A8 profile \u4EC5\u5305\u542B\u6838\u5FC3\u63D2\u4EF6\u5F00\u5173\u4E0E\u63D2\u4EF6\u914D\u7F6E\uFF1B\u5916\u89C2\u3001\u4E3B\u9898\u3001\u5FEB\u6377\u952E\u7B49 app \u8BBE\u7F6E\u4E0D\u4F1A\u5E94\u7528\u5230\u624B\u673A\u3002")
     });
   }
-  groupHeading(container, t("App \u8BBE\u7F6E"));
-  for (const spec of APP_FILES) {
-    if (isMobileDoc && !isMobileAllowedAppFile(spec.file)) continue;
+  const appSpecs = APP_FILES.filter((spec) => !isMobileDoc || isMobileAllowedAppFile(spec.file));
+  groupHeader(
+    container,
+    t("App \u8BBE\u7F6E"),
+    appSpecs,
+    (spec) => doc.app.includes(spec.file),
+    (on) => {
+      doc.app = on ? appSpecs.map((spec) => spec.file) : [];
+      void host.onChanged(globalThis.structuredClone(doc));
+    }
+  );
+  for (const spec of appSpecs) {
     toggleRow(
       container,
       t(spec.label),
@@ -1401,7 +1417,16 @@ function renderProfileEditor(container, doc, data, host) {
       }
     );
   }
-  groupHeading(container, t("\u793E\u533A\u63D2\u4EF6"));
+  groupHeader(
+    container,
+    t("\u793E\u533A\u63D2\u4EF6"),
+    data.plugins,
+    (plugin) => doc.plugins.includes(plugin.id),
+    (on) => {
+      doc.plugins = on ? data.plugins.map((plugin) => plugin.id) : [];
+      void host.onChanged(globalThis.structuredClone(doc));
+    }
+  );
   for (const plugin of data.plugins) {
     const label = plugin.name === plugin.id ? plugin.id : `${plugin.name}\uFF08${plugin.id}\uFF09`;
     const extra = plugin.isDesktopOnly ? t("\u684C\u9762\u4E13\u5C5E\uFF0C\u4E0D\u8FDB\u79FB\u52A8 profile") : void 0;
@@ -1411,14 +1436,32 @@ function renderProfileEditor(container, doc, data, host) {
     }, extra);
   }
   if (!isMobileDoc) {
-    groupHeading(container, t("CSS \u7247\u6BB5"));
+    groupHeader(
+      container,
+      t("CSS \u7247\u6BB5"),
+      data.snippets,
+      (name) => doc.snippets.includes(name),
+      (on) => {
+        doc.snippets = on ? [...data.snippets] : [];
+        void host.onChanged(globalThis.structuredClone(doc));
+      }
+    );
     for (const name of data.snippets) {
       toggleRow(container, name, doc.snippets.includes(name), (value) => {
         doc.snippets = value ? [...doc.snippets, name] : doc.snippets.filter((item) => item !== name);
         void host.onChanged(globalThis.structuredClone(doc));
       });
     }
-    groupHeading(container, t("\u4E3B\u9898"));
+    groupHeader(
+      container,
+      t("\u4E3B\u9898"),
+      data.themes,
+      (name) => doc.themes.includes(name),
+      (on) => {
+        doc.themes = on ? [...data.themes] : [];
+        void host.onChanged(globalThis.structuredClone(doc));
+      }
+    );
     for (const name of data.themes) {
       toggleRow(container, name, doc.themes.includes(name), (value) => {
         doc.themes = value ? [...doc.themes, name] : doc.themes.filter((item) => item !== name);
