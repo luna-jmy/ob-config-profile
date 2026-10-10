@@ -10,6 +10,8 @@ import type ConfigProfilePlugin from "../main";
  * renderProfileEditor 渲染；勾选即存（onProfileEdited 落盘并联动 mobile 派生）。
  */
 export class ProfileEditModal extends Modal {
+	private bodyEl!: HTMLElement;
+
 	constructor(
 		private readonly plugin: ConfigProfilePlugin,
 		private readonly profile: ProfileDoc,
@@ -29,11 +31,17 @@ export class ProfileEditModal extends Modal {
 			cls: "cp-modal__hint",
 			text: t("勾选改动即时保存，无需手动确认。"),
 		});
-		const body = this.contentEl.createDiv();
-		renderProfileEditor(body, this.profile, this.data, {
+		this.bodyEl = this.contentEl.createDiv();
+		this.renderEditor();
+	}
+
+	/** 全选等批量变化后整体重渲染（单行开关自己会更新，不触发） */
+	private renderEditor(): void {
+		renderProfileEditor(this.bodyEl, this.profile, this.data, {
 			onChanged: async (changed) => {
 				await this.plugin.onProfileEdited(changed);
 			},
+			onBulkChanged: () => this.renderEditor(),
 		});
 	}
 

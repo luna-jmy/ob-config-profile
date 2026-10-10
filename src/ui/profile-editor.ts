@@ -26,6 +26,8 @@ export interface ProfileEditorData {
 export interface ProfileEditorHost {
 	/** 勾选变化（doc 已就地修改）；返回 Promise 由调用方落盘 */
 	onChanged(doc: ProfileDoc): Promise<void>;
+	/** 全选/全关等批量变化落盘后调用；调用方应重渲染编辑器刷新各行与计数 */
+	onBulkChanged?(): void;
 }
 
 function toggleRow(
@@ -86,7 +88,7 @@ export function renderProfileEditor(
 		(spec) => doc.app.includes(spec.file),
 		(on) => {
 			doc.app = on ? appSpecs.map((spec) => spec.file) : [];
-			void host.onChanged(globalThis.structuredClone(doc));
+			void host.onChanged(globalThis.structuredClone(doc)).then(() => host.onBulkChanged?.());
 		},
 	);
 	for (const spec of appSpecs) {
@@ -111,7 +113,7 @@ export function renderProfileEditor(
 		(plugin) => doc.plugins.includes(plugin.id),
 		(on) => {
 			doc.plugins = on ? data.plugins.map((plugin) => plugin.id) : [];
-			void host.onChanged(globalThis.structuredClone(doc));
+			void host.onChanged(globalThis.structuredClone(doc)).then(() => host.onBulkChanged?.());
 		},
 	);
 	for (const plugin of data.plugins) {
@@ -132,7 +134,7 @@ export function renderProfileEditor(
 			(name) => doc.snippets.includes(name),
 			(on) => {
 				doc.snippets = on ? [...data.snippets] : [];
-				void host.onChanged(globalThis.structuredClone(doc));
+				void host.onChanged(globalThis.structuredClone(doc)).then(() => host.onBulkChanged?.());
 			},
 		);
 		for (const name of data.snippets) {
@@ -148,7 +150,7 @@ export function renderProfileEditor(
 			(name) => doc.themes.includes(name),
 			(on) => {
 				doc.themes = on ? [...data.themes] : [];
-				void host.onChanged(globalThis.structuredClone(doc));
+				void host.onChanged(globalThis.structuredClone(doc)).then(() => host.onBulkChanged?.());
 			},
 		);
 		for (const name of data.themes) {

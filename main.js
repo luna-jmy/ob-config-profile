@@ -1,4 +1,4 @@
-/* Config Profile — bundled 2026-10-10T05:08:02.274Z */
+/* Config Profile — bundled 2026-10-10T05:13:55.421Z */
 "use strict";
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -1403,7 +1403,10 @@ function renderProfileEditor(container, doc, data, host) {
     (spec) => doc.app.includes(spec.file),
     (on) => {
       doc.app = on ? appSpecs.map((spec) => spec.file) : [];
-      void host.onChanged(globalThis.structuredClone(doc));
+      void host.onChanged(globalThis.structuredClone(doc)).then(() => {
+        var _a;
+        return (_a = host.onBulkChanged) == null ? void 0 : _a.call(host);
+      });
     }
   );
   for (const spec of appSpecs) {
@@ -1424,7 +1427,10 @@ function renderProfileEditor(container, doc, data, host) {
     (plugin) => doc.plugins.includes(plugin.id),
     (on) => {
       doc.plugins = on ? data.plugins.map((plugin) => plugin.id) : [];
-      void host.onChanged(globalThis.structuredClone(doc));
+      void host.onChanged(globalThis.structuredClone(doc)).then(() => {
+        var _a;
+        return (_a = host.onBulkChanged) == null ? void 0 : _a.call(host);
+      });
     }
   );
   for (const plugin of data.plugins) {
@@ -1443,7 +1449,10 @@ function renderProfileEditor(container, doc, data, host) {
       (name) => doc.snippets.includes(name),
       (on) => {
         doc.snippets = on ? [...data.snippets] : [];
-        void host.onChanged(globalThis.structuredClone(doc));
+        void host.onChanged(globalThis.structuredClone(doc)).then(() => {
+          var _a;
+          return (_a = host.onBulkChanged) == null ? void 0 : _a.call(host);
+        });
       }
     );
     for (const name of data.snippets) {
@@ -1459,7 +1468,10 @@ function renderProfileEditor(container, doc, data, host) {
       (name) => doc.themes.includes(name),
       (on) => {
         doc.themes = on ? [...data.themes] : [];
-        void host.onChanged(globalThis.structuredClone(doc));
+        void host.onChanged(globalThis.structuredClone(doc)).then(() => {
+          var _a;
+          return (_a = host.onBulkChanged) == null ? void 0 : _a.call(host);
+        });
       }
     );
     for (const name of data.themes) {
@@ -1487,11 +1499,16 @@ var ProfileEditModal = class extends import_obsidian6.Modal {
       cls: "cp-modal__hint",
       text: t("\u52FE\u9009\u6539\u52A8\u5373\u65F6\u4FDD\u5B58\uFF0C\u65E0\u9700\u624B\u52A8\u786E\u8BA4\u3002")
     });
-    const body = this.contentEl.createDiv();
-    renderProfileEditor(body, this.profile, this.data, {
+    this.bodyEl = this.contentEl.createDiv();
+    this.renderEditor();
+  }
+  /** 全选等批量变化后整体重渲染（单行开关自己会更新，不触发） */
+  renderEditor() {
+    renderProfileEditor(this.bodyEl, this.profile, this.data, {
       onChanged: async (changed) => {
         await this.plugin.onProfileEdited(changed);
-      }
+      },
+      onBulkChanged: () => this.renderEditor()
     });
   }
   onClose() {
