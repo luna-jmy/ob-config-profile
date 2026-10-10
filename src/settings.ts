@@ -59,7 +59,8 @@ export class CPSettingTab extends PluginSettingTab {
 					}),
 			);
 
-		if (!this.plugin.store.isMobile) {
+		// 「同步插件主体」按角色分两侧：PC 同步设备 = 上传侧；仅应用设备/手机 = 应用侧
+		if (!this.plugin.store.isMobile && this.plugin.config.preferredRole === "sync") {
 			new Setting(container)
 				.setName(t("同步插件主体"))
 				.setDesc(
@@ -68,6 +69,18 @@ export class CPSettingTab extends PluginSettingTab {
 				.addToggle((toggle) =>
 					toggle.setValue(this.plugin.config.syncArtifacts).onChange(async (value) => {
 						this.plugin.config.syncArtifacts = value;
+						await this.plugin.saveConfig();
+					}),
+				);
+		} else {
+			new Setting(container)
+				.setName(t("同步插件主体"))
+				.setDesc(
+					t("开启后应用时把池里的插件主体（main.js / styles.css / manifest.json）连同配置一起写入，未安装的插件直接装齐，重载后生效；关闭则只应用配置，未安装的插件跳过。"),
+				)
+				.addToggle((toggle) =>
+					toggle.setValue(this.plugin.config.applyArtifacts).onChange(async (value) => {
+						this.plugin.config.applyArtifacts = value;
 						await this.plugin.saveConfig();
 					}),
 				);
@@ -109,7 +122,9 @@ export class CPSettingTab extends PluginSettingTab {
 				toggle
 					.setValue(isSync)
 					.setTooltip(t("开 = 同步设备，关 = 仅应用"))
-					.onChange((value) => void this.plugin.setRole(value ? "sync" : "apply")),
+					.onChange((value) =>
+						void this.plugin.setRole(value ? "sync" : "apply").then(() => this.display()),
+					),
 			);
 	}
 

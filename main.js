@@ -1,4 +1,4 @@
-/* Config Profile — bundled 2026-10-10T08:07:51.372Z */
+/* Config Profile — bundled 2026-10-10T08:14:46.758Z */
 "use strict";
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -184,6 +184,8 @@ var EN = {
   "\u4EC5\u4F5C\u6765\u6E90\u6807\u6CE8\uFF1A\u663E\u793A\u5728\u540C\u6B65\u8BB0\u5F55\u4E0E\u51B2\u7A81\u63D0\u793A\u91CC\uFF0C\u8BF4\u660E\u914D\u7F6E\u6765\u81EA\u54EA\u53F0\u8BBE\u5907\uFF1B\u4E0D\u53C2\u4E0E\u540C\u6B65\u5339\u914D\u3002": "Provenance label only: shown in sync records and conflict prompts to tell which device a change came from; not used for matching.",
   "\u540C\u6B65\u63D2\u4EF6\u4E3B\u4F53": "Sync plugin artifacts",
   "\u628A\u63D2\u4EF6\u7684 main.js / styles.css / manifest.json \u4E00\u5E76\u660E\u6587\u540C\u6B65\uFF08\u4E0D\u52A0\u5BC6\uFF09\u3002\u5F00\u542F\u540E\u5E94\u7528\u7AEF\u53EF\u76F4\u63A5\u88C5\u9F50\u7F3A\u5931\u63D2\u4EF6\uFF1B\u4E0B\u6B21\u540C\u6B65\u751F\u6548\u3002": "Also sync plugins' main.js / styles.css / manifest.json in plain text (unencrypted). Apply-side devices can then install missing plugins directly; takes effect on the next sync.",
+  "\u5F00\u542F\u540E\u5E94\u7528\u65F6\u628A\u6C60\u91CC\u7684\u63D2\u4EF6\u4E3B\u4F53\uFF08main.js / styles.css / manifest.json\uFF09\u8FDE\u540C\u914D\u7F6E\u4E00\u8D77\u5199\u5165\uFF0C\u672A\u5B89\u88C5\u7684\u63D2\u4EF6\u76F4\u63A5\u88C5\u9F50\uFF0C\u91CD\u8F7D\u540E\u751F\u6548\uFF1B\u5173\u95ED\u5219\u53EA\u5E94\u7528\u914D\u7F6E\uFF0C\u672A\u5B89\u88C5\u7684\u63D2\u4EF6\u8DF3\u8FC7\u3002": "When on, applying also writes plugin bodies (main.js / styles.css / manifest.json) from the store, installing missing plugins directly (effective after reload); when off, only settings are applied and uninstalled plugins are skipped.",
+  "\u4EE5\u4E0B\u63D2\u4EF6\u5DF2\u4ECE\u914D\u7F6E\u5E93\u88C5\u9F50\u4E3B\u4F53\uFF0C\u91CD\u8F7D\u540E\u751F\u6548\uFF1A": "These plugins were installed from the store; reload to take effect:",
   "\u8BED\u8A00": "Language",
   "\u8DDF\u968F Obsidian": "Follow Obsidian",
   "\u4E2D\u6587": "Chinese",
@@ -476,6 +478,26 @@ function decideStartupRole(preferredRole) {
   return { kind: "role", role: preferredRole };
 }
 
+// src/store/items.ts
+var SELF_PLUGIN_ID = "config-profile";
+var INSTALL_ARTIFACTS = /* @__PURE__ */ new Set(["main.js", "styles.css", "manifest.json"]);
+var APP_FILES = [
+  { file: "app.json", label: "\u7F16\u8F91\u5668\u4E0E\u6587\u4EF6\u8BBE\u7F6E" },
+  { file: "appearance.json", label: "\u5916\u89C2" },
+  { file: "hotkeys.json", label: "\u5FEB\u6377\u952E" },
+  { file: "core-plugins.json", label: "\u6838\u5FC3\u63D2\u4EF6\u5F00\u5173" },
+  { file: "community-plugins.json", label: "\u793E\u533A\u63D2\u4EF6\u542F\u7528\u5217\u8868" },
+  { file: "graph.json", label: "\u5173\u7CFB\u56FE\u8BBE\u7F6E" },
+  { file: "bookmarks.json", label: "\u4E66\u7B7E" }
+];
+var MOBILE_ALLOWED_APP_FILES = ["core-plugins.json", "community-plugins.json"];
+function isMobileAllowedAppFile(file) {
+  return MOBILE_ALLOWED_APP_FILES.includes(file);
+}
+function isCarryablePluginFile(fileName) {
+  return !INSTALL_ARTIFACTS.has(fileName);
+}
+
 // src/services/apply-service.ts
 var WrongStorePasswordError = class extends Error {
   constructor() {
@@ -506,22 +528,16 @@ var ApplyService = class {
       throw error;
     }
   }
-  async run(profile, password) {
-    const report = { applied: [], missingPlugins: [], desktopOnlySkipped: [] };
+  async run(profile, password, options = {}) {
+    const installArtifacts = options.installArtifacts === true;
+    const report = { applied: [], installedPlugins: [], missingPlugins: [], desktopOnlySkipped: [] };
     const base = this.poolBase(profile);
     const pluginIds = [...profile.plugins];
     if (this.adapter.isMobile) {
       for (const id of [...pluginIds]) {
-        const manifestRaw = await this.adapter.obsidianRead(`plugins/${id}/manifest.json`);
-        if (manifestRaw !== null) {
-          try {
-            const manifest = JSON.parse(manifestRaw);
-            if (manifest.isDesktopOnly === true) {
-              pluginIds.splice(pluginIds.indexOf(id), 1);
-              report.desktopOnlySkipped.push(id);
-            }
-          } catch (e) {
-          }
+        if (await this.isDesktopOnlyPlugin(base, id)) {
+          pluginIds.splice(pluginIds.indexOf(id), 1);
+          report.desktopOnlySkipped.push(id);
         }
       }
     }
@@ -531,15 +547,21 @@ var ApplyService = class {
       await this.adapter.obsidianWrite(file, content);
       report.applied.push(file);
     }
+    const artifactFilter = (fileName) => !installArtifacts && INSTALL_ARTIFACTS.has(fileName);
     for (const id of pluginIds) {
       if (!await this.adapter.hasLocalPluginDir(id)) {
-        report.missingPlugins.push(id);
-        continue;
+        const poolHasArtifacts = await this.adapter.readIfExists(`${base}/plugins/${id}/manifest.json`) !== null;
+        if (!(installArtifacts && poolHasArtifacts)) {
+          report.missingPlugins.push(id);
+          continue;
+        }
+        report.installedPlugins.push(id);
       }
       const copied = await this.adapter.copyTree(
         `${base}/plugins/${id}`,
         this.adapter.obsidianPath(`plugins/${id}`),
         {
+          excludeFileName: artifactFilter,
           transform: (content) => this.readPoolEntryFromContent(content, password)
         }
       );
@@ -569,6 +591,20 @@ var ApplyService = class {
     }
     return report;
   }
+  /** isDesktopOnly 判定（SPEC §3.3）：池内 manifest（明文产物）优先，其次本机已装 manifest */
+  async isDesktopOnlyPlugin(base, id) {
+    for (const source of [`${base}/plugins/${id}/manifest.json`, `plugins/${id}/manifest.json`]) {
+      const raw = source.startsWith(base) ? await this.adapter.readIfExists(source) : await this.adapter.obsidianRead(source);
+      if (raw === null) continue;
+      try {
+        const manifest = JSON.parse(raw);
+        if (manifest.isDesktopOnly === true) return true;
+        if (manifest.isDesktopOnly === false) return false;
+      } catch (e) {
+      }
+    }
+    return false;
+  }
   /** copyTree 的变换：内容是信封则解密（树内文件已在池里，不再读盘） */
   async readPoolEntryFromContent(content, password) {
     const envelope = parseEnvelopeText(content);
@@ -585,28 +621,6 @@ var ApplyService = class {
 
 // src/services/config-adapter.ts
 var import_obsidian = require("obsidian");
-
-// src/store/items.ts
-var SELF_PLUGIN_ID = "config-profile";
-var INSTALL_ARTIFACTS = /* @__PURE__ */ new Set(["main.js", "styles.css", "manifest.json"]);
-var APP_FILES = [
-  { file: "app.json", label: "\u7F16\u8F91\u5668\u4E0E\u6587\u4EF6\u8BBE\u7F6E" },
-  { file: "appearance.json", label: "\u5916\u89C2" },
-  { file: "hotkeys.json", label: "\u5FEB\u6377\u952E" },
-  { file: "core-plugins.json", label: "\u6838\u5FC3\u63D2\u4EF6\u5F00\u5173" },
-  { file: "community-plugins.json", label: "\u793E\u533A\u63D2\u4EF6\u542F\u7528\u5217\u8868" },
-  { file: "graph.json", label: "\u5173\u7CFB\u56FE\u8BBE\u7F6E" },
-  { file: "bookmarks.json", label: "\u4E66\u7B7E" }
-];
-var MOBILE_ALLOWED_APP_FILES = ["core-plugins.json", "community-plugins.json"];
-function isMobileAllowedAppFile(file) {
-  return MOBILE_ALLOWED_APP_FILES.includes(file);
-}
-function isCarryablePluginFile(fileName) {
-  return !INSTALL_ARTIFACTS.has(fileName);
-}
-
-// src/services/config-adapter.ts
 var LEGACY_DEVICE_ID_KEY = "cp-device-id";
 var STORE_PASSWORD_KEY = "cp-store-password";
 var ConfigAdapter = class {
@@ -1330,6 +1344,15 @@ var ApplyResultModal = class extends import_obsidian3.Modal {
       cls: "cp-modal__hint",
       text: t("\u5FC5\u987B\u91CD\u8F7D\uFF1A\u8FD0\u884C\u4E2D\u7684\u63D2\u4EF6\u9000\u51FA\u65F6\u4F1A\u628A\u5185\u5B58\u91CC\u7684\u65E7\u914D\u7F6E\u5199\u56DE\uFF0C\u4E0D\u91CD\u8F7D\u4F1A\u8986\u76D6\u521A\u5E94\u7528\u7684\u6587\u4EF6\u3002")
     });
+    if (this.report.installedPlugins.length > 0) {
+      const box = this.contentEl.createDiv();
+      box.createEl("p", {
+        cls: "cp-modal__hint",
+        text: t("\u4EE5\u4E0B\u63D2\u4EF6\u5DF2\u4ECE\u914D\u7F6E\u5E93\u88C5\u9F50\u4E3B\u4F53\uFF0C\u91CD\u8F7D\u540E\u751F\u6548\uFF1A")
+      });
+      const ul = box.createEl("ul");
+      for (const id of this.report.installedPlugins) ul.createEl("li", { text: id });
+    }
     if (this.report.missingPlugins.length > 0) {
       const box = this.contentEl.createDiv();
       box.createEl("p", {
@@ -1838,12 +1861,21 @@ var CPSettingTab = class extends import_obsidian10.PluginSettingTab {
         await this.plugin.saveConfig();
       })
     );
-    if (!this.plugin.store.isMobile) {
+    if (!this.plugin.store.isMobile && this.plugin.config.preferredRole === "sync") {
       new import_obsidian10.Setting(container).setName(t("\u540C\u6B65\u63D2\u4EF6\u4E3B\u4F53")).setDesc(
         t("\u628A\u63D2\u4EF6\u7684 main.js / styles.css / manifest.json \u4E00\u5E76\u660E\u6587\u540C\u6B65\uFF08\u4E0D\u52A0\u5BC6\uFF09\u3002\u5F00\u542F\u540E\u5E94\u7528\u7AEF\u53EF\u76F4\u63A5\u88C5\u9F50\u7F3A\u5931\u63D2\u4EF6\uFF1B\u4E0B\u6B21\u540C\u6B65\u751F\u6548\u3002")
       ).addToggle(
         (toggle) => toggle.setValue(this.plugin.config.syncArtifacts).onChange(async (value) => {
           this.plugin.config.syncArtifacts = value;
+          await this.plugin.saveConfig();
+        })
+      );
+    } else {
+      new import_obsidian10.Setting(container).setName(t("\u540C\u6B65\u63D2\u4EF6\u4E3B\u4F53")).setDesc(
+        t("\u5F00\u542F\u540E\u5E94\u7528\u65F6\u628A\u6C60\u91CC\u7684\u63D2\u4EF6\u4E3B\u4F53\uFF08main.js / styles.css / manifest.json\uFF09\u8FDE\u540C\u914D\u7F6E\u4E00\u8D77\u5199\u5165\uFF0C\u672A\u5B89\u88C5\u7684\u63D2\u4EF6\u76F4\u63A5\u88C5\u9F50\uFF0C\u91CD\u8F7D\u540E\u751F\u6548\uFF1B\u5173\u95ED\u5219\u53EA\u5E94\u7528\u914D\u7F6E\uFF0C\u672A\u5B89\u88C5\u7684\u63D2\u4EF6\u8DF3\u8FC7\u3002")
+      ).addToggle(
+        (toggle) => toggle.setValue(this.plugin.config.applyArtifacts).onChange(async (value) => {
+          this.plugin.config.applyArtifacts = value;
           await this.plugin.saveConfig();
         })
       );
@@ -1869,7 +1901,9 @@ var CPSettingTab = class extends import_obsidian10.PluginSettingTab {
       s.controlEl.createSpan({ text: roleName });
     });
     new import_obsidian10.Setting(container).setName(t("\u5207\u6362\u89D2\u8272")).setDesc(t("\u5207\u6362\u540E\u7ACB\u5373\u751F\u6548\uFF0C\u65E0\u9700\u91CD\u8F7D\u3002")).addToggle(
-      (toggle) => toggle.setValue(isSync).setTooltip(t("\u5F00 = \u540C\u6B65\u8BBE\u5907\uFF0C\u5173 = \u4EC5\u5E94\u7528")).onChange((value) => void this.plugin.setRole(value ? "sync" : "apply"))
+      (toggle) => toggle.setValue(isSync).setTooltip(t("\u5F00 = \u540C\u6B65\u8BBE\u5907\uFF0C\u5173 = \u4EC5\u5E94\u7528")).onChange(
+        (value) => void this.plugin.setRole(value ? "sync" : "apply").then(() => this.display())
+      )
     );
   }
   // ── 加密（SPEC §2.5：改密 / 启用仅同步设备 PC 端） ──
@@ -2015,7 +2049,8 @@ var DEFAULT_CONFIG = {
   deviceName: "",
   deviceId: "",
   preferredRole: "ask",
-  syncArtifacts: false
+  syncArtifacts: false,
+  applyArtifacts: false
 };
 function mergeConfig(saved) {
   const source = saved != null ? saved : {};
@@ -2025,7 +2060,8 @@ function mergeConfig(saved) {
     deviceName: typeof source.deviceName === "string" ? source.deviceName : "",
     deviceId: typeof source.deviceId === "string" ? source.deviceId : "",
     preferredRole: source.preferredRole === "sync" || source.preferredRole === "apply" ? source.preferredRole : "ask",
-    syncArtifacts: source.syncArtifacts === true
+    syncArtifacts: source.syncArtifacts === true,
+    applyArtifacts: source.applyArtifacts === true
   };
 }
 
@@ -2231,7 +2267,9 @@ var ConfigProfilePlugin = class extends import_obsidian11.Plugin {
     }
     const service = new ApplyService(this.store, paths);
     try {
-      const report = await service.run(parsed.profile, password);
+      const report = await service.run(parsed.profile, password, {
+        installArtifacts: this.config.applyArtifacts
+      });
       if (report.applied.length === 0 && report.missingPlugins.length === 0 && report.desktopOnlySkipped.length === 0) {
         new import_obsidian11.Notice(t("profile \u91CC\u6CA1\u6709\u52FE\u9009\u4EFB\u4F55\u5185\u5BB9\uFF1A{name}", { name }));
         return;

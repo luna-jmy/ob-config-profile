@@ -278,7 +278,9 @@ export default class ConfigProfilePlugin extends Plugin {
 
 		const service = new ApplyService(this.store, paths);
 		try {
-			const report: ApplyReport = await service.run(parsed.profile, password);
+			const report: ApplyReport = await service.run(parsed.profile, password, {
+			installArtifacts: this.config.applyArtifacts,
+		});
 			if (report.applied.length === 0 && report.missingPlugins.length === 0 && report.desktopOnlySkipped.length === 0) {
 				new Notice(t("profile 里没有勾选任何内容：{name}", { name }));
 				return;

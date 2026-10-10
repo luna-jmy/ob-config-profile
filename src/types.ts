@@ -24,6 +24,8 @@ export interface CPConfig {
 	preferredRole: "ask" | "sync" | "apply";
 	/** 同步插件主体（main.js/styles.css/manifest.json，明文不加密）；下次同步生效 */
 	syncArtifacts: boolean;
+	/** 应用侧同步插件主体（SPEC §3.3）：开 = 应用时连主体一起装齐；关 = 只应用配置 */
+	applyArtifacts: boolean;
 }
 
 export const DEFAULT_STORE_PATH = "SettingProfiles";
@@ -35,6 +37,7 @@ export const DEFAULT_CONFIG: CPConfig = {
 	deviceId: "",
 	preferredRole: "ask",
 	syncArtifacts: false,
+	applyArtifacts: false,
 };
 
 /** 合并持久化配置与默认值；只接受类型匹配的字段，损坏数据回落默认（可重复执行）。 */
@@ -48,5 +51,6 @@ export function mergeConfig(saved: unknown): CPConfig {
 		preferredRole:
 			source.preferredRole === "sync" || source.preferredRole === "apply" ? source.preferredRole : "ask",
 		syncArtifacts: source.syncArtifacts === true,
+		applyArtifacts: source.applyArtifacts === true,
 	};
 }

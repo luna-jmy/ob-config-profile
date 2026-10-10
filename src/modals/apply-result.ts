@@ -32,6 +32,15 @@ export class ApplyResultModal extends Modal {
 			text: t("必须重载：运行中的插件退出时会把内存里的旧配置写回，不重载会覆盖刚应用的文件。"),
 		});
 
+		if (this.report.installedPlugins.length > 0) {
+			const box = this.contentEl.createDiv();
+			box.createEl("p", {
+				cls: "cp-modal__hint",
+				text: t("以下插件已从配置库装齐主体，重载后生效："),
+			});
+			const ul = box.createEl("ul");
+			for (const id of this.report.installedPlugins) ul.createEl("li", { text: id });
+		}
 		if (this.report.missingPlugins.length > 0) {
 			const box = this.contentEl.createDiv();
 			box.createEl("p", {

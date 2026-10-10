@@ -33,6 +33,9 @@ export const EN: Record<string, string> = {
 	"同步插件主体": "Sync plugin artifacts",
 	"把插件的 main.js / styles.css / manifest.json 一并明文同步（不加密）。开启后应用端可直接装齐缺失插件；下次同步生效。":
 		"Also sync plugins' main.js / styles.css / manifest.json in plain text (unencrypted). Apply-side devices can then install missing plugins directly; takes effect on the next sync.",
+	"开启后应用时把池里的插件主体（main.js / styles.css / manifest.json）连同配置一起写入，未安装的插件直接装齐，重载后生效；关闭则只应用配置，未安装的插件跳过。":
+		"When on, applying also writes plugin bodies (main.js / styles.css / manifest.json) from the store, installing missing plugins directly (effective after reload); when off, only settings are applied and uninstalled plugins are skipped.",
+	"以下插件已从配置库装齐主体，重载后生效：": "These plugins were installed from the store; reload to take effect:",
 	"语言": "Language",
 	"跟随 Obsidian": "Follow Obsidian",
 	"中文": "Chinese",

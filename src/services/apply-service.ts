@@ -5,6 +5,7 @@
  */
 
 import { decryptText, PasswordError, parseEnvelopeText } from "../crypto/envelope";
+import { INSTALL_ARTIFACTS } from "../store/items";
 import type { StorePaths } from "../store/paths";
 import type { ProfileDoc } from "../store/profile";
 import type { ConfigAdapter } from "./config-adapter";
@@ -12,7 +13,9 @@ import type { ConfigAdapter } from "./config-adapter";
 export interface ApplyReport {
 	/** 已写入的条目（展示用相对路径） */
 	applied: string[];
-	/** 池里有、本机未安装的插件 id（提示自行安装） */
+	/** 本次从池装齐主体的插件 id（新安装，重载后生效） */
+	installedPlugins: string[];
+	/** 池里有、本机未安装且未装齐的插件 id（提示自行安装） */
 	missingPlugins: string[];
 	/** mobile 端被剔除的桌面专属插件 id（防手工改 profile 塞进桌面插件） */
 	desktopOnlySkipped: string[];
@@ -51,25 +54,19 @@ export class ApplyService {
 		}
 	}
 
-	async run(profile: ProfileDoc, password: string | null): Promise<ApplyReport> {
-		const report: ApplyReport = { applied: [], missingPlugins: [], desktopOnlySkipped: [] };
+	async run(profile: ProfileDoc, password: string | null, options: { installArtifacts?: boolean } = {}): Promise<ApplyReport> {
+		const installArtifacts = options.installArtifacts === true;
+		const report: ApplyReport = { applied: [], installedPlugins: [], missingPlugins: [], desktopOnlySkipped: [] };
 		const base = this.poolBase(profile);
 
-		// mobile 端防御性再过滤 isDesktopOnly（防手工改 profile 塞进桌面插件，SPEC §3.3 第 2 步）
+		// mobile 端防御性再过滤 isDesktopOnly（防手工改 profile 塞进桌面插件，SPEC §3.3 第 2 步）。
+		// 判定来源：池内 manifest（产物明文，未安装的插件也能识别）→ 本机已装 manifest → 不判。
 		const pluginIds = [...profile.plugins];
 		if (this.adapter.isMobile) {
 			for (const id of [...pluginIds]) {
-				const manifestRaw = await this.adapter.obsidianRead(`plugins/${id}/manifest.json`);
-				if (manifestRaw !== null) {
-					try {
-						const manifest = JSON.parse(manifestRaw) as { isDesktopOnly?: unknown };
-						if (manifest.isDesktopOnly === true) {
-							pluginIds.splice(pluginIds.indexOf(id), 1);
-							report.desktopOnlySkipped.push(id);
-						}
-					} catch {
-						// 本机 manifest 损坏：照常应用
-					}
+				if (await this.isDesktopOnlyPlugin(base, id)) {
+					pluginIds.splice(pluginIds.indexOf(id), 1);
+					report.desktopOnlySkipped.push(id);
 				}
 			}
 		}
@@ -83,15 +80,22 @@ export class ApplyService {
 		}
 
 		// ── 社区插件 ──
+		// 关闭「同步插件主体」时排除产物（哪怕池里有）；开启时未安装且池有主体 → 直接装齐
+		const artifactFilter = (fileName: string) => !installArtifacts && INSTALL_ARTIFACTS.has(fileName);
 		for (const id of pluginIds) {
 			if (!(await this.adapter.hasLocalPluginDir(id))) {
-				report.missingPlugins.push(id);
-				continue;
+				const poolHasArtifacts = (await this.adapter.readIfExists(`${base}/plugins/${id}/manifest.json`)) !== null;
+				if (!(installArtifacts && poolHasArtifacts)) {
+					report.missingPlugins.push(id);
+					continue;
+				}
+				report.installedPlugins.push(id);
 			}
 			const copied = await this.adapter.copyTree(
 				`${base}/plugins/${id}`,
 				this.adapter.obsidianPath(`plugins/${id}`),
 				{
+					excludeFileName: artifactFilter,
 					transform: (content) => this.readPoolEntryFromContent(content, password),
 				},
 			);
@@ -124,6 +128,24 @@ export class ApplyService {
 		}
 
 		return report;
+	}
+
+	/** isDesktopOnly 判定（SPEC §3.3）：池内 manifest（明文产物）优先，其次本机已装 manifest */
+	private async isDesktopOnlyPlugin(base: string, id: string): Promise<boolean> {
+		for (const source of [`${base}/plugins/${id}/manifest.json`, `plugins/${id}/manifest.json`]) {
+			const raw = source.startsWith(base)
+				? await this.adapter.readIfExists(source)
+				: await this.adapter.obsidianRead(source);
+			if (raw === null) continue;
+			try {
+				const manifest = JSON.parse(raw) as { isDesktopOnly?: unknown };
+				if (manifest.isDesktopOnly === true) return true;
+				if (manifest.isDesktopOnly === false) return false;
+			} catch {
+				// manifest 损坏：看下一个来源
+			}
+		}
+		return false;
 	}
 
 	/** copyTree 的变换：内容是信封则解密（树内文件已在池里，不再读盘） */
