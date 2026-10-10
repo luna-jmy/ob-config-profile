@@ -12,7 +12,7 @@ import type ConfigProfilePlugin from "../main";
 export class ProfileEditModal extends Modal {
 	constructor(
 		private readonly plugin: ConfigProfilePlugin,
-		private readonly doc: ProfileDoc,
+		private readonly profile: ProfileDoc,
 		private readonly data: ProfileEditorData,
 	) {
 		super(plugin.app);
@@ -21,16 +21,16 @@ export class ProfileEditModal extends Modal {
 	onOpen(): void {
 		this.contentEl.addClass("cp-modal");
 		const title =
-			this.doc.platform === "mobile"
-				? t("编辑 profile：{name}（手机）", { name: this.doc.name })
-				: t("编辑 profile：{name}", { name: this.doc.name });
+			this.profile.platform === "mobile"
+				? t("编辑 profile：{name}（手机）", { name: this.profile.name })
+				: t("编辑 profile：{name}", { name: this.profile.name });
 		this.titleEl.setText(title);
 		this.contentEl.createEl("p", {
 			cls: "cp-modal__hint",
 			text: t("勾选改动即时保存，无需手动确认。"),
 		});
 		const body = this.contentEl.createDiv();
-		renderProfileEditor(body, this.doc, this.data, {
+		renderProfileEditor(body, this.profile, this.data, {
 			onChanged: async (changed) => {
 				await this.plugin.onProfileEdited(changed);
 			},

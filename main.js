@@ -1,4 +1,4 @@
-/* Config Profile — bundled 2026-10-10T04:43:00.680Z */
+/* Config Profile — bundled 2026-10-10T04:57:35.079Z */
 "use strict";
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -1430,22 +1430,22 @@ function renderProfileEditor(container, doc, data, host) {
 
 // src/modals/profile-edit.ts
 var ProfileEditModal = class extends import_obsidian6.Modal {
-  constructor(plugin, doc, data) {
+  constructor(plugin, profile, data) {
     super(plugin.app);
     this.plugin = plugin;
-    this.doc = doc;
+    this.profile = profile;
     this.data = data;
   }
   onOpen() {
     this.contentEl.addClass("cp-modal");
-    const title = this.doc.platform === "mobile" ? t("\u7F16\u8F91 profile\uFF1A{name}\uFF08\u624B\u673A\uFF09", { name: this.doc.name }) : t("\u7F16\u8F91 profile\uFF1A{name}", { name: this.doc.name });
+    const title = this.profile.platform === "mobile" ? t("\u7F16\u8F91 profile\uFF1A{name}\uFF08\u624B\u673A\uFF09", { name: this.profile.name }) : t("\u7F16\u8F91 profile\uFF1A{name}", { name: this.profile.name });
     this.titleEl.setText(title);
     this.contentEl.createEl("p", {
       cls: "cp-modal__hint",
       text: t("\u52FE\u9009\u6539\u52A8\u5373\u65F6\u4FDD\u5B58\uFF0C\u65E0\u9700\u624B\u52A8\u786E\u8BA4\u3002")
     });
     const body = this.contentEl.createDiv();
-    renderProfileEditor(body, this.doc, this.data, {
+    renderProfileEditor(body, this.profile, this.data, {
       onChanged: async (changed) => {
         await this.plugin.onProfileEdited(changed);
       }
