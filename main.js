@@ -1,4 +1,4 @@
-/* Config Profile — bundled 2026-10-10T07:43:32.729Z */
+/* Config Profile — bundled 2026-10-10T07:49:03.090Z */
 "use strict";
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
