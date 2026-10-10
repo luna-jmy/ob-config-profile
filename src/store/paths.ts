@@ -42,7 +42,7 @@ export function storePaths(storePath: string): StorePaths {
 	const root = normalizeStorePath(storePath);
 	return {
 		root,
-		crypto: `${root}/_crypto.json`,
+		crypto: `${root}/crypto.json`,
 		pcPool: poolPaths(root, "pcconfig"),
 		mobilePool: poolPaths(root, "mobileconfig"),
 		profilesDir: `${root}/profiles`,
@@ -51,5 +51,15 @@ export function storePaths(storePath: string): StorePaths {
 
 /** 池元数据路径 */
 export function metaPath(pool: PoolPaths): string {
+	return `${pool.base}/meta.json`;
+}
+
+/** 旧版下划线前缀文件名（0.1.6 前用 `_crypto.json` / `_meta.json`，会撞部分
+ *  同步工具的排除规则，见 CHANGELOG 0.1.6）——迁移用 */
+export function legacyCryptoPath(root: string): string {
+	return `${root}/_crypto.json`;
+}
+
+export function legacyMetaPath(pool: PoolPaths): string {
 	return `${pool.base}/_meta.json`;
 }

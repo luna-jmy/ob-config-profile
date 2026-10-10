@@ -12,7 +12,7 @@ import {
 } from "./crypto/envelope";
 import type { CryptoMeta } from "./crypto/envelope";
 import { setLanguage, t } from "./i18n";
-import { storePaths } from "./store/paths";
+import { legacyCryptoPath, legacyMetaPath, metaPath, storePaths } from "./store/paths";
 import type { StorePaths } from "./store/paths";
 import {
 	emptyProfile,
@@ -68,6 +68,7 @@ export default class ConfigProfilePlugin extends Plugin {
 		this.applyLanguage();
 		this.store = new ConfigAdapter(this.app);
 		await this.ensureDeviceId();
+		await this.migrateStoreFileNames();
 		this.addSettingTab(new CPSettingTab(this.app, this));
 
 		// 角色是纯本地偏好：没选过就问一次（磁盘探测只在同步命令里做，不阻塞 onload）
@@ -96,6 +97,28 @@ export default class ConfigProfilePlugin extends Plugin {
 		return `cp-${Math.random().toString(36).slice(2)}${Date.now().toString(36)}`;
 	}
 
+	// ── 旧文件名迁移（0.1.6：`_crypto.json`/`_meta.json` → 去下划线） ──
+	// 下划线前缀撞部分同步工具（如 remotely-save）的排除规则，导致这两个文件不随 vault 同步。
+	// 见到旧名就改为新名；新名已存在（对端先迁好同步过来）则删旧文件。失败静默——下次启动重试。
+
+	private async migrateStoreFileNames(): Promise<void> {
+		const paths = this.paths();
+		const pairs: [string, string][] = [
+			[legacyCryptoPath(paths.root), paths.crypto],
+			[legacyMetaPath(paths.pcPool), metaPath(paths.pcPool)],
+			[legacyMetaPath(paths.mobilePool), metaPath(paths.mobilePool)],
+		];
+		for (const [from, to] of pairs) {
+			try {
+				if (!(await this.store.pathExists(from))) continue;
+				if (await this.store.pathExists(to)) await this.store.deletePath(from);
+				else await this.store.renamePath(from, to);
+			} catch {
+				// 迁移失败不阻塞启动，下次再试
+			}
+		}
+	}
+
 	// ── 角色（SPEC §3.1：本地偏好，无 lock） ──
 
 	private async applyFirstRunChoice(choice: DeviceRole): Promise<void> {
@@ -111,11 +134,11 @@ export default class ConfigProfilePlugin extends Plugin {
 	// ── 加密（SPEC §2.5） ──
 
 	private async readCryptoMeta(): Promise<CryptoMeta | null> {
-		const raw = await this.store.readIfExists(`${this.paths().root}/_crypto.json`);
+		const raw = await this.store.readIfExists(this.paths().crypto);
 		return raw === null ? null : parseCryptoMeta(raw);
 	}
 
-	/** store 是否已加密（有合法 _crypto.json） */
+	/** store 是否已加密（有合法 crypto.json） */
 	async storeEncrypted(): Promise<boolean> {
 		return (await this.readCryptoMeta()) !== null;
 	}
@@ -164,7 +187,7 @@ export default class ConfigProfilePlugin extends Plugin {
 		if (!(await verifyPassword(meta, oldPassword))) throw new WrongStorePasswordError();
 
 		const paths = this.paths();
-		await this.store.writeAtomic(`${paths.root}/_crypto.json`, JSON.stringify(await createCryptoMeta(newPassword), null, "\t"));
+		await this.store.writeAtomic(paths.crypto, JSON.stringify(await createCryptoMeta(newPassword), null, "\t"));
 		// 池内容以新密码重写：复用同步流程（重加密即「双方都变」外的全量推）
 		await this.runSync(newPassword);
 	}
@@ -188,7 +211,7 @@ export default class ConfigProfilePlugin extends Plugin {
 			password = await promptNewStorePassword(this.app);
 			if (password !== null) {
 				await this.store.writeAtomic(
-					`${this.paths().root}/_crypto.json`,
+					this.paths().crypto,
 					JSON.stringify(await createCryptoMeta(password), null, "\t"),
 				);
 				this.store.setStorePassword(password);

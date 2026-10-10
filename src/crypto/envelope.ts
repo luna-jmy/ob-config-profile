@@ -17,7 +17,7 @@ export interface Envelope {
 	data: string;
 }
 
-/** store 根 `_crypto.json` 的形状 */
+/** store 根 `crypto.json` 的形状 */
 export interface CryptoMeta {
 	schema: 1;
 	kdf: "pbkdf2-sha256";
@@ -133,7 +133,7 @@ export async function decryptText(password: string, envelope: Envelope): Promise
 	return new TextDecoder().decode(plain);
 }
 
-/** 生成 `_crypto.json`（含校验信封） */
+/** 生成 `crypto.json`（含校验信封） */
 export async function createCryptoMeta(password: string): Promise<CryptoMeta> {
 	return {
 		schema: 1,

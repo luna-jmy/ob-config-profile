@@ -20,10 +20,10 @@ describe("normalizeStorePath", () => {
 });
 
 describe("storePaths（SPEC §2.1 结构）", () => {
-	it("根级：_crypto.json 全 store 一份", () => {
+	it("根级：crypto.json 全 store 一份（0.1.6 起去下划线前缀）", () => {
 		const p = storePaths("SettingProfiles");
 		expect(p.root).toBe("SettingProfiles");
-		expect(p.crypto).toBe("SettingProfiles/_crypto.json");
+		expect(p.crypto).toBe("SettingProfiles/crypto.json");
 	});
 
 	it("PC 池与移动池物理隔离", () => {
@@ -39,13 +39,13 @@ describe("storePaths（SPEC §2.1 结构）", () => {
 		expect(storePaths("store").profilesDir).toBe("store/profiles");
 	});
 
-	it("meta 路径", () => {
-		expect(metaPath(storePaths("store").pcPool)).toBe("store/pcconfig/_meta.json");
+	it("meta 路径（0.1.6 起去下划线前缀）", () => {
+		expect(metaPath(storePaths("store").pcPool)).toBe("store/pcconfig/meta.json");
 	});
 
 	it("输入先规整再组路径", () => {
 		const p = storePaths(" /My Store/ ");
 		expect(p.root).toBe("My Store");
-		expect(p.crypto).toBe("My Store/_crypto.json");
+		expect(p.crypto).toBe("My Store/crypto.json");
 	});
 });

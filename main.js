@@ -1,4 +1,4 @@
-/* Config Profile — bundled 2026-10-10T08:38:25.380Z */
+/* Config Profile — bundled 2026-10-10T08:46:13.739Z */
 "use strict";
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -373,13 +373,19 @@ function storePaths(storePath) {
   const root = normalizeStorePath(storePath);
   return {
     root,
-    crypto: `${root}/_crypto.json`,
+    crypto: `${root}/crypto.json`,
     pcPool: poolPaths(root, "pcconfig"),
     mobilePool: poolPaths(root, "mobileconfig"),
     profilesDir: `${root}/profiles`
   };
 }
 function metaPath(pool) {
+  return `${pool.base}/meta.json`;
+}
+function legacyCryptoPath(root) {
+  return `${root}/_crypto.json`;
+}
+function legacyMetaPath(pool) {
   return `${pool.base}/_meta.json`;
 }
 
@@ -655,6 +661,10 @@ var ConfigAdapter = class {
   /** store 根目录是否存在于本机（设置页三态提示用：区分「没同步到」与「未加密」） */
   async storeDirExists(paths) {
     return this.adapter.exists(this.n(paths.root));
+  }
+  /** vault 相对路径是否存在（旧文件名迁移探测用） */
+  async pathExists(path) {
+    return this.adapter.exists(this.n(path));
   }
   async poolHasContent(paths) {
     if (!await this.adapter.exists(this.n(paths.root))) return false;
@@ -2133,6 +2143,7 @@ var ConfigProfilePlugin = class extends import_obsidian11.Plugin {
     this.applyLanguage();
     this.store = new ConfigAdapter(this.app);
     await this.ensureDeviceId();
+    await this.migrateStoreFileNames();
     this.addSettingTab(new CPSettingTab(this.app, this));
     this.app.workspace.onLayoutReady(() => {
       this.registerCommands();
@@ -2156,6 +2167,25 @@ var ConfigProfilePlugin = class extends import_obsidian11.Plugin {
     if (c && typeof c.randomUUID === "function") return c.randomUUID();
     return `cp-${Math.random().toString(36).slice(2)}${Date.now().toString(36)}`;
   }
+  // ── 旧文件名迁移（0.1.6：`_crypto.json`/`_meta.json` → 去下划线） ──
+  // 下划线前缀撞部分同步工具（如 remotely-save）的排除规则，导致这两个文件不随 vault 同步。
+  // 见到旧名就改为新名；新名已存在（对端先迁好同步过来）则删旧文件。失败静默——下次启动重试。
+  async migrateStoreFileNames() {
+    const paths = this.paths();
+    const pairs = [
+      [legacyCryptoPath(paths.root), paths.crypto],
+      [legacyMetaPath(paths.pcPool), metaPath(paths.pcPool)],
+      [legacyMetaPath(paths.mobilePool), metaPath(paths.mobilePool)]
+    ];
+    for (const [from, to] of pairs) {
+      try {
+        if (!await this.store.pathExists(from)) continue;
+        if (await this.store.pathExists(to)) await this.store.deletePath(from);
+        else await this.store.renamePath(from, to);
+      } catch (e) {
+      }
+    }
+  }
   // ── 角色（SPEC §3.1：本地偏好，无 lock） ──
   async applyFirstRunChoice(choice) {
     await this.setRole(choice);
@@ -2167,10 +2197,10 @@ var ConfigProfilePlugin = class extends import_obsidian11.Plugin {
   }
   // ── 加密（SPEC §2.5） ──
   async readCryptoMeta() {
-    const raw = await this.store.readIfExists(`${this.paths().root}/_crypto.json`);
+    const raw = await this.store.readIfExists(this.paths().crypto);
     return raw === null ? null : parseCryptoMeta(raw);
   }
-  /** store 是否已加密（有合法 _crypto.json） */
+  /** store 是否已加密（有合法 crypto.json） */
   async storeEncrypted() {
     return await this.readCryptoMeta() !== null;
   }
@@ -2214,7 +2244,7 @@ var ConfigProfilePlugin = class extends import_obsidian11.Plugin {
     if (meta === null) throw new Error("store not encrypted");
     if (!await verifyPassword(meta, oldPassword)) throw new WrongStorePasswordError();
     const paths = this.paths();
-    await this.store.writeAtomic(`${paths.root}/_crypto.json`, JSON.stringify(await createCryptoMeta(newPassword), null, "	"));
+    await this.store.writeAtomic(paths.crypto, JSON.stringify(await createCryptoMeta(newPassword), null, "	"));
     await this.runSync(newPassword);
   }
   // ── 同步（SPEC §3.2，仅 PC + 仅同步设备；多主时间戳双向） ──
@@ -2233,7 +2263,7 @@ var ConfigProfilePlugin = class extends import_obsidian11.Plugin {
       password = await promptNewStorePassword(this.app);
       if (password !== null) {
         await this.store.writeAtomic(
-          `${this.paths().root}/_crypto.json`,
+          this.paths().crypto,
           JSON.stringify(await createCryptoMeta(password), null, "	")
         );
         this.store.setStorePassword(password);

@@ -175,7 +175,7 @@ export class SyncService {
 			}
 		}
 
-		// ── 收尾：baseline / 墓碑 GC / devices / _meta.json ──
+		// ── 收尾：baseline / 墓碑 GC / devices / meta.json ──
 		const baseline: Record<string, string> = {};
 		for (const [key, entry] of Object.entries(meta.entries)) {
 			if (entry.deleted) continue;

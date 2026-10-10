@@ -63,6 +63,11 @@ export class ConfigAdapter {
 		return this.adapter.exists(this.n(paths.root));
 	}
 
+	/** vault 相对路径是否存在（旧文件名迁移探测用） */
+	async pathExists(path: string): Promise<boolean> {
+		return this.adapter.exists(this.n(path));
+	}
+
 	async poolHasContent(paths: StorePaths): Promise<boolean> {
 		if (!(await this.adapter.exists(this.n(paths.root)))) return false;
 		const dirs = [paths.pcPool.base, paths.mobilePool.base, paths.profilesDir];

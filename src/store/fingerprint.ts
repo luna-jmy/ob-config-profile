@@ -1,5 +1,5 @@
 /**
- * 内容指纹（纯函数，非加密用途）：FNV-1a 32 位，用于 _meta.json 里「指纹未变跳过写入」。
+ * 内容指纹（纯函数，非加密用途）：FNV-1a 32 位，用于 meta.json 里「指纹未变跳过写入」。
  */
 
 export function fingerprint(text: string): string {

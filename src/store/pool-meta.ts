@@ -1,5 +1,5 @@
 /**
- * 池元数据 `_meta.json`（纯函数，零 DOM、不 import obsidian）。
+ * 池元数据 `meta.json`（纯函数，零 DOM、不 import obsidian）。
  *
  * schema 2（0.1.0，多主时间戳同步，SPEC §3.2）：
  * - entries 记每个池条目的明文指纹、写入时间戳与写入设备（LWW 依据），
@@ -76,7 +76,7 @@ function parseDevice(raw: unknown): DeviceBaseline | null {
 }
 
 /**
- * 解析 `_meta.json` 原文：不存在 / 损坏 → 空 meta（fail-safe，走首同步护栏）；
+ * 解析 `meta.json` 原文：不存在 / 损坏 → 空 meta（fail-safe，走首同步护栏）；
  * schema 1（0.0.3）→ 读时升级：fp 是旧密文指纹，但 devices 留空意味着
  * 任何设备下次同步都会走「首次同步确认」，全量推或拉后指纹体系归位。
  */
