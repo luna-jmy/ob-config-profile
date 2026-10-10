@@ -163,6 +163,7 @@ export const EN: Record<string, string> = {
 	"App 设置": "App settings",
 	"已选 {selected}/{total}": "Selected {selected}/{total}",
 	"全选": "Select all",
+	"暂无条目": "Nothing here yet",
 	"社区插件": "Community plugins",
 	"CSS 片段": "CSS snippets",
 	"主题": "Themes",

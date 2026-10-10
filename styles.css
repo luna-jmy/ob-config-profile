@@ -34,3 +34,23 @@
 	display: block;
 	text-align: left;
 }
+
+/* profile 编辑器折叠分组（原生 details/summary） */
+.cp-editor__group {
+	margin-top: var(--size-4-3);
+}
+
+.cp-editor__group > summary {
+	cursor: pointer;
+	font-weight: var(--font-medium, 600);
+	color: var(--text-normal);
+}
+
+.cp-editor__group > summary:hover {
+	color: var(--text-accent);
+}
+
+.cp-editor__group-body {
+	margin-top: var(--size-4-1);
+}
+

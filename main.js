@@ -1,4 +1,4 @@
-/* Config Profile — bundled 2026-10-10T05:13:55.421Z */
+/* Config Profile — bundled 2026-10-10T05:23:53.266Z */
 "use strict";
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -301,6 +301,7 @@ var EN = {
   "App \u8BBE\u7F6E": "App settings",
   "\u5DF2\u9009 {selected}/{total}": "Selected {selected}/{total}",
   "\u5168\u9009": "Select all",
+  "\u6682\u65E0\u6761\u76EE": "Nothing here yet",
   "\u793E\u533A\u63D2\u4EF6": "Community plugins",
   "CSS \u7247\u6BB5": "CSS snippets",
   "\u4E3B\u9898": "Themes",
@@ -550,10 +551,18 @@ var ApplyService = class {
     }
     for (const name of profile.themes) {
       const content = await this.readPoolEntry(`${base}/themes/${name}`, password);
-      if (content === null) continue;
-      await this.adapter.mkdir(this.adapter.obsidianPath("themes"));
-      await this.adapter.obsidianWrite(`themes/${name}`, content);
-      report.applied.push(`themes/${name}`);
+      if (content !== null) {
+        await this.adapter.mkdir(this.adapter.obsidianPath("themes"));
+        await this.adapter.obsidianWrite(`themes/${name}`, content);
+        report.applied.push(`themes/${name}`);
+        continue;
+      }
+      const copied = await this.adapter.copyTree(
+        `${base}/themes/${name}`,
+        this.adapter.obsidianPath(`themes/${name}`),
+        { transform: (raw) => this.readPoolEntryFromContent(raw, password) }
+      );
+      if (copied.length > 0) report.applied.push(`themes/${name}`);
     }
     return report;
   }
@@ -714,6 +723,22 @@ var ConfigAdapter = class {
       var _a;
       return (_a = file.split("/").pop()) != null ? _a : file;
     });
+  }
+  /** 列目录直接子项名（文件与文件夹；目录不存在 → 空）——主题目录：松散 css 与文件夹主题并存 */
+  async listChildNames(dir) {
+    const p = this.n(dir);
+    if (!await this.adapter.exists(p)) return { files: [], folders: [] };
+    const listed = await this.adapter.list(p);
+    return {
+      files: listed.files.map((file) => {
+        var _a;
+        return (_a = file.split("/").pop()) != null ? _a : file;
+      }),
+      folders: listed.folders.map((folder) => {
+        var _a;
+        return (_a = folder.split("/").pop()) != null ? _a : folder;
+      })
+    };
   }
   /** 递归列出一棵目录树下的全部文件（vault 相对路径） */
   async listFilesRecursive(root) {
@@ -1107,13 +1132,20 @@ var SyncService = class {
         if (raw !== null) local.set(`plugins/${plugin.id}/${rel}`, raw);
       }
     }
-    for (const [prefix, dir] of [
-      ["snippets", "snippets"],
-      ["themes", "themes"]
-    ]) {
-      for (const name of await this.adapter.listFileNames(this.adapter.obsidianPath(dir))) {
-        const raw = await this.adapter.readIfExists(`${this.adapter.obsidianPath(dir)}/${name}`);
-        if (raw !== null) local.set(`${prefix}/${name}`, raw);
+    for (const name of await this.adapter.listFileNames(this.adapter.obsidianPath("snippets"))) {
+      const raw = await this.adapter.readIfExists(this.adapter.obsidianPath(`snippets/${name}`));
+      if (raw !== null) local.set(`snippets/${name}`, raw);
+    }
+    const themeDir = this.adapter.obsidianPath("themes");
+    const themeChildren = await this.adapter.listChildNames(themeDir);
+    for (const name of themeChildren.files) {
+      const raw = await this.adapter.readIfExists(`${themeDir}/${name}`);
+      if (raw !== null) local.set(`themes/${name}`, raw);
+    }
+    for (const folder of themeChildren.folders) {
+      for (const file of await this.adapter.listFilesRecursive(`${themeDir}/${folder}`)) {
+        const raw = await this.adapter.readIfExists(file);
+        if (raw !== null) local.set(`themes/${file.slice(themeDir.length + 1)}`, raw);
       }
     }
     return local;
@@ -1378,11 +1410,19 @@ function toggleRow(container, label, checked, onChange, extra) {
   if (extra) setting.setDesc(extra);
   setting.addToggle((toggle) => toggle.setValue(checked).onChange(onChange));
 }
-function groupHeader(container, name, items, isSelected, selectAll) {
-  const setting = new import_obsidian5.Setting(container).setName(name).setHeading();
-  if (items.length === 0) return;
+function collapsibleGroup(container, name) {
+  const details = container.createEl("details", { cls: "cp-editor__group" });
+  details.open = true;
+  details.createEl("summary", { text: name });
+  return details.createDiv({ cls: "cp-editor__group-body" });
+}
+function groupHeader(body, items, isSelected, selectAll) {
+  if (items.length === 0) {
+    new import_obsidian5.Setting(body).setName(t("\u5168\u9009")).setDesc(t("\u6682\u65E0\u6761\u76EE"));
+    return;
+  }
   const selected = items.filter(isSelected).length;
-  setting.setDesc(t("\u5DF2\u9009 {selected}/{total}", { selected, total: items.length })).addToggle(
+  new import_obsidian5.Setting(body).setName(t("\u5168\u9009")).setDesc(t("\u5DF2\u9009 {selected}/{total}", { selected, total: items.length })).addToggle(
     (toggle) => toggle.setValue(selected === items.length).setTooltip(t("\u5168\u9009")).onChange((value) => selectAll(value))
   );
 }
@@ -1395,10 +1435,10 @@ function renderProfileEditor(container, doc, data, host) {
       text: t("\u79FB\u52A8 profile \u4EC5\u5305\u542B\u6838\u5FC3\u63D2\u4EF6\u5F00\u5173\u4E0E\u63D2\u4EF6\u914D\u7F6E\uFF1B\u5916\u89C2\u3001\u4E3B\u9898\u3001\u5FEB\u6377\u952E\u7B49 app \u8BBE\u7F6E\u4E0D\u4F1A\u5E94\u7528\u5230\u624B\u673A\u3002")
     });
   }
+  const appBody = collapsibleGroup(container, t("App \u8BBE\u7F6E"));
   const appSpecs = APP_FILES.filter((spec) => !isMobileDoc || isMobileAllowedAppFile(spec.file));
   groupHeader(
-    container,
-    t("App \u8BBE\u7F6E"),
+    appBody,
     appSpecs,
     (spec) => doc.app.includes(spec.file),
     (on) => {
@@ -1411,7 +1451,7 @@ function renderProfileEditor(container, doc, data, host) {
   );
   for (const spec of appSpecs) {
     toggleRow(
-      container,
+      appBody,
       t(spec.label),
       doc.app.includes(spec.file),
       (value) => {
@@ -1420,9 +1460,9 @@ function renderProfileEditor(container, doc, data, host) {
       }
     );
   }
+  const pluginBody = collapsibleGroup(container, t("\u793E\u533A\u63D2\u4EF6"));
   groupHeader(
-    container,
-    t("\u793E\u533A\u63D2\u4EF6"),
+    pluginBody,
     data.plugins,
     (plugin) => doc.plugins.includes(plugin.id),
     (on) => {
@@ -1436,15 +1476,15 @@ function renderProfileEditor(container, doc, data, host) {
   for (const plugin of data.plugins) {
     const label = plugin.name === plugin.id ? plugin.id : `${plugin.name}\uFF08${plugin.id}\uFF09`;
     const extra = plugin.isDesktopOnly ? t("\u684C\u9762\u4E13\u5C5E\uFF0C\u4E0D\u8FDB\u79FB\u52A8 profile") : void 0;
-    toggleRow(container, label, doc.plugins.includes(plugin.id), (value) => {
+    toggleRow(pluginBody, label, doc.plugins.includes(plugin.id), (value) => {
       doc.plugins = value ? [...doc.plugins, plugin.id] : doc.plugins.filter((id) => id !== plugin.id);
       void host.onChanged(globalThis.structuredClone(doc));
     }, extra);
   }
   if (!isMobileDoc) {
+    const snippetBody = collapsibleGroup(container, t("CSS \u7247\u6BB5"));
     groupHeader(
-      container,
-      t("CSS \u7247\u6BB5"),
+      snippetBody,
       data.snippets,
       (name) => doc.snippets.includes(name),
       (on) => {
@@ -1456,14 +1496,14 @@ function renderProfileEditor(container, doc, data, host) {
       }
     );
     for (const name of data.snippets) {
-      toggleRow(container, name, doc.snippets.includes(name), (value) => {
+      toggleRow(snippetBody, name, doc.snippets.includes(name), (value) => {
         doc.snippets = value ? [...doc.snippets, name] : doc.snippets.filter((item) => item !== name);
         void host.onChanged(globalThis.structuredClone(doc));
       });
     }
+    const themeBody = collapsibleGroup(container, t("\u4E3B\u9898"));
     groupHeader(
-      container,
-      t("\u4E3B\u9898"),
+      themeBody,
       data.themes,
       (name) => doc.themes.includes(name),
       (on) => {
@@ -1475,7 +1515,7 @@ function renderProfileEditor(container, doc, data, host) {
       }
     );
     for (const name of data.themes) {
-      toggleRow(container, name, doc.themes.includes(name), (value) => {
+      toggleRow(themeBody, name, doc.themes.includes(name), (value) => {
         doc.themes = value ? [...doc.themes, name] : doc.themes.filter((item) => item !== name);
         void host.onChanged(globalThis.structuredClone(doc));
       });
@@ -2286,12 +2326,12 @@ var ConfigProfilePlugin = class extends import_obsidian11.Plugin {
         `${(platform === "mobile" ? pool.mobilePool : pool.pcPool).snippets}`
       )
     ]);
-    const themes = /* @__PURE__ */ new Set([
-      ...await this.store.listFileNames(this.store.obsidianPath("themes")),
-      ...await this.store.listFileNames(
-        `${(platform === "mobile" ? pool.mobilePool : pool.pcPool).themes}`
-      )
-    ]);
+    const themes = /* @__PURE__ */ new Set();
+    for (const dir of [this.store.obsidianPath("themes"), `${(platform === "mobile" ? pool.mobilePool : pool.pcPool).themes}`]) {
+      const children = await this.store.listChildNames(dir);
+      for (const name of children.files) themes.add(name);
+      for (const name of children.folders) themes.add(name);
+    }
     return {
       plugins: [...merged.values()],
       snippets: [...snippets],

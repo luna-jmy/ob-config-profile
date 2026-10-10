@@ -6,6 +6,7 @@ import type { ProfileDoc } from "../store/profile";
 /**
  * profile 编辑器（SPEC §3.4 / §4）：设置页的 profile 小节与「查看/编辑」Modal
  * **共用这一份渲染**——防两套真相。勾选改动即回调（由调用方决定落盘时机）。
+ * 分组用原生 details/summary 折叠（组太长）；全选开关落盘后由 onBulkChanged 整体重渲染。
  */
 
 export interface PluginOption {
@@ -19,7 +20,7 @@ export interface ProfileEditorData {
 	plugins: PluginOption[];
 	/** 本机 + 池内 snippets 文件名并集 */
 	snippets: string[];
-	/** 本机 + 池内 themes 文件名并集 */
+	/** 本机 + 池内主题名并集（松散 css 文件名或文件夹主题名） */
 	themes: string[];
 }
 
@@ -42,18 +43,28 @@ function toggleRow(
 	setting.addToggle((toggle) => toggle.setValue(checked).onChange(onChange));
 }
 
-/** 分组标题行：带「已选 N/M」计数与全选开关（点一下全开/全关，单次落盘） */
+/** 折叠分组：summary 是组名，返回组体容器（行渲染进去） */
+function collapsibleGroup(container: HTMLElement, name: string): HTMLElement {
+	const details = container.createEl("details", { cls: "cp-editor__group" });
+	details.open = true;
+	details.createEl("summary", { text: name });
+	return details.createDiv({ cls: "cp-editor__group-body" });
+}
+
+/** 组体首行：全选开关 + 「已选 N/M」计数（点一下全开/全关，单次落盘） */
 function groupHeader<T>(
-	container: HTMLElement,
-	name: string,
+	body: HTMLElement,
 	items: readonly T[],
 	isSelected: (item: T) => boolean,
 	selectAll: (selected: boolean) => void,
 ): void {
-	const setting = new Setting(container).setName(name).setHeading();
-	if (items.length === 0) return;
+	if (items.length === 0) {
+		new Setting(body).setName(t("全选")).setDesc(t("暂无条目"));
+		return;
+	}
 	const selected = items.filter(isSelected).length;
-	setting
+	new Setting(body)
+		.setName(t("全选"))
 		.setDesc(t("已选 {selected}/{total}", { selected, total: items.length }))
 		.addToggle((toggle) =>
 			toggle
@@ -80,10 +91,10 @@ export function renderProfileEditor(
 	}
 
 	// ── app 设置 ──
+	const appBody = collapsibleGroup(container, t("App 设置"));
 	const appSpecs = APP_FILES.filter((spec) => !isMobileDoc || isMobileAllowedAppFile(spec.file));
 	groupHeader(
-		container,
-		t("App 设置"),
+		appBody,
 		appSpecs,
 		(spec) => doc.app.includes(spec.file),
 		(on) => {
@@ -93,7 +104,7 @@ export function renderProfileEditor(
 	);
 	for (const spec of appSpecs) {
 		toggleRow(
-			container,
+			appBody,
 			t(spec.label),
 			doc.app.includes(spec.file),
 			(value) => {
@@ -106,9 +117,9 @@ export function renderProfileEditor(
 	}
 
 	// ── 社区插件 ──
+	const pluginBody = collapsibleGroup(container, t("社区插件"));
 	groupHeader(
-		container,
-		t("社区插件"),
+		pluginBody,
 		data.plugins,
 		(plugin) => doc.plugins.includes(plugin.id),
 		(on) => {
@@ -119,7 +130,7 @@ export function renderProfileEditor(
 	for (const plugin of data.plugins) {
 		const label = plugin.name === plugin.id ? plugin.id : `${plugin.name}（${plugin.id}）`;
 		const extra = plugin.isDesktopOnly ? t("桌面专属，不进移动 profile") : undefined;
-		toggleRow(container, label, doc.plugins.includes(plugin.id), (value) => {
+		toggleRow(pluginBody, label, doc.plugins.includes(plugin.id), (value) => {
 			doc.plugins = value ? [...doc.plugins, plugin.id] : doc.plugins.filter((id) => id !== plugin.id);
 			void host.onChanged(globalThis.structuredClone(doc));
 		}, extra);
@@ -127,9 +138,9 @@ export function renderProfileEditor(
 
 	// ── 片段 / 主题（mobile profile 没有这两组） ──
 	if (!isMobileDoc) {
+		const snippetBody = collapsibleGroup(container, t("CSS 片段"));
 		groupHeader(
-			container,
-			t("CSS 片段"),
+			snippetBody,
 			data.snippets,
 			(name) => doc.snippets.includes(name),
 			(on) => {
@@ -138,14 +149,15 @@ export function renderProfileEditor(
 			},
 		);
 		for (const name of data.snippets) {
-			toggleRow(container, name, doc.snippets.includes(name), (value) => {
+			toggleRow(snippetBody, name, doc.snippets.includes(name), (value) => {
 				doc.snippets = value ? [...doc.snippets, name] : doc.snippets.filter((item) => item !== name);
 				void host.onChanged(globalThis.structuredClone(doc));
 			});
 		}
+
+		const themeBody = collapsibleGroup(container, t("主题"));
 		groupHeader(
-			container,
-			t("主题"),
+			themeBody,
 			data.themes,
 			(name) => doc.themes.includes(name),
 			(on) => {
@@ -154,7 +166,7 @@ export function renderProfileEditor(
 			},
 		);
 		for (const name of data.themes) {
-			toggleRow(container, name, doc.themes.includes(name), (value) => {
+			toggleRow(themeBody, name, doc.themes.includes(name), (value) => {
 				doc.themes = value ? [...doc.themes, name] : doc.themes.filter((item) => item !== name);
 				void host.onChanged(globalThis.structuredClone(doc));
 			});

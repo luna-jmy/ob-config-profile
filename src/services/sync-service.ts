@@ -222,13 +222,21 @@ export class SyncService {
 				if (raw !== null) local.set(`plugins/${plugin.id}/${rel}`, raw);
 			}
 		}
-		for (const [prefix, dir] of [
-			["snippets", "snippets"],
-			["themes", "themes"],
-		] as const) {
-			for (const name of await this.adapter.listFileNames(this.adapter.obsidianPath(dir))) {
-				const raw = await this.adapter.readIfExists(`${this.adapter.obsidianPath(dir)}/${name}`);
-				if (raw !== null) local.set(`${prefix}/${name}`, raw);
+		// snippets：只收松散 css；themes：松散 css + 文件夹主题（新版 Obsidian 主题是目录树）
+		for (const name of await this.adapter.listFileNames(this.adapter.obsidianPath("snippets"))) {
+			const raw = await this.adapter.readIfExists(this.adapter.obsidianPath(`snippets/${name}`));
+			if (raw !== null) local.set(`snippets/${name}`, raw);
+		}
+		const themeDir = this.adapter.obsidianPath("themes");
+		const themeChildren = await this.adapter.listChildNames(themeDir);
+		for (const name of themeChildren.files) {
+			const raw = await this.adapter.readIfExists(`${themeDir}/${name}`);
+			if (raw !== null) local.set(`themes/${name}`, raw);
+		}
+		for (const folder of themeChildren.folders) {
+			for (const file of await this.adapter.listFilesRecursive(`${themeDir}/${folder}`)) {
+				const raw = await this.adapter.readIfExists(file);
+				if (raw !== null) local.set(`themes/${file.slice(themeDir.length + 1)}`, raw);
 			}
 		}
 		return local;

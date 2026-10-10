@@ -399,12 +399,13 @@ export default class ConfigProfilePlugin extends Plugin {
 				`${(platform === "mobile" ? pool.mobilePool : pool.pcPool).snippets}`,
 			)),
 		]);
-		const themes = new Set([
-			...(await this.store.listFileNames(this.store.obsidianPath("themes"))),
-			...(await this.store.listFileNames(
-				`${(platform === "mobile" ? pool.mobilePool : pool.pcPool).themes}`,
-			)),
-		]);
+		// 主题名 = 松散 css 文件名或文件夹主题名（新版 Obsidian 主题是目录），本机与池取并集
+		const themes = new Set<string>();
+		for (const dir of [this.store.obsidianPath("themes"), `${(platform === "mobile" ? pool.mobilePool : pool.pcPool).themes}`]) {
+			const children = await this.store.listChildNames(dir);
+			for (const name of children.files) themes.add(name);
+			for (const name of children.folders) themes.add(name);
+		}
 		return {
 			plugins: [...merged.values()],
 			snippets: [...snippets],

@@ -157,6 +157,17 @@ export class ConfigAdapter {
 		return listed.files.map((file) => file.split("/").pop() ?? file);
 	}
 
+	/** 列目录直接子项名（文件与文件夹；目录不存在 → 空）——主题目录：松散 css 与文件夹主题并存 */
+	async listChildNames(dir: string): Promise<{ files: string[]; folders: string[] }> {
+		const p = this.n(dir);
+		if (!(await this.adapter.exists(p))) return { files: [], folders: [] };
+		const listed = await this.adapter.list(p);
+		return {
+			files: listed.files.map((file) => file.split("/").pop() ?? file),
+			folders: listed.folders.map((folder) => folder.split("/").pop() ?? folder),
+		};
+	}
+
 	/** 递归列出一棵目录树下的全部文件（vault 相对路径） */
 	async listFilesRecursive(root: string): Promise<string[]> {
 		const p = this.n(root);

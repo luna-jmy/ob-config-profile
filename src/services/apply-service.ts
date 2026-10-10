@@ -107,11 +107,20 @@ export class ApplyService {
 			report.applied.push(`snippets/${name}`);
 		}
 		for (const name of profile.themes) {
+			// 松散 css（旧形态）或文件夹主题（新版 Obsidian：themes/<id>/manifest.json + theme.css）
 			const content = await this.readPoolEntry(`${base}/themes/${name}`, password);
-			if (content === null) continue;
-			await this.adapter.mkdir(this.adapter.obsidianPath("themes"));
-			await this.adapter.obsidianWrite(`themes/${name}`, content);
-			report.applied.push(`themes/${name}`);
+			if (content !== null) {
+				await this.adapter.mkdir(this.adapter.obsidianPath("themes"));
+				await this.adapter.obsidianWrite(`themes/${name}`, content);
+				report.applied.push(`themes/${name}`);
+				continue;
+			}
+			const copied = await this.adapter.copyTree(
+				`${base}/themes/${name}`,
+				this.adapter.obsidianPath(`themes/${name}`),
+				{ transform: (raw) => this.readPoolEntryFromContent(raw, password) },
+			);
+			if (copied.length > 0) report.applied.push(`themes/${name}`);
 		}
 
 		return report;
