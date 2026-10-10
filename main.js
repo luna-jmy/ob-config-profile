@@ -1,4 +1,4 @@
-/* Config Profile — bundled 2026-10-10T08:14:46.758Z */
+/* Config Profile — bundled 2026-10-10T08:32:22.172Z */
 "use strict";
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -208,6 +208,7 @@ var EN = {
   "\u5F55\u5165\u540C\u6B65\u5BC6\u7801": "Enter sync password",
   "\u8F93\u5165\u540C\u6B65\u8BBE\u5907\u8BBE\u7F6E\u7684\u5BC6\u7801\u4EE5\u89E3\u5BC6\u914D\u7F6E\u5E93\uFF1B\u9A8C\u8BC1\u901A\u8FC7\u540E\u672C\u673A\u8BB0\u4F4F\uFF08\u53EA\u5B58\u672C\u673A\uFF0C\u4E0D\u8FDB vault\uFF09\u3002": "Enter the password set on a sync device to decrypt the store; once verified it is remembered on this device only (never in the vault).",
   "\u914D\u7F6E\u5E93\u672A\u52A0\u5BC6\uFF0C\u65E0\u9700\u5BC6\u7801\u3002": "The store is not encrypted; no password is needed.",
+  "\u672A\u627E\u5230\u914D\u7F6E\u5E93\uFF08{path}\uFF09\u3002\u8BF7\u786E\u8BA4\u914D\u7F6E\u5E93\u5DF2\u968F\u7B14\u8BB0\u540C\u6B65\u5230\u672C\u673A\uFF0C\u4E14\u8DEF\u5F84\u4E0E\u540C\u6B65\u8BBE\u5907\u4E00\u81F4\u3002": "Store not found ({path}). Make sure the store has reached this device with your notes and the path matches the sync device.",
   "\u5BC6\u7801\u5DF2\u9A8C\u8BC1\u5E76\u8BB0\u4F4F\uFF08\u53EA\u5B58\u672C\u673A\uFF09\u3002": "Password verified and saved (stored on this device only).",
   "\u4FEE\u6539\u5931\u8D25\uFF1A{message}": "Change failed: {message}",
   // ── 设置页：Profiles 区 ──
@@ -648,6 +649,10 @@ var ConfigAdapter = class {
     this.app.saveLocalStorage(STORE_PASSWORD_KEY, password);
   }
   // ── store 结构探测 ──
+  /** store 根目录是否存在于本机（设置页三态提示用：区分「没同步到」与「未加密」） */
+  async storeDirExists(paths) {
+    return this.adapter.exists(this.n(paths.root));
+  }
   async poolHasContent(paths) {
     if (!await this.adapter.exists(this.n(paths.root))) return false;
     const dirs = [paths.pcPool.base, paths.mobilePool.base, paths.profilesDir];
@@ -1916,9 +1921,17 @@ var CPSettingTab = class extends import_obsidian10.PluginSettingTab {
     }
     const canManage = !this.plugin.store.isMobile && this.plugin.config.preferredRole === "sync";
     if (!canManage) {
-      if (!encrypted) return;
       new import_obsidian10.Setting(container).setName(t("\u52A0\u5BC6")).setHeading();
-      new import_obsidian10.Setting(container).setName(t("\u5F55\u5165\u540C\u6B65\u5BC6\u7801")).setDesc(t("\u8F93\u5165\u540C\u6B65\u8BBE\u5907\u8BBE\u7F6E\u7684\u5BC6\u7801\u4EE5\u89E3\u5BC6\u914D\u7F6E\u5E93\uFF1B\u9A8C\u8BC1\u901A\u8FC7\u540E\u672C\u673A\u8BB0\u4F4F\uFF08\u53EA\u5B58\u672C\u673A\uFF0C\u4E0D\u8FDB vault\uFF09\u3002")).addButton((btn) => btn.setButtonText(t("\u5F55\u5165\u540C\u6B65\u5BC6\u7801")).onClick(() => void this.plugin.enterStorePassword()));
+      if (encrypted) {
+        new import_obsidian10.Setting(container).setName(t("\u5F55\u5165\u540C\u6B65\u5BC6\u7801")).setDesc(t("\u8F93\u5165\u540C\u6B65\u8BBE\u5907\u8BBE\u7F6E\u7684\u5BC6\u7801\u4EE5\u89E3\u5BC6\u914D\u7F6E\u5E93\uFF1B\u9A8C\u8BC1\u901A\u8FC7\u540E\u672C\u673A\u8BB0\u4F4F\uFF08\u53EA\u5B58\u672C\u673A\uFF0C\u4E0D\u8FDB vault\uFF09\u3002")).addButton((btn) => btn.setButtonText(t("\u5F55\u5165\u540C\u6B65\u5BC6\u7801")).onClick(() => void this.plugin.enterStorePassword()));
+        return;
+      }
+      const storeExists = await this.plugin.storeDirExists();
+      new import_obsidian10.Setting(container).setName(t("\u5F55\u5165\u540C\u6B65\u5BC6\u7801")).setDesc(
+        storeExists ? t("\u914D\u7F6E\u5E93\u672A\u52A0\u5BC6\uFF0C\u65E0\u9700\u5BC6\u7801\u3002") : t("\u672A\u627E\u5230\u914D\u7F6E\u5E93\uFF08{path}\uFF09\u3002\u8BF7\u786E\u8BA4\u914D\u7F6E\u5E93\u5DF2\u968F\u7B14\u8BB0\u540C\u6B65\u5230\u672C\u673A\uFF0C\u4E14\u8DEF\u5F84\u4E0E\u540C\u6B65\u8BBE\u5907\u4E00\u81F4\u3002", {
+          path: this.plugin.config.storePath
+        })
+      );
       return;
     }
     new import_obsidian10.Setting(container).setName(t("\u52A0\u5BC6")).setHeading();
@@ -2129,6 +2142,10 @@ var ConfigProfilePlugin = class extends import_obsidian11.Plugin {
   /** store 是否已加密（有合法 _crypto.json） */
   async storeEncrypted() {
     return await this.readCryptoMeta() !== null;
+  }
+  /** store 根目录是否存在于本机（设置页三态提示用） */
+  async storeDirExists() {
+    return this.store.storeDirExists(this.paths());
   }
   /** 确保密码可用：未存则弹输入框并验证；验证失败返回 null（调用方中止） */
   async ensurePassword(meta) {

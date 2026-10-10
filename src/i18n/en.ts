@@ -60,6 +60,8 @@ export const EN: Record<string, string> = {
 	"输入同步设备设置的密码以解密配置库；验证通过后本机记住（只存本机，不进 vault）。":
 		"Enter the password set on a sync device to decrypt the store; once verified it is remembered on this device only (never in the vault).",
 	"配置库未加密，无需密码。": "The store is not encrypted; no password is needed.",
+	"未找到配置库（{path}）。请确认配置库已随笔记同步到本机，且路径与同步设备一致。":
+		"Store not found ({path}). Make sure the store has reached this device with your notes and the path matches the sync device.",
 	"密码已验证并记住（只存本机）。": "Password verified and saved (stored on this device only).",
 	"修改失败：{message}": "Change failed: {message}",
 	// ── 设置页：Profiles 区 ──

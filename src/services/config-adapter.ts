@@ -58,6 +58,11 @@ export class ConfigAdapter {
 
 	// ── store 结构探测 ──
 
+	/** store 根目录是否存在于本机（设置页三态提示用：区分「没同步到」与「未加密」） */
+	async storeDirExists(paths: StorePaths): Promise<boolean> {
+		return this.adapter.exists(this.n(paths.root));
+	}
+
 	async poolHasContent(paths: StorePaths): Promise<boolean> {
 		if (!(await this.adapter.exists(this.n(paths.root)))) return false;
 		const dirs = [paths.pcPool.base, paths.mobilePool.base, paths.profilesDir];

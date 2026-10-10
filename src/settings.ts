@@ -140,13 +140,26 @@ export class CPSettingTab extends PluginSettingTab {
 		const canManage = !this.plugin.store.isMobile && this.plugin.config.preferredRole === "sync";
 
 		if (!canManage) {
-			// 仅应用设备：无加密管理权；store 已加密时只给「录入同步密码」动作行，未加密则整区不渲染
-			if (!encrypted) return;
+			// 仅应用设备：无加密管理权。三态明示，绝不静默隐藏（否则用户找不到录入密码的入口）：
+			// store 已加密 → 「录入同步密码」动作行；store 在但未加密 → 无需密码；store 目录缺失 → 提示同步/查路径
 			new Setting(container).setName(t("加密")).setHeading();
+			if (encrypted) {
+				new Setting(container)
+					.setName(t("录入同步密码"))
+					.setDesc(t("输入同步设备设置的密码以解密配置库；验证通过后本机记住（只存本机，不进 vault）。"))
+					.addButton((btn) => btn.setButtonText(t("录入同步密码")).onClick(() => void this.plugin.enterStorePassword()));
+				return;
+			}
+			const storeExists = await this.plugin.storeDirExists();
 			new Setting(container)
 				.setName(t("录入同步密码"))
-				.setDesc(t("输入同步设备设置的密码以解密配置库；验证通过后本机记住（只存本机，不进 vault）。"))
-				.addButton((btn) => btn.setButtonText(t("录入同步密码")).onClick(() => void this.plugin.enterStorePassword()));
+				.setDesc(
+					storeExists
+						? t("配置库未加密，无需密码。")
+						: t("未找到配置库（{path}）。请确认配置库已随笔记同步到本机，且路径与同步设备一致。", {
+								path: this.plugin.config.storePath,
+							}),
+				);
 			return;
 		}
 

@@ -120,6 +120,11 @@ export default class ConfigProfilePlugin extends Plugin {
 		return (await this.readCryptoMeta()) !== null;
 	}
 
+	/** store 根目录是否存在于本机（设置页三态提示用） */
+	async storeDirExists(): Promise<boolean> {
+		return this.store.storeDirExists(this.paths());
+	}
+
 	/** 确保密码可用：未存则弹输入框并验证；验证失败返回 null（调用方中止） */
 	async ensurePassword(meta: CryptoMeta): Promise<string | null> {
 		let password = this.store.storePassword();
