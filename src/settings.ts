@@ -6,7 +6,6 @@ import { askConfirm } from "./modals/confirm";
 import { promptChangeStorePassword } from "./modals/password";
 import { promptText } from "./modals/text-input";
 import { WrongStorePasswordError } from "./services/apply-service";
-import type { ProfilePlatform } from "./store/profile";
 
 /**
  * 设置页（SPEC §4）：通用 / 角色 / 加密 / Profiles 四区。
@@ -114,7 +113,7 @@ export class CPSettingTab extends PluginSettingTab {
 			);
 	}
 
-	// ── 加密（SPEC §2.5：改密 / 启用仅主配置 PC 端） ──
+	// ── 加密（SPEC §2.5：改密 / 启用仅同步设备 PC 端） ──
 
 	private async renderCrypto(container: HTMLElement): Promise<void> {
 		new Setting(container).setName(t("加密")).setHeading();
@@ -143,7 +142,7 @@ export class CPSettingTab extends PluginSettingTab {
 				.setDesc(
 					canManage
 						? t("尚未加密。下次同步时可设置密码，store 将整库加密。")
-						: t("尚未加密（主配置设备可在其设置中开启）。"),
+						: t("尚未加密（同步设备可在其设置中开启）。"),
 				);
 			if (canManage) {
 				new Setting(container)
@@ -188,52 +187,55 @@ export class CPSettingTab extends PluginSettingTab {
 			.addButton((btn) => btn.setButtonText(t("新建")).setCta().onClick(() => void this.createProfile()));
 
 		if (profiles.length === 0) {
-			new Setting(container).setDesc(t("还没有 profile。新建一个，或在主配置端执行同步。"));
+			new Setting(container).setDesc(t("还没有 profile。新建一个，或在一台同步设备上执行同步。"));
 			return;
 		}
 
 		for (const name of names) {
 			const desktop = profiles.find((entry) => entry.name === name && entry.platform === "desktop");
-			const mobile = profiles.find((entry) => entry.name === name && entry.platform === "mobile");
 			if (desktop) {
-				this.renderProfileRow(container, name, "desktop", mobile !== null);
-			}
-			if (mobile) {
-				this.renderProfileRow(container, name, "mobile", false);
+				const mobile = profiles.some((entry) => entry.name === name && entry.platform === "mobile");
+				this.renderProfileRow(container, name, mobile);
+			} else {
+				// 孤儿派生：mobile 文件在、桌面文件被手删——只提供删除
+				this.renderOrphanMobileRow(container, name);
 			}
 		}
 	}
 
-	private renderProfileRow(
-		container: HTMLElement,
-		name: string,
-		platform: ProfilePlatform,
-		hasMobileTwin: boolean,
-	): void {
-		const label = platform === "mobile" ? t("{name}（手机）", { name }) : name;
-		const desc =
-			platform === "mobile"
-				? t("由同名桌面 profile 适配生成，跟随其更新。")
-				: hasMobileTwin
-					? t("已开启手机适配。")
-					: "";
-		const setting = new Setting(container).setName(label).setDesc(desc);
-		if (platform === "desktop") {
-			setting.addToggle((toggle) =>
-				toggle
-					.setValue(hasMobileTwin)
-					.setTooltip(t("适配手机"))
-					.onChange((value) => void this.setMobileAdaptation(name, value)),
-			);
-		}
+	/** 每个 profile 名一行：手机适配是开关状态，不单列 mobile 行（派生跟随桌面，编辑它无意义） */
+	private renderProfileRow(container: HTMLElement, name: string, hasMobileTwin: boolean): void {
+		const setting = new Setting(container).setName(name).setDesc(
+			hasMobileTwin
+				? t("已开启手机适配：手机端应用《{name}（手机）》。", { name })
+				: t("未开启手机适配。"),
+		);
+		setting.addToggle((toggle) =>
+			toggle
+				.setValue(hasMobileTwin)
+				.setTooltip(t("适配手机"))
+				.onChange((value) => void this.setMobileAdaptation(name, value)),
+		);
 		setting
-			.addButton((btn) => btn.setButtonText(t("查看/编辑")).onClick(() => void this.plugin.openProfileEditor(name, platform)))
+			.addButton((btn) => btn.setButtonText(t("查看/编辑")).onClick(() => void this.plugin.openProfileEditor(name, "desktop")))
 			.addButton((btn) => btn.setButtonText(t("重命名")).onClick(() => void this.renameProfile(name)))
 			.addButton((btn) =>
 				btn
 					.setButtonText(t("删除"))
 					.setDestructive()
-					.onClick(() => void this.deleteProfile(name, platform)),
+					.onClick(() => void this.deleteProfile(name)),
+			);
+	}
+
+	private renderOrphanMobileRow(container: HTMLElement, name: string): void {
+		new Setting(container)
+			.setName(t("{name}（手机）", { name }))
+			.setDesc(t("桌面 profile 已不存在的派生残留，可删除。"))
+			.addButton((btn) =>
+				btn
+					.setButtonText(t("删除"))
+					.setDestructive()
+					.onClick(() => void this.plugin.deleteProfile(name, "mobile").then(() => this.display())),
 			);
 	}
 
@@ -263,17 +265,27 @@ export class CPSettingTab extends PluginSettingTab {
 		if (ok) this.display();
 	}
 
-	private async deleteProfile(name: string, platform: ProfilePlatform): Promise<void> {
-		const label = platform === "mobile" ? t("{name}（手机）", { name }) : name;
+	private async deleteProfile(name: string): Promise<void> {
 		const confirmed = await askConfirm(this.app, {
 			title: t("删除 profile"),
-			message: t("确定删除《{label}》？此操作不可撤销。", { label }),
+			message: t("确定删除《{label}》？此操作不可撤销。", { label: name }),
 			acceptLabel: t("删除"),
 			cancelLabel: t("取消"),
 			acceptStyle: "warning",
 		});
 		if (!confirmed) return;
-		await this.plugin.deleteProfile(name, platform);
+		// SPEC §3.5：删 desktop 时询问是否连带删 mobile 派生
+		const twin = await this.plugin.readProfile(name, "mobile");
+		if (twin !== null) {
+			const deleteTwin = await askConfirm(this.app, {
+				title: t("删除手机适配 profile"),
+				message: t("《{name}》有手机适配派生，一并删除？", { name }),
+				acceptLabel: t("一并删除"),
+				cancelLabel: t("仅删桌面版"),
+			});
+			if (deleteTwin) await this.plugin.deleteProfile(name, "mobile");
+		}
+		await this.plugin.deleteProfile(name, "desktop");
 		this.display();
 	}
 

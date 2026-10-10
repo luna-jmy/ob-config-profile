@@ -36,6 +36,7 @@ import type { ConflictResolution, FirstSyncDirection } from "./services/sync-opt
 import { chooseFromList } from "./modals/choice-list";
 import { ApplyResultModal } from "./modals/apply-result";
 import { FirstRunModal } from "./modals/first-run-modal";
+import { ProfileEditModal } from "./modals/profile-edit";
 import { promptNewStorePassword, promptStorePassword } from "./modals/password";
 import { CPSettingTab } from "./settings";
 import { DEFAULT_CONFIG, mergeConfig } from "./types";
@@ -445,14 +446,17 @@ export default class ConfigProfilePlugin extends Plugin {
 	}
 
 	async openProfileEditor(name: string, platform: ProfilePlatform): Promise<void> {
-		const doc = await this.readProfile(name, platform);
-		if (doc === null) {
-			new Notice(t("找不到 profile：{name}", { name }));
-			return;
+		try {
+			const doc = await this.readProfile(name, platform);
+			if (doc === null) {
+				new Notice(t("找不到 profile：{name}", { name }));
+				return;
+			}
+			const data = await this.profileEditorData(platform);
+			new ProfileEditModal(this, globalThis.structuredClone(doc), data).open();
+		} catch (error) {
+			new Notice(t("打开编辑器失败：{message}", { message: error instanceof Error ? error.message : String(error) }));
 		}
-		const data = await this.profileEditorData(platform);
-		const { ProfileEditModal } = await import("./modals/profile-edit");
-		new ProfileEditModal(this, globalThis.structuredClone(doc), data).open();
 	}
 
 	/** 编辑器落盘回调（设置页小节与 Modal 共用） */

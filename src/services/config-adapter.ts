@@ -200,9 +200,11 @@ export class ConfigAdapter {
 
 	async deletePath(path: string): Promise<void> {
 		const p = this.n(path);
-		if (await this.adapter.exists(p)) {
-			await this.adapter.rmdir(p, true);
-		}
+		if (!(await this.adapter.exists(p))) return;
+		const stat = await this.adapter.stat(p);
+		// rmdir 只用于目录（官方 API 口径），删文件必须走 remove——否则平台行为不定
+		if (stat?.type === "file") await this.adapter.remove(p);
+		else await this.adapter.rmdir(p, true);
 	}
 
 	async renamePath(from: string, to: string): Promise<void> {
