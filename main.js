@@ -1,4 +1,4 @@
-/* Config Profile — bundled 2026-10-10T05:23:53.266Z */
+/* Config Profile — bundled 2026-10-10T05:41:16.673Z */
 "use strict";
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -1410,9 +1410,9 @@ function toggleRow(container, label, checked, onChange, extra) {
   if (extra) setting.setDesc(extra);
   setting.addToggle((toggle) => toggle.setValue(checked).onChange(onChange));
 }
-function collapsibleGroup(container, name) {
+function collapsibleGroup(container, name, open = true) {
   const details = container.createEl("details", { cls: "cp-editor__group" });
-  details.open = true;
+  details.open = open;
   details.createEl("summary", { text: name });
   return details.createDiv({ cls: "cp-editor__group-body" });
 }
@@ -1427,7 +1427,17 @@ function groupHeader(body, items, isSelected, selectAll) {
   );
 }
 function renderProfileEditor(container, doc, data, host) {
+  var _a, _b;
+  const foldState = /* @__PURE__ */ new Map();
+  for (const details of Array.from(container.querySelectorAll("details.cp-editor__group"))) {
+    const key = (_b = (_a = details.querySelector("summary")) == null ? void 0 : _a.textContent) != null ? _b : "";
+    if (key !== "") foldState.set(key, details.open);
+  }
   container.empty();
+  const wasOpen = (name) => {
+    var _a2;
+    return (_a2 = foldState.get(name)) != null ? _a2 : true;
+  };
   const isMobileDoc = doc.platform === "mobile";
   if (isMobileDoc) {
     container.createEl("p", {
@@ -1435,7 +1445,7 @@ function renderProfileEditor(container, doc, data, host) {
       text: t("\u79FB\u52A8 profile \u4EC5\u5305\u542B\u6838\u5FC3\u63D2\u4EF6\u5F00\u5173\u4E0E\u63D2\u4EF6\u914D\u7F6E\uFF1B\u5916\u89C2\u3001\u4E3B\u9898\u3001\u5FEB\u6377\u952E\u7B49 app \u8BBE\u7F6E\u4E0D\u4F1A\u5E94\u7528\u5230\u624B\u673A\u3002")
     });
   }
-  const appBody = collapsibleGroup(container, t("App \u8BBE\u7F6E"));
+  const appBody = collapsibleGroup(container, t("App \u8BBE\u7F6E"), wasOpen(t("App \u8BBE\u7F6E")));
   const appSpecs = APP_FILES.filter((spec) => !isMobileDoc || isMobileAllowedAppFile(spec.file));
   groupHeader(
     appBody,
@@ -1444,8 +1454,8 @@ function renderProfileEditor(container, doc, data, host) {
     (on) => {
       doc.app = on ? appSpecs.map((spec) => spec.file) : [];
       void host.onChanged(globalThis.structuredClone(doc)).then(() => {
-        var _a;
-        return (_a = host.onBulkChanged) == null ? void 0 : _a.call(host);
+        var _a2;
+        return (_a2 = host.onBulkChanged) == null ? void 0 : _a2.call(host);
       });
     }
   );
@@ -1460,7 +1470,7 @@ function renderProfileEditor(container, doc, data, host) {
       }
     );
   }
-  const pluginBody = collapsibleGroup(container, t("\u793E\u533A\u63D2\u4EF6"));
+  const pluginBody = collapsibleGroup(container, t("\u793E\u533A\u63D2\u4EF6"), wasOpen(t("\u793E\u533A\u63D2\u4EF6")));
   groupHeader(
     pluginBody,
     data.plugins,
@@ -1468,8 +1478,8 @@ function renderProfileEditor(container, doc, data, host) {
     (on) => {
       doc.plugins = on ? data.plugins.map((plugin) => plugin.id) : [];
       void host.onChanged(globalThis.structuredClone(doc)).then(() => {
-        var _a;
-        return (_a = host.onBulkChanged) == null ? void 0 : _a.call(host);
+        var _a2;
+        return (_a2 = host.onBulkChanged) == null ? void 0 : _a2.call(host);
       });
     }
   );
@@ -1482,7 +1492,7 @@ function renderProfileEditor(container, doc, data, host) {
     }, extra);
   }
   if (!isMobileDoc) {
-    const snippetBody = collapsibleGroup(container, t("CSS \u7247\u6BB5"));
+    const snippetBody = collapsibleGroup(container, t("CSS \u7247\u6BB5"), wasOpen(t("CSS \u7247\u6BB5")));
     groupHeader(
       snippetBody,
       data.snippets,
@@ -1490,8 +1500,8 @@ function renderProfileEditor(container, doc, data, host) {
       (on) => {
         doc.snippets = on ? [...data.snippets] : [];
         void host.onChanged(globalThis.structuredClone(doc)).then(() => {
-          var _a;
-          return (_a = host.onBulkChanged) == null ? void 0 : _a.call(host);
+          var _a2;
+          return (_a2 = host.onBulkChanged) == null ? void 0 : _a2.call(host);
         });
       }
     );
@@ -1501,7 +1511,7 @@ function renderProfileEditor(container, doc, data, host) {
         void host.onChanged(globalThis.structuredClone(doc));
       });
     }
-    const themeBody = collapsibleGroup(container, t("\u4E3B\u9898"));
+    const themeBody = collapsibleGroup(container, t("\u4E3B\u9898"), wasOpen(t("\u4E3B\u9898")));
     groupHeader(
       themeBody,
       data.themes,
@@ -1509,8 +1519,8 @@ function renderProfileEditor(container, doc, data, host) {
       (on) => {
         doc.themes = on ? [...data.themes] : [];
         void host.onChanged(globalThis.structuredClone(doc)).then(() => {
-          var _a;
-          return (_a = host.onBulkChanged) == null ? void 0 : _a.call(host);
+          var _a2;
+          return (_a2 = host.onBulkChanged) == null ? void 0 : _a2.call(host);
         });
       }
     );

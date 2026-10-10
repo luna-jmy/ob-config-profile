@@ -43,10 +43,10 @@ function toggleRow(
 	setting.addToggle((toggle) => toggle.setValue(checked).onChange(onChange));
 }
 
-/** 折叠分组：summary 是组名，返回组体容器（行渲染进去） */
-function collapsibleGroup(container: HTMLElement, name: string): HTMLElement {
+/** 折叠分组：summary 是组名，返回组体容器（行渲染进去）；open 透传旧状态（批量重渲染不丢折叠） */
+function collapsibleGroup(container: HTMLElement, name: string, open = true): HTMLElement {
 	const details = container.createEl("details", { cls: "cp-editor__group" });
-	details.open = true;
+	details.open = open;
 	details.createEl("summary", { text: name });
 	return details.createDiv({ cls: "cp-editor__group-body" });
 }
@@ -80,7 +80,14 @@ export function renderProfileEditor(
 	data: ProfileEditorData,
 	host: ProfileEditorHost,
 ): void {
+	// 整体重渲染（全选）前记录各组折叠状态，重建后恢复——别把用户收起的组弹开
+	const foldState = new Map<string, boolean>();
+	for (const details of Array.from(container.querySelectorAll<HTMLDetailsElement>("details.cp-editor__group"))) {
+		const key = details.querySelector("summary")?.textContent ?? "";
+		if (key !== "") foldState.set(key, details.open);
+	}
 	container.empty();
+	const wasOpen = (name: string): boolean => foldState.get(name) ?? true;
 
 	const isMobileDoc = doc.platform === "mobile";
 	if (isMobileDoc) {
@@ -91,7 +98,7 @@ export function renderProfileEditor(
 	}
 
 	// ── app 设置 ──
-	const appBody = collapsibleGroup(container, t("App 设置"));
+	const appBody = collapsibleGroup(container, t("App 设置"), wasOpen(t("App 设置")));
 	const appSpecs = APP_FILES.filter((spec) => !isMobileDoc || isMobileAllowedAppFile(spec.file));
 	groupHeader(
 		appBody,
@@ -117,7 +124,7 @@ export function renderProfileEditor(
 	}
 
 	// ── 社区插件 ──
-	const pluginBody = collapsibleGroup(container, t("社区插件"));
+	const pluginBody = collapsibleGroup(container, t("社区插件"), wasOpen(t("社区插件")));
 	groupHeader(
 		pluginBody,
 		data.plugins,
@@ -138,7 +145,7 @@ export function renderProfileEditor(
 
 	// ── 片段 / 主题（mobile profile 没有这两组） ──
 	if (!isMobileDoc) {
-		const snippetBody = collapsibleGroup(container, t("CSS 片段"));
+		const snippetBody = collapsibleGroup(container, t("CSS 片段"), wasOpen(t("CSS 片段")));
 		groupHeader(
 			snippetBody,
 			data.snippets,
@@ -155,7 +162,7 @@ export function renderProfileEditor(
 			});
 		}
 
-		const themeBody = collapsibleGroup(container, t("主题"));
+		const themeBody = collapsibleGroup(container, t("主题"), wasOpen(t("主题")));
 		groupHeader(
 			themeBody,
 			data.themes,
