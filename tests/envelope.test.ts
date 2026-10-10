@@ -4,6 +4,7 @@ import {
 	decryptText,
 	encryptText,
 	isEnvelope,
+	PasswordError,
 	parseCryptoMeta,
 	parseEnvelopeText,
 	verifyPassword,
@@ -19,9 +20,7 @@ describe("encryptText / decryptText", () => {
 
 	it("错误密码抛 PasswordError", async () => {
 		const envelope = await encryptText("pw123", "data");
-		await expect(decryptText("wrong", envelope)).rejects.toThrowError(
-			expect.objectContaining({ name: "PasswordError" }),
-		);
+		await expect(decryptText("wrong", envelope)).rejects.toThrowError(PasswordError);
 	});
 
 	it("同一明文两次加密 iv 不同（GCM nonce 不复用）", async () => {
