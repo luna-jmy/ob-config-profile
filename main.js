@@ -1,4 +1,4 @@
-/* Config Profile — bundled 2026-10-10T05:50:41.319Z */
+/* Config Profile — bundled 2026-10-10T07:43:32.729Z */
 "use strict";
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -204,6 +204,10 @@ var EN = {
   "\u5C1A\u672A\u52A0\u5BC6\uFF08\u540C\u6B65\u8BBE\u5907\u53EF\u5728\u5176\u8BBE\u7F6E\u4E2D\u5F00\u542F\uFF09\u3002": "Not encrypted yet (a sync device can enable it in its settings).",
   "\u8BBE\u7F6E\u5BC6\u7801\u5E76\u7ACB\u5373\u91CD\u65B0\u540C\u6B65\uFF08\u6574\u5E93\u52A0\u5BC6\uFF09\u3002": "Set a password and re-sync immediately (whole-store encryption).",
   "\u5BC6\u7801\u5DF2\u4FEE\u6539\uFF0C\u6C60\u5185\u5BC6\u6587\u5DF2\u91CD\u5199\u3002": "Password changed; encrypted entries rewritten.",
+  "\u5F55\u5165\u5BC6\u7801": "Enter password",
+  "\u8F93\u5165\u540C\u6B65\u8BBE\u5907\u8BBE\u7F6E\u7684\u5BC6\u7801\uFF0C\u9A8C\u8BC1\u901A\u8FC7\u540E\u672C\u673A\u8BB0\u4F4F\uFF08\u53EA\u5B58\u672C\u673A\uFF0C\u4E0D\u8FDB vault\uFF09\u3002": "Enter the password set on a sync device. Once verified it is remembered on this device only (never in the vault).",
+  "\u914D\u7F6E\u5E93\u672A\u52A0\u5BC6\uFF0C\u65E0\u9700\u5BC6\u7801\u3002": "The store is not encrypted; no password is needed.",
+  "\u5BC6\u7801\u5DF2\u9A8C\u8BC1\u5E76\u8BB0\u4F4F\uFF08\u53EA\u5B58\u672C\u673A\uFF09\u3002": "Password verified and saved (stored on this device only).",
   "\u4FEE\u6539\u5931\u8D25\uFF1A{message}": "Change failed: {message}",
   // ── 设置页：Profiles 区 ──
   "Profiles": "Profiles",
@@ -1883,6 +1887,8 @@ var CPSettingTab = class extends import_obsidian10.PluginSettingTab {
       new import_obsidian10.Setting(container).setName(t("\u914D\u7F6E\u5E93\u52A0\u5BC6")).setDesc(t("store \u6574\u5E93\u52A0\u5BC6\uFF1B\u5BC6\u7801\u53EA\u5B58\u5404\u8BBE\u5907\u672C\u5730\uFF0C\u4E0D\u8FDB vault\u3002"));
       if (canManage) {
         new import_obsidian10.Setting(container).setName(t("\u4FEE\u6539\u5BC6\u7801")).setDesc(t("\u6C60\u5185\u5168\u90E8\u5BC6\u6587\u4F1A\u4EE5\u65B0\u5BC6\u7801\u91CD\u65B0\u52A0\u5BC6\u91CD\u5199\u3002")).addButton((btn) => btn.setButtonText(t("\u4FEE\u6539\u5BC6\u7801")).onClick(() => void this.changePassword()));
+      } else {
+        new import_obsidian10.Setting(container).setName(t("\u5F55\u5165\u5BC6\u7801")).setDesc(t("\u8F93\u5165\u540C\u6B65\u8BBE\u5907\u8BBE\u7F6E\u7684\u5BC6\u7801\uFF0C\u9A8C\u8BC1\u901A\u8FC7\u540E\u672C\u673A\u8BB0\u4F4F\uFF08\u53EA\u5B58\u672C\u673A\uFF0C\u4E0D\u8FDB vault\uFF09\u3002")).addButton((btn) => btn.setButtonText(t("\u5F55\u5165\u5BC6\u7801")).onClick(() => void this.plugin.enterStorePassword()));
       }
     } else {
       new import_obsidian10.Setting(container).setName(t("\u914D\u7F6E\u5E93\u52A0\u5BC6")).setDesc(
@@ -2104,6 +2110,22 @@ var ConfigProfilePlugin = class extends import_obsidian11.Plugin {
     }
     this.store.setStorePassword(password);
     return password;
+  }
+  /** 设置页「录入密码」（仅应用设备，SPEC §4）：显式输入并验证，成功后本机记住 */
+  async enterStorePassword() {
+    const meta = await this.readCryptoMeta();
+    if (meta === null) {
+      new import_obsidian11.Notice(t("\u914D\u7F6E\u5E93\u672A\u52A0\u5BC6\uFF0C\u65E0\u9700\u5BC6\u7801\u3002"));
+      return;
+    }
+    const password = await promptStorePassword(this.app);
+    if (password === null || password === "") return;
+    if (!await verifyPassword(meta, password)) {
+      new import_obsidian11.Notice(t("\u5BC6\u7801\u4E0D\u6B63\u786E\u3002"));
+      return;
+    }
+    this.store.setStorePassword(password);
+    new import_obsidian11.Notice(t("\u5BC6\u7801\u5DF2\u9A8C\u8BC1\u5E76\u8BB0\u4F4F\uFF08\u53EA\u5B58\u672C\u673A\uFF09\u3002"));
   }
   /** 修改密码（仅同步设备；设置页调用）：解密池内全部密文 → 新密码重加密重写 */
   async changeStorePassword(oldPassword, newPassword) {

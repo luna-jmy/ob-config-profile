@@ -135,6 +135,11 @@ export class CPSettingTab extends PluginSettingTab {
 					.setName(t("修改密码"))
 					.setDesc(t("池内全部密文会以新密码重新加密重写。"))
 					.addButton((btn) => btn.setButtonText(t("修改密码")).onClick(() => void this.changePassword()));
+			} else {
+				new Setting(container)
+					.setName(t("录入密码"))
+					.setDesc(t("输入同步设备设置的密码，验证通过后本机记住（只存本机，不进 vault）。"))
+					.addButton((btn) => btn.setButtonText(t("录入密码")).onClick(() => void this.plugin.enterStorePassword()));
 			}
 		} else {
 			new Setting(container)

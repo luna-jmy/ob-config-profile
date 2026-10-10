@@ -135,6 +135,23 @@ export default class ConfigProfilePlugin extends Plugin {
 		return password;
 	}
 
+	/** 设置页「录入密码」（仅应用设备，SPEC §4）：显式输入并验证，成功后本机记住 */
+	async enterStorePassword(): Promise<void> {
+		const meta = await this.readCryptoMeta();
+		if (meta === null) {
+			new Notice(t("配置库未加密，无需密码。"));
+			return;
+		}
+		const password = await promptStorePassword(this.app);
+		if (password === null || password === "") return;
+		if (!(await verifyPassword(meta, password))) {
+			new Notice(t("密码不正确。"));
+			return;
+		}
+		this.store.setStorePassword(password);
+		new Notice(t("密码已验证并记住（只存本机）。"));
+	}
+
 	/** 修改密码（仅同步设备；设置页调用）：解密池内全部密文 → 新密码重加密重写 */
 	async changeStorePassword(oldPassword: string, newPassword: string): Promise<void> {
 		const meta = await this.readCryptoMeta();
