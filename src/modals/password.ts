@@ -12,6 +12,22 @@ function readInputValue(input: HTMLInputElement | null): string {
 	return input?.value ?? "";
 }
 
+/** 密码输入框的「眼睛」显隐切换（Setting 需先 addText，再追加该按钮） */
+function addRevealToggle(setting: Setting, input: () => HTMLInputElement | null): void {
+	let visible = false;
+	setting.addExtraButton((btn) =>
+		btn
+			.setIcon("eye")
+			.setTooltip(t("显示密码"))
+			.onClick(() => {
+				visible = !visible;
+				const el = input();
+				if (el) el.type = visible ? "text" : "password";
+				btn.setIcon(visible ? "eye-off" : "eye").setTooltip(visible ? t("隐藏密码") : t("显示密码"));
+			}),
+	);
+}
+
 export function promptNewStorePassword(app: App): Promise<string | null> {
 	return new Promise((resolve) => {
 		new NewPasswordModal(app, resolve).open();
@@ -24,10 +40,14 @@ export function promptStorePassword(app: App): Promise<string | null> {
 	});
 }
 
-/** 修改密码（仅主配置）：返回 {oldPassword, newPassword}；取消 / 关闭返回 null */
-export function promptChangeStorePassword(app: App): Promise<{ oldPassword: string; newPassword: string } | null> {
+/** 修改密码（仅主配置）：currentPassword 预填本机记住的密码（小黑点 + 眼睛可见）。
+ *  取消 / 关闭返回 null */
+export function promptChangeStorePassword(
+	app: App,
+	currentPassword: string | null,
+): Promise<{ oldPassword: string; newPassword: string } | null> {
 	return new Promise((resolve) => {
-		new ChangePasswordModal(app, resolve).open();
+		new ChangePasswordModal(app, currentPassword, resolve).open();
 	});
 }
 
@@ -52,18 +72,18 @@ class NewPasswordModal extends Modal {
 		let pwInput: HTMLInputElement | null = null;
 		let pw2Input: HTMLInputElement | null = null;
 
-		new Setting(this.contentEl)
-			.setName(t("密码"))
-			.addText((text) => {
-				text.inputEl.type = "password";
-				pwInput = text.inputEl;
-			});
-		new Setting(this.contentEl)
-			.setName(t("再输一次"))
-			.addText((text) => {
-				text.inputEl.type = "password";
-				pw2Input = text.inputEl;
-			});
+		const pwSetting = new Setting(this.contentEl).setName(t("密码"));
+		pwSetting.addText((text) => {
+			text.inputEl.type = "password";
+			pwInput = text.inputEl;
+		});
+		addRevealToggle(pwSetting, () => pwInput);
+		const pw2Setting = new Setting(this.contentEl).setName(t("再输一次"));
+		pw2Setting.addText((text) => {
+			text.inputEl.type = "password";
+			pw2Input = text.inputEl;
+		});
+		addRevealToggle(pw2Setting, () => pw2Input);
 
 		const buttons = this.contentEl.createDiv({ cls: "cp-modal__buttons" });
 		new ButtonComponent(buttons)
@@ -115,10 +135,12 @@ class PasswordInputModal extends Modal {
 		});
 
 		let pwInput: HTMLInputElement | null = null;
-		new Setting(this.contentEl).setName(t("密码")).addText((text) => {
+		const pwSetting = new Setting(this.contentEl).setName(t("密码"));
+		pwSetting.addText((text) => {
 			text.inputEl.type = "password";
 			pwInput = text.inputEl;
 		});
+		addRevealToggle(pwSetting, () => pwInput);
 
 		const buttons = this.contentEl.createDiv({ cls: "cp-modal__buttons" });
 		new ButtonComponent(buttons)
@@ -149,6 +171,7 @@ class ChangePasswordModal extends Modal {
 
 	constructor(
 		app: App,
+		private readonly currentPassword: string | null,
 		private readonly settle: (result: { oldPassword: string; newPassword: string } | null) => void,
 	) {
 		super(app);
@@ -165,18 +188,28 @@ class ChangePasswordModal extends Modal {
 		let oldInput: HTMLInputElement | null = null;
 		let newInput: HTMLInputElement | null = null;
 		let new2Input: HTMLInputElement | null = null;
-		new Setting(this.contentEl).setName(t("当前密码")).addText((text) => {
+		const oldSetting = new Setting(this.contentEl).setName(t("当前密码"));
+		if (this.currentPassword !== null) {
+			oldSetting.setDesc(t("已自动填入本机记住的密码（点眼睛图标可查看）。"));
+		}
+		oldSetting.addText((text) => {
 			text.inputEl.type = "password";
+			if (this.currentPassword !== null) text.setValue(this.currentPassword);
 			oldInput = text.inputEl;
 		});
-		new Setting(this.contentEl).setName(t("新密码")).addText((text) => {
+		addRevealToggle(oldSetting, () => oldInput);
+		const newSetting = new Setting(this.contentEl).setName(t("新密码"));
+		newSetting.addText((text) => {
 			text.inputEl.type = "password";
 			newInput = text.inputEl;
 		});
-		new Setting(this.contentEl).setName(t("再输一次新密码")).addText((text) => {
+		addRevealToggle(newSetting, () => newInput);
+		const new2Setting = new Setting(this.contentEl).setName(t("再输一次新密码"));
+		new2Setting.addText((text) => {
 			text.inputEl.type = "password";
 			new2Input = text.inputEl;
 		});
+		addRevealToggle(new2Setting, () => new2Input);
 
 		const buttons = this.contentEl.createDiv({ cls: "cp-modal__buttons" });
 		new ButtonComponent(buttons).setButtonText(t("取消")).onClick(() => {

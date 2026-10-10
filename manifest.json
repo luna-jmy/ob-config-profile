@@ -1,7 +1,7 @@
 {
 	"id": "config-profile",
 	"name": "Config Profile",
-	"version": "0.1.4",
+	"version": "0.1.5",
 	"minAppVersion": "1.8.7",
 	"description": "Sync and manage Obsidian settings across devices and vaults via profiles: desktop captures, every device applies.",
 	"author": "Luna Jiang",

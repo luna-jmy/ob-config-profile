@@ -1,4 +1,4 @@
-/* Config Profile — bundled 2026-10-10T08:32:22.172Z */
+/* Config Profile — bundled 2026-10-10T08:38:25.380Z */
 "use strict";
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -297,6 +297,9 @@ var EN = {
   "\u4FEE\u6539\u914D\u7F6E\u5E93\u5BC6\u7801": "Change the store password",
   "\u6C60\u5185\u5168\u90E8\u5BC6\u6587\u4F1A\u4EE5\u65B0\u5BC6\u7801\u91CD\u65B0\u52A0\u5BC6\u5E76\u91CD\u5199\uFF0C\u5176\u4ED6\u8BBE\u5907\u4E0B\u6B21\u5E94\u7528\u65F6\u8F93\u5165\u65B0\u5BC6\u7801\u5373\u53EF\u3002": "Every encrypted entry will be re-encrypted with the new password; other devices just enter the new password on their next apply.",
   "\u5F53\u524D\u5BC6\u7801": "Current password",
+  "\u5DF2\u81EA\u52A8\u586B\u5165\u672C\u673A\u8BB0\u4F4F\u7684\u5BC6\u7801\uFF08\u70B9\u773C\u775B\u56FE\u6807\u53EF\u67E5\u770B\uFF09\u3002": "Pre-filled with the password remembered on this device (click the eye to view).",
+  "\u663E\u793A\u5BC6\u7801": "Show password",
+  "\u9690\u85CF\u5BC6\u7801": "Hide password",
   "\u65B0\u5BC6\u7801": "New password",
   "\u518D\u8F93\u4E00\u6B21\u65B0\u5BC6\u7801": "Re-enter new password",
   "\u786E\u8BA4\u4FEE\u6539": "Apply change",
@@ -1603,6 +1606,17 @@ function readInputValue(input) {
   var _a;
   return (_a = input == null ? void 0 : input.value) != null ? _a : "";
 }
+function addRevealToggle(setting, input) {
+  let visible = false;
+  setting.addExtraButton(
+    (btn) => btn.setIcon("eye").setTooltip(t("\u663E\u793A\u5BC6\u7801")).onClick(() => {
+      visible = !visible;
+      const el = input();
+      if (el) el.type = visible ? "text" : "password";
+      btn.setIcon(visible ? "eye-off" : "eye").setTooltip(visible ? t("\u9690\u85CF\u5BC6\u7801") : t("\u663E\u793A\u5BC6\u7801"));
+    })
+  );
+}
 function promptNewStorePassword(app) {
   return new Promise((resolve) => {
     new NewPasswordModal(app, resolve).open();
@@ -1613,9 +1627,9 @@ function promptStorePassword(app) {
     new PasswordInputModal(app, resolve).open();
   });
 }
-function promptChangeStorePassword(app) {
+function promptChangeStorePassword(app, currentPassword) {
   return new Promise((resolve) => {
-    new ChangePasswordModal(app, resolve).open();
+    new ChangePasswordModal(app, currentPassword, resolve).open();
   });
 }
 var NewPasswordModal = class extends import_obsidian7.Modal {
@@ -1633,14 +1647,18 @@ var NewPasswordModal = class extends import_obsidian7.Modal {
     });
     let pwInput = null;
     let pw2Input = null;
-    new import_obsidian7.Setting(this.contentEl).setName(t("\u5BC6\u7801")).addText((text) => {
+    const pwSetting = new import_obsidian7.Setting(this.contentEl).setName(t("\u5BC6\u7801"));
+    pwSetting.addText((text) => {
       text.inputEl.type = "password";
       pwInput = text.inputEl;
     });
-    new import_obsidian7.Setting(this.contentEl).setName(t("\u518D\u8F93\u4E00\u6B21")).addText((text) => {
+    addRevealToggle(pwSetting, () => pwInput);
+    const pw2Setting = new import_obsidian7.Setting(this.contentEl).setName(t("\u518D\u8F93\u4E00\u6B21"));
+    pw2Setting.addText((text) => {
       text.inputEl.type = "password";
       pw2Input = text.inputEl;
     });
+    addRevealToggle(pw2Setting, () => pw2Input);
     const buttons = this.contentEl.createDiv({ cls: "cp-modal__buttons" });
     new import_obsidian7.ButtonComponent(buttons).setButtonText(t("\u6682\u4E0D\u52A0\u5BC6")).setTooltip(t("store \u4EE5\u660E\u6587\u968F\u7B14\u8BB0\u540C\u6B65\uFF1B\u540E\u7EED\u53EF\u5728\u8BBE\u7F6E\u91CC\u5F00\u542F\u52A0\u5BC6\uFF08\u89E6\u53D1\u4E00\u6B21\u91CD\u65B0\u540C\u6B65\uFF09")).onClick(() => {
       this.answered = true;
@@ -1677,10 +1695,12 @@ var PasswordInputModal = class extends import_obsidian7.Modal {
       text: t("\u8FD9\u4E2A\u914D\u7F6E\u5E93\u5DF2\u52A0\u5BC6\u3002\u8F93\u5165\u4E3B\u914D\u7F6E\u8BBE\u5907\u8BBE\u7F6E\u7684\u5BC6\u7801\u4EE5\u7EE7\u7EED\uFF0C\u9A8C\u8BC1\u901A\u8FC7\u540E\u672C\u673A\u8BB0\u4F4F\u5BC6\u7801\u3002")
     });
     let pwInput = null;
-    new import_obsidian7.Setting(this.contentEl).setName(t("\u5BC6\u7801")).addText((text) => {
+    const pwSetting = new import_obsidian7.Setting(this.contentEl).setName(t("\u5BC6\u7801"));
+    pwSetting.addText((text) => {
       text.inputEl.type = "password";
       pwInput = text.inputEl;
     });
+    addRevealToggle(pwSetting, () => pwInput);
     const buttons = this.contentEl.createDiv({ cls: "cp-modal__buttons" });
     new import_obsidian7.ButtonComponent(buttons).setButtonText(t("\u53D6\u6D88")).onClick(() => {
       this.answered = true;
@@ -1699,8 +1719,9 @@ var PasswordInputModal = class extends import_obsidian7.Modal {
   }
 };
 var ChangePasswordModal = class extends import_obsidian7.Modal {
-  constructor(app, settle) {
+  constructor(app, currentPassword, settle) {
     super(app);
+    this.currentPassword = currentPassword;
     this.settle = settle;
     this.answered = false;
   }
@@ -1714,18 +1735,28 @@ var ChangePasswordModal = class extends import_obsidian7.Modal {
     let oldInput = null;
     let newInput = null;
     let new2Input = null;
-    new import_obsidian7.Setting(this.contentEl).setName(t("\u5F53\u524D\u5BC6\u7801")).addText((text) => {
+    const oldSetting = new import_obsidian7.Setting(this.contentEl).setName(t("\u5F53\u524D\u5BC6\u7801"));
+    if (this.currentPassword !== null) {
+      oldSetting.setDesc(t("\u5DF2\u81EA\u52A8\u586B\u5165\u672C\u673A\u8BB0\u4F4F\u7684\u5BC6\u7801\uFF08\u70B9\u773C\u775B\u56FE\u6807\u53EF\u67E5\u770B\uFF09\u3002"));
+    }
+    oldSetting.addText((text) => {
       text.inputEl.type = "password";
+      if (this.currentPassword !== null) text.setValue(this.currentPassword);
       oldInput = text.inputEl;
     });
-    new import_obsidian7.Setting(this.contentEl).setName(t("\u65B0\u5BC6\u7801")).addText((text) => {
+    addRevealToggle(oldSetting, () => oldInput);
+    const newSetting = new import_obsidian7.Setting(this.contentEl).setName(t("\u65B0\u5BC6\u7801"));
+    newSetting.addText((text) => {
       text.inputEl.type = "password";
       newInput = text.inputEl;
     });
-    new import_obsidian7.Setting(this.contentEl).setName(t("\u518D\u8F93\u4E00\u6B21\u65B0\u5BC6\u7801")).addText((text) => {
+    addRevealToggle(newSetting, () => newInput);
+    const new2Setting = new import_obsidian7.Setting(this.contentEl).setName(t("\u518D\u8F93\u4E00\u6B21\u65B0\u5BC6\u7801"));
+    new2Setting.addText((text) => {
       text.inputEl.type = "password";
       new2Input = text.inputEl;
     });
+    addRevealToggle(new2Setting, () => new2Input);
     const buttons = this.contentEl.createDiv({ cls: "cp-modal__buttons" });
     new import_obsidian7.ButtonComponent(buttons).setButtonText(t("\u53D6\u6D88")).onClick(() => {
       this.answered = true;
@@ -1944,7 +1975,7 @@ var CPSettingTab = class extends import_obsidian10.PluginSettingTab {
     }
   }
   async changePassword() {
-    const input = await promptChangeStorePassword(this.app);
+    const input = await promptChangeStorePassword(this.app, this.plugin.store.storePassword());
     if (input === null) return;
     try {
       await this.plugin.changeStorePassword(input.oldPassword, input.newPassword);

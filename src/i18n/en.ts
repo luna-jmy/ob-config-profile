@@ -162,6 +162,9 @@ export const EN: Record<string, string> = {
 	"池内全部密文会以新密码重新加密并重写，其他设备下次应用时输入新密码即可。":
 		"Every encrypted entry will be re-encrypted with the new password; other devices just enter the new password on their next apply.",
 	"当前密码": "Current password",
+	"已自动填入本机记住的密码（点眼睛图标可查看）。": "Pre-filled with the password remembered on this device (click the eye to view).",
+	"显示密码": "Show password",
+	"隐藏密码": "Hide password",
 	"新密码": "New password",
 	"再输一次新密码": "Re-enter new password",
 	"确认修改": "Apply change",

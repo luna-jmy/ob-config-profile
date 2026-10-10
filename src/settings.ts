@@ -185,7 +185,7 @@ export class CPSettingTab extends PluginSettingTab {
 	}
 
 	private async changePassword(): Promise<void> {
-		const input = await promptChangeStorePassword(this.app);
+		const input = await promptChangeStorePassword(this.app, this.plugin.store.storePassword());
 		if (input === null) return;
 		try {
 			await this.plugin.changeStorePassword(input.oldPassword, input.newPassword);
