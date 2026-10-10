@@ -1,4 +1,4 @@
-/* Config Profile — bundled 2026-10-10T08:46:13.739Z */
+/* Config Profile — bundled 2026-10-10T14:02:17.119Z */
 "use strict";
 var __defProp = Object.defineProperty;
 var __getOwnPropDesc = Object.getOwnPropertyDescriptor;
@@ -794,6 +794,8 @@ var ConfigAdapter = class {
   async readIfExists(path) {
     const p = this.n(path);
     if (!await this.adapter.exists(p)) return null;
+    const stat = await this.adapter.stat(p);
+    if ((stat == null ? void 0 : stat.type) !== "file") return null;
     return this.adapter.read(p);
   }
   async writeText(path, content) {

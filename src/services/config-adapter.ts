@@ -199,6 +199,10 @@ export class ConfigAdapter {
 	async readIfExists(path: string): Promise<string | null> {
 		const p = this.n(path);
 		if (!(await this.adapter.exists(p))) return null;
+		// 存在但不是文件（如文件夹主题目录）按「没有」处理：read 目录会 EISDIR，
+		// 应用侧靠 null 回退到 copyTree 的目录分支
+		const stat = await this.adapter.stat(p);
+		if (stat?.type !== "file") return null;
 		return this.adapter.read(p);
 	}
 

@@ -1,6 +1,6 @@
 {
 	"name": "config-profile",
-	"version": "0.1.6",
+	"version": "0.1.7",
 	"description": "Sync and manage Obsidian settings across devices and vaults via profiles.",
 	"main": "main.js",
 	"type": "module",

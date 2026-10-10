@@ -20,6 +20,15 @@
 - `_meta.json` 升级 schema 2（条目时间戳 / 写入设备 + 各设备 baseline），旧版读时自动
   迁移；0.0.3 的 store 无需手动处理。
 
+## 0.1.7
+
+- **修复应用含文件夹主题的 profile 必报 EISDIR**：同步侧把新版 Obsidian 的文件夹主题
+  按目录树存进池（`themes/<名>/manifest.json + theme.css`），应用侧的回退逻辑是
+  「先按松散 css 单文件读、读不到再按目录整树复制」——但目录也算「存在」，对着目录
+  `read` 在桌面端抛 `EISDIR: illegal operation on a directory, read`，应用中断。
+  现在 `readIfExists` 先判路径类型，非文件一律按「没有」返回，文件夹主题正常走
+  目录复制分支落到本机 `themes/`；松散 css 主题行为不变。
+
 ## 0.1.6
 
 - **元数据文件去下划线前缀**（破坏性改名 + 自动迁移）：`_crypto.json` → `crypto.json`、
